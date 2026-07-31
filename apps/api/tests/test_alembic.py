@@ -12,5 +12,5 @@ def test_alembic_config_resolves():
     cfg = Config(str(API_ROOT / "alembic.ini"))
     cfg.set_main_option("script_location", str(API_ROOT / "corpus" / "db" / "migrations"))
     script = ScriptDirectory.from_config(cfg)
-    # No revisions yet at M0; the environment itself must still resolve cleanly.
-    assert script.get_heads() == []
+    # A single linear head — branched migration history is a mistake here.
+    assert len(script.get_heads()) == 1

@@ -337,3 +337,18 @@ CREATE TABLE plan_versions (
 
 Write `scripts/backfill.py` with `--symbols`, `--since`, `--only` flags and a resume file.
 It will crash. Make it resumable.
+
+## Implementation notes (M1, where reality diverged)
+
+- **Trading calendar**: historical trading days are *observed* — a date is a trading
+  day iff the NIFTY 50 index has an OHLCV bar for it. This is a record of what traded,
+  not an inference from weekday rules, and it captures ad-hoc sessions (Budget
+  Saturdays) exactly. Future holidays can't be observed, so they load from the
+  exchange's published list via `load_holiday_csv` (`corpus/ingest/jobs/calendar.py`).
+- **Corporate actions**: until a trustworthy automated source is wired, actions enter
+  through a hand-maintained CSV (`scripts/load_corporate_actions.py`). Deliberate: a
+  wrong split ratio silently corrupts every adjusted close, so the file must be
+  auditable line by line. The `Source` protocol slot for an automated feed remains.
+- **Adjustment scope**: only SPLIT and BONUS adjust `adj_close`. Dividends are cash
+  in return computations; rights/mergers need case-by-case terms. Recorded, not
+  auto-adjusted.

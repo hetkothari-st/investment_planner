@@ -9,6 +9,20 @@ jobs:
   api:
     name: API — lint + tests (incl. architectural fence)
     runs-on: ubuntu-latest
+    services:
+      timescaledb:
+        image: timescale/timescaledb:latest-pg16
+        env:
+          POSTGRES_USER: corpus
+          POSTGRES_PASSWORD: corpus
+          POSTGRES_DB: corpus_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U corpus"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
     defaults:
       run:
         working-directory: apps/api
@@ -21,7 +35,9 @@ jobs:
         run: uv sync --frozen
       - name: Ruff
         run: uv run ruff check .
-      - name: Pytest
+      - name: Pytest (against TimescaleDB, incl. real migration)
+        env:
+          CORPUS_TEST_PG_URL: postgresql+asyncpg://corpus:corpus@localhost:5432/corpus_test
         run: uv run pytest -q
 
   web:
