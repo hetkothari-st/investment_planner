@@ -1,0 +1,15 @@
+# Conviction -> probability mapping for Brier scoring — docs/08.
+# These start as assumptions and get recalibrated from observed data after
+# 50 scored recommendations per horizon. Bump the version, never edit.
+version: v1
+conviction_probability:
+  LOW: "0.55"
+  MODERATE: "0.65"
+  HIGH: "0.78"
+min_scored_for_display: 20
+# Benchmark for net alpha. NIFTY 500 index token on Kite — verify against a
+# fresh instrument dump before relying on it; NIFTY 50 (256265) is the
+# fallback everyone agrees on.
+benchmark_instrument_token: 271113
+tax_short_pct: "20"               # STCG, horizon SHORT
+tax_long_pct: "12.5"              # LTCG, MID/LONG (exemption ignored: conservative)

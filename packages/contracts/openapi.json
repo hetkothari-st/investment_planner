@@ -331,6 +331,234 @@
      }
     }
    }
+  },
+  "/sim/theses": {
+   "get": {
+    "tags": [
+     "sim"
+    ],
+    "summary": "List Theses",
+    "operationId": "list_theses_sim_theses_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/ThesisOut"
+         },
+         "type": "array",
+         "title": "Response List Theses Sim Theses Get"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "sim"
+    ],
+    "summary": "Post Thesis",
+    "operationId": "post_thesis_sim_theses_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ManualThesisIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ThesisOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/sim/positions": {
+   "get": {
+    "tags": [
+     "sim"
+    ],
+    "summary": "List Positions",
+    "operationId": "list_positions_sim_positions_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/PositionOut"
+         },
+         "type": "array",
+         "title": "Response List Positions Sim Positions Get"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "sim"
+    ],
+    "summary": "Post Position",
+    "operationId": "post_position_sim_positions_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/OpenPositionIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/PositionOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/sim/positions/{position_id}/close": {
+   "post": {
+    "tags": [
+     "sim"
+    ],
+    "summary": "Post Close",
+    "operationId": "post_close_sim_positions__position_id__close_post",
+    "parameters": [
+     {
+      "name": "position_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Position Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ClosePositionIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/PositionOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/sim/run-daily": {
+   "post": {
+    "tags": [
+     "sim"
+    ],
+    "summary": "Run Daily",
+    "description": "Manual trigger for pipeline steps 9-10 until the nightly scheduler\nlands with the full pipeline (M5+).",
+    "operationId": "run_daily_sim_run_daily_post",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/MarkRunOut"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/sim/calibration": {
+   "get": {
+    "tags": [
+     "sim"
+    ],
+    "summary": "Get Calibration",
+    "operationId": "get_calibration_sim_calibration_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/HorizonSummary"
+         },
+         "type": "array",
+         "title": "Response Get Calibration Sim Calibration Get"
+        }
+       }
+      }
+     }
+    }
+   }
   }
  },
  "components": {
@@ -359,6 +587,39 @@
      "degraded_reason"
     ],
     "title": "AuthStatus"
+   },
+   "ClosePositionIn": {
+    "properties": {
+     "reason": {
+      "type": "string",
+      "title": "Reason"
+     },
+     "journal_note": {
+      "type": "string",
+      "title": "Journal Note"
+     },
+     "price": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Price"
+     }
+    },
+    "type": "object",
+    "required": [
+     "reason",
+     "journal_note"
+    ],
+    "title": "ClosePositionIn"
    },
    "DebtIn-Input": {
     "properties": {
@@ -450,6 +711,42 @@
      "annual_rate_pct"
     ],
     "title": "DebtIn"
+   },
+   "FalsifierIn": {
+    "properties": {
+     "field_id": {
+      "type": "string",
+      "title": "Field Id"
+     },
+     "operator": {
+      "type": "string",
+      "title": "Operator"
+     },
+     "threshold": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       }
+      ],
+      "title": "Threshold"
+     },
+     "human_text": {
+      "type": "string",
+      "title": "Human Text"
+     }
+    },
+    "type": "object",
+    "required": [
+     "field_id",
+     "operator",
+     "threshold",
+     "human_text"
+    ],
+    "title": "FalsifierIn"
    },
    "GateResult": {
     "properties": {
@@ -606,6 +903,91 @@
     ],
     "title": "HorizonBucket"
    },
+   "HorizonSummary": {
+    "properties": {
+     "horizon": {
+      "type": "string",
+      "title": "Horizon"
+     },
+     "n": {
+      "type": "integer",
+      "title": "N"
+     },
+     "n_needed": {
+      "type": "integer",
+      "title": "N Needed"
+     },
+     "hit_rate_pct": {
+      "anyOf": [
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Hit Rate Pct"
+     },
+     "band_coverage_pct": {
+      "anyOf": [
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Band Coverage Pct"
+     },
+     "mean_brier": {
+      "anyOf": [
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Mean Brier"
+     },
+     "net_alpha_pct": {
+      "anyOf": [
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Net Alpha Pct"
+     },
+     "verdict": {
+      "type": "string",
+      "title": "Verdict"
+     },
+     "severity": {
+      "type": "string",
+      "title": "Severity"
+     }
+    },
+    "type": "object",
+    "required": [
+     "horizon",
+     "n",
+     "n_needed",
+     "hit_rate_pct",
+     "band_coverage_pct",
+     "mean_brier",
+     "net_alpha_pct",
+     "verdict",
+     "severity"
+    ],
+    "title": "HorizonSummary"
+   },
    "JobStability": {
     "type": "string",
     "enum": [
@@ -614,6 +996,206 @@
      "HIGH"
     ],
     "title": "JobStability"
+   },
+   "ManualThesisIn": {
+    "properties": {
+     "isin": {
+      "type": "string",
+      "title": "Isin"
+     },
+     "tradingsymbol": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Tradingsymbol"
+     },
+     "instrument_token": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Instrument Token"
+     },
+     "horizon": {
+      "type": "string",
+      "title": "Horizon"
+     },
+     "expires_on": {
+      "type": "string",
+      "format": "date",
+      "title": "Expires On"
+     },
+     "ref_price": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       }
+      ],
+      "title": "Ref Price"
+     },
+     "band_bear_pct": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       }
+      ],
+      "title": "Band Bear Pct"
+     },
+     "band_base_pct": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       }
+      ],
+      "title": "Band Base Pct"
+     },
+     "band_bull_pct": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       }
+      ],
+      "title": "Band Bull Pct"
+     },
+     "conviction": {
+      "type": "string",
+      "title": "Conviction"
+     },
+     "suggested_size_inr": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       }
+      ],
+      "title": "Suggested Size Inr"
+     },
+     "thesis_md": {
+      "type": "string",
+      "minLength": 10,
+      "title": "Thesis Md",
+      "description": "Your reasoning, frozen at issue"
+     },
+     "falsifiers": {
+      "items": {
+       "$ref": "#/components/schemas/FalsifierIn"
+      },
+      "type": "array",
+      "minItems": 1,
+      "title": "Falsifiers"
+     }
+    },
+    "type": "object",
+    "required": [
+     "isin",
+     "horizon",
+     "expires_on",
+     "ref_price",
+     "band_bear_pct",
+     "band_base_pct",
+     "band_bull_pct",
+     "conviction",
+     "suggested_size_inr",
+     "thesis_md",
+     "falsifiers"
+    ],
+    "title": "ManualThesisIn"
+   },
+   "MarkRunOut": {
+    "properties": {
+     "marked": {
+      "type": "integer",
+      "title": "Marked"
+     },
+     "scored": {
+      "type": "integer",
+      "title": "Scored"
+     },
+     "skipped": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Skipped"
+     }
+    },
+    "type": "object",
+    "required": [
+     "marked",
+     "scored",
+     "skipped"
+    ],
+    "title": "MarkRunOut"
+   },
+   "OpenPositionIn": {
+    "properties": {
+     "recommendation_id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Recommendation Id"
+     },
+     "amount_inr": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       }
+      ],
+      "title": "Amount Inr"
+     },
+     "price": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Price"
+     }
+    },
+    "type": "object",
+    "required": [
+     "recommendation_id",
+     "amount_inr"
+    ],
+    "title": "OpenPositionIn"
    },
    "PlanResult": {
     "properties": {
@@ -732,6 +1314,146 @@
      "sensitivity"
     ],
     "title": "PlanResult"
+   },
+   "PositionOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Id"
+     },
+     "recommendation_id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Recommendation Id"
+     },
+     "isin": {
+      "type": "string",
+      "title": "Isin"
+     },
+     "opened_on": {
+      "type": "string",
+      "format": "date",
+      "title": "Opened On"
+     },
+     "qty": {
+      "type": "integer",
+      "title": "Qty"
+     },
+     "entry_price": {
+      "type": "string",
+      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+      "title": "Entry Price"
+     },
+     "entry_costs_inr": {
+      "type": "integer",
+      "title": "Entry Costs Inr"
+     },
+     "closed_on": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Closed On"
+     },
+     "exit_price": {
+      "anyOf": [
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Exit Price"
+     },
+     "close_reason": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Close Reason"
+     },
+     "journal_note": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Journal Note"
+     },
+     "latest_mark": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Latest Mark"
+     },
+     "realised_pnl_inr": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Realised Pnl Inr"
+     },
+     "holding_xirr_pct": {
+      "anyOf": [
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Holding Xirr Pct"
+     },
+     "thesis_snapshot_md": {
+      "type": "string",
+      "title": "Thesis Snapshot Md"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "recommendation_id",
+     "isin",
+     "opened_on",
+     "qty",
+     "entry_price",
+     "entry_costs_inr",
+     "closed_on",
+     "exit_price",
+     "close_reason",
+     "journal_note",
+     "latest_mark",
+     "realised_pnl_inr",
+     "holding_xirr_pct",
+     "thesis_snapshot_md"
+    ],
+    "title": "PositionOut"
    },
    "ProfileIn-Input": {
     "properties": {
@@ -994,6 +1716,107 @@
      "options"
     ],
     "title": "TemperamentScenario"
+   },
+   "ThesisOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Id"
+     },
+     "isin": {
+      "type": "string",
+      "title": "Isin"
+     },
+     "tradingsymbol": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Tradingsymbol"
+     },
+     "horizon": {
+      "type": "string",
+      "title": "Horizon"
+     },
+     "issued_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Issued At"
+     },
+     "expires_on": {
+      "type": "string",
+      "format": "date",
+      "title": "Expires On"
+     },
+     "ref_price": {
+      "type": "string",
+      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+      "title": "Ref Price"
+     },
+     "band_bear_pct": {
+      "type": "string",
+      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+      "title": "Band Bear Pct"
+     },
+     "band_base_pct": {
+      "type": "string",
+      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+      "title": "Band Base Pct"
+     },
+     "band_bull_pct": {
+      "type": "string",
+      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+      "title": "Band Bull Pct"
+     },
+     "conviction": {
+      "type": "string",
+      "title": "Conviction"
+     },
+     "suggested_size_inr": {
+      "type": "integer",
+      "title": "Suggested Size Inr"
+     },
+     "report_md": {
+      "type": "string",
+      "title": "Report Md"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "falsifiers": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Falsifiers"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "isin",
+     "tradingsymbol",
+     "horizon",
+     "issued_at",
+     "expires_on",
+     "ref_price",
+     "band_bear_pct",
+     "band_base_pct",
+     "band_bull_pct",
+     "conviction",
+     "suggested_size_inr",
+     "report_md",
+     "status",
+     "falsifiers"
+    ],
+    "title": "ThesisOut"
    },
    "UserState": {
     "properties": {

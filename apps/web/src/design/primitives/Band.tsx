@@ -9,7 +9,8 @@ export function Band({
   bearPct: number
   basePct: number
   bullPct: number
-  nAnalogues: number
+  /** empirical analogue count; omit for stated (non-empirical) bands */
+  nAnalogues?: number
 }) {
   const lo = Math.min(bearPct, 0)
   const hi = Math.max(bullPct, 0)
@@ -24,7 +25,7 @@ export function Band({
         role="img"
         aria-label={`Scenario band: bear ${fmt(bearPct)}, base ${fmt(basePct)}, bull ${fmt(
           bullPct,
-        )}, from ${nAnalogues} analogues`}
+        )}${nAnalogues !== undefined ? `, from ${nAnalogues} analogues` : ' (stated)'}`}
       >
         {/* zero line */}
         <div
@@ -75,9 +76,15 @@ export function Band({
         <span style={{ color: 'var(--text-primary)' }}>{fmt(basePct)}</span>
         <span style={{ color: 'var(--jade)' }}>{fmt(bullPct)}</span>
       </div>
-      <div className="legend-strip" data-numeric style={{ color: 'var(--text-tertiary)', marginTop: 4 }}>
-        n={nAnalogues} analogues
-      </div>
+      {nAnalogues !== undefined && (
+        <div
+          className="legend-strip"
+          data-numeric
+          style={{ color: 'var(--text-tertiary)', marginTop: 4 }}
+        >
+          n={nAnalogues} analogues
+        </div>
+      )}
     </div>
   )
 }

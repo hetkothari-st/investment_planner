@@ -61,3 +61,30 @@ export function inr(paise: number): string {
 export function toPaise(rupees: string | number): number {
   return Math.round(Number(rupees) * 100)
 }
+
+// --- M4: simulator + calibration ---
+
+export type ManualThesisIn = components['schemas']['ManualThesisIn']
+export type ThesisOut = components['schemas']['ThesisOut']
+export type PositionOut = components['schemas']['PositionOut']
+export type HorizonSummary = components['schemas']['HorizonSummary']
+export type MarkRunOut = components['schemas']['MarkRunOut']
+
+export const simApi = {
+  theses: () => request<ThesisOut[]>('/sim/theses'),
+  postThesis: (t: ManualThesisIn) =>
+    request<ThesisOut>('/sim/theses', { method: 'POST', body: JSON.stringify(t) }),
+  positions: () => request<PositionOut[]>('/sim/positions'),
+  openPosition: (recommendation_id: string, amount_inr: number, price?: string) =>
+    request<PositionOut>('/sim/positions', {
+      method: 'POST',
+      body: JSON.stringify({ recommendation_id, amount_inr, price }),
+    }),
+  closePosition: (id: string, reason: string, journal_note: string, price?: string) =>
+    request<PositionOut>(`/sim/positions/${id}/close`, {
+      method: 'POST',
+      body: JSON.stringify({ reason, journal_note, price }),
+    }),
+  runDaily: () => request<MarkRunOut>('/sim/run-daily', { method: 'POST' }),
+  calibration: () => request<HorizonSummary[]>('/sim/calibration'),
+}

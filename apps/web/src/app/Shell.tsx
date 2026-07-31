@@ -7,6 +7,8 @@ import { NavLink } from 'react-router'
 const NAV = [
   { to: '/planner', title: 'Planner', glyph: 'P' },
   { to: '/allocation', title: 'Allocation', glyph: 'A' },
+  { to: '/simulator', title: 'Simulator', glyph: 'S' },
+  { to: '/calibration', title: 'Calibration', glyph: 'C' },
   { to: '/kitchen-sink', title: 'Kitchen sink', glyph: 'K' },
 ]
 

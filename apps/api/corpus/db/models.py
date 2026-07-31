@@ -215,3 +215,128 @@ class PlanVersion(Base):
     plan_result: Mapped[dict] = mapped_column(JsonB, nullable=False)
     rationale_md: Mapped[str] = mapped_column(Text, nullable=False)
     superseded_by: Mapped[uuid.UUID | None] = mapped_column(Uuid)
+
+
+# --- M4: recommendations, falsifiers, simulation, calibration — docs/02 ---
+
+
+class Recommendation(Base):
+    """IMMUTABLE once written. A Postgres trigger (migration 0003) rejects
+    UPDATE on every column except status. The snapshot is the scientific
+    record; edit nothing, ever."""
+
+    __tablename__ = "recommendations"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    isin: Mapped[str] = mapped_column(Text, nullable=False)
+    tradingsymbol: Mapped[str | None] = mapped_column(Text)
+    instrument_token: Mapped[int | None] = mapped_column(BigInteger)
+    horizon: Mapped[str] = mapped_column(Text, nullable=False)
+    issued_at: Mapped[datetime] = mapped_column(
+        TZDateTime, nullable=False, server_default=func.now()
+    )
+    expires_on: Mapped[date] = mapped_column(Date, nullable=False)
+    ref_price: Mapped[Decimal] = mapped_column(Numeric(18, 4), nullable=False)
+    band_bear_pct: Mapped[Decimal] = mapped_column(Numeric(8, 3), nullable=False)
+    band_base_pct: Mapped[Decimal] = mapped_column(Numeric(8, 3), nullable=False)
+    band_bull_pct: Mapped[Decimal] = mapped_column(Numeric(8, 3), nullable=False)
+    conviction: Mapped[str] = mapped_column(Text, nullable=False)
+    suggested_size_inr: Mapped[Decimal] = mapped_column(Numeric(18, 2), nullable=False)
+    score_snapshot: Mapped[dict] = mapped_column(JsonB, nullable=False)
+    weights_version: Mapped[str] = mapped_column(Text, nullable=False)
+    report_md: Mapped[str] = mapped_column(Text, nullable=False)
+    net_of_costs_hurdle_pct: Mapped[Decimal] = mapped_column(Numeric(8, 3), nullable=False)
+    status: Mapped[str] = mapped_column(Text, nullable=False, server_default="LIVE")
+
+    __table_args__ = (
+        CheckConstraint("horizon IN ('SHORT','MID','LONG')", name="horizon_valid"),
+        CheckConstraint(
+            "conviction IN ('LOW','MODERATE','HIGH')", name="conviction_valid"
+        ),
+        CheckConstraint(
+            "status IN ('LIVE','EXPIRED','INVALIDATED')", name="rec_status_valid"
+        ),
+        CheckConstraint(
+            "band_bear_pct < band_base_pct AND band_base_pct < band_bull_pct",
+            name="band_ordered",
+        ),
+    )
+
+
+class Falsifier(Base):
+    __tablename__ = "falsifiers"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    recommendation_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("recommendations.id"), nullable=False
+    )
+    field_id: Mapped[str] = mapped_column(Text, nullable=False)
+    operator: Mapped[str] = mapped_column(Text, nullable=False)
+    threshold: Mapped[Decimal] = mapped_column(Numeric(20, 6), nullable=False)
+    human_text: Mapped[str] = mapped_column(Text, nullable=False)
+    breached_at: Mapped[datetime | None] = mapped_column(TZDateTime)
+
+    __table_args__ = (
+        CheckConstraint(
+            "operator IN ('LT','LTE','GT','GTE','CROSSES_BELOW','CROSSES_ABOVE')",
+            name="operator_valid",
+        ),
+    )
+
+
+class SimPosition(Base):
+    __tablename__ = "sim_positions"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    recommendation_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("recommendations.id"), nullable=False
+    )
+    isin: Mapped[str] = mapped_column(Text, nullable=False)
+    instrument_token: Mapped[int | None] = mapped_column(BigInteger)
+    opened_on: Mapped[date] = mapped_column(Date, nullable=False)
+    qty: Mapped[int] = mapped_column(Integer, nullable=False)
+    entry_price: Mapped[Decimal] = mapped_column(Numeric(18, 4), nullable=False)
+    entry_costs_inr: Mapped[Decimal] = mapped_column(Numeric(18, 2), nullable=False)
+    thesis_snapshot_md: Mapped[str] = mapped_column(Text, nullable=False)
+    closed_on: Mapped[date | None] = mapped_column(Date)
+    exit_price: Mapped[Decimal | None] = mapped_column(Numeric(18, 4))
+    exit_costs_inr: Mapped[Decimal | None] = mapped_column(Numeric(18, 2))
+    close_reason: Mapped[str | None] = mapped_column(Text)
+    journal_note: Mapped[str | None] = mapped_column(Text)  # "Why now?"
+
+    __table_args__ = (
+        CheckConstraint(
+            "close_reason IN ('MANUAL','FALSIFIER','EXPIRY','THESIS_CHANGED')",
+            name="close_reason_valid",
+        ),
+    )
+
+
+class SimMark(Base):
+    __tablename__ = "sim_marks"
+
+    position_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("sim_positions.id"), primary_key=True
+    )
+    trade_date: Mapped[date] = mapped_column(Date, primary_key=True)
+    close_price: Mapped[Decimal] = mapped_column(Numeric(18, 4), nullable=False)
+    mtm_inr: Mapped[Decimal] = mapped_column(Numeric(18, 2), nullable=False)
+    unrealised_pct: Mapped[Decimal] = mapped_column(Numeric(10, 4), nullable=False)
+    drawdown_from_peak_pct: Mapped[Decimal] = mapped_column(Numeric(10, 4), nullable=False)
+
+
+class CalibrationResult(Base):
+    __tablename__ = "calibration_results"
+
+    recommendation_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("recommendations.id"), primary_key=True
+    )
+    scored_on: Mapped[date] = mapped_column(Date, nullable=False)
+    actual_return_pct: Mapped[Decimal] = mapped_column(Numeric(10, 4), nullable=False)
+    actual_net_return_pct: Mapped[Decimal] = mapped_column(Numeric(10, 4), nullable=False)
+    index_return_pct: Mapped[Decimal | None] = mapped_column(Numeric(10, 4))
+    in_band: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    direction_correct: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    brier: Mapped[Decimal | None] = mapped_column(Numeric(8, 5))
+    band_error_pct: Mapped[Decimal | None] = mapped_column(Numeric(10, 4))
+    calibration_version: Mapped[str] = mapped_column(Text, nullable=False)

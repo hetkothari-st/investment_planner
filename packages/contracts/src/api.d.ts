@@ -194,6 +194,97 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/sim/theses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Theses */
+        get: operations["list_theses_sim_theses_get"];
+        put?: never;
+        /** Post Thesis */
+        post: operations["post_thesis_sim_theses_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sim/positions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Positions */
+        get: operations["list_positions_sim_positions_get"];
+        put?: never;
+        /** Post Position */
+        post: operations["post_position_sim_positions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sim/positions/{position_id}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Post Close */
+        post: operations["post_close_sim_positions__position_id__close_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sim/run-daily": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Run Daily
+         * @description Manual trigger for pipeline steps 9-10 until the nightly scheduler
+         *     lands with the full pipeline (M5+).
+         */
+        post: operations["run_daily_sim_run_daily_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sim/calibration": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Calibration */
+        get: operations["get_calibration_sim_calibration_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -204,6 +295,15 @@ export interface components {
             authenticated: boolean;
             /** Degraded Reason */
             degraded_reason: string | null;
+        };
+        /** ClosePositionIn */
+        ClosePositionIn: {
+            /** Reason */
+            reason: string;
+            /** Journal Note */
+            journal_note: string;
+            /** Price */
+            price?: number | string | null;
         };
         /** DebtIn */
         "DebtIn-Input": {
@@ -242,6 +342,17 @@ export interface components {
              * @default false
              */
             tax_deductible: boolean;
+        };
+        /** FalsifierIn */
+        FalsifierIn: {
+            /** Field Id */
+            field_id: string;
+            /** Operator */
+            operator: string;
+            /** Threshold */
+            threshold: number | string;
+            /** Human Text */
+            human_text: string;
         };
         /** GateResult */
         GateResult: {
@@ -310,11 +421,88 @@ export interface components {
          * @enum {string}
          */
         HorizonBucket: "LIQUID_0_12" | "DEBT_12_36" | "HYBRID_36_60" | "EQUITY_60_PLUS";
+        /** HorizonSummary */
+        HorizonSummary: {
+            /** Horizon */
+            horizon: string;
+            /** N */
+            n: number;
+            /** N Needed */
+            n_needed: number;
+            /** Hit Rate Pct */
+            hit_rate_pct: string | null;
+            /** Band Coverage Pct */
+            band_coverage_pct: string | null;
+            /** Mean Brier */
+            mean_brier: string | null;
+            /** Net Alpha Pct */
+            net_alpha_pct: string | null;
+            /** Verdict */
+            verdict: string;
+            /** Severity */
+            severity: string;
+        };
         /**
          * JobStability
          * @enum {string}
          */
         JobStability: "LOW" | "MEDIUM" | "HIGH";
+        /** ManualThesisIn */
+        ManualThesisIn: {
+            /** Isin */
+            isin: string;
+            /** Tradingsymbol */
+            tradingsymbol?: string | null;
+            /** Instrument Token */
+            instrument_token?: number | null;
+            /** Horizon */
+            horizon: string;
+            /**
+             * Expires On
+             * Format: date
+             */
+            expires_on: string;
+            /** Ref Price */
+            ref_price: number | string;
+            /** Band Bear Pct */
+            band_bear_pct: number | string;
+            /** Band Base Pct */
+            band_base_pct: number | string;
+            /** Band Bull Pct */
+            band_bull_pct: number | string;
+            /** Conviction */
+            conviction: string;
+            /** Suggested Size Inr */
+            suggested_size_inr: number | string;
+            /**
+             * Thesis Md
+             * @description Your reasoning, frozen at issue
+             */
+            thesis_md: string;
+            /** Falsifiers */
+            falsifiers: components["schemas"]["FalsifierIn"][];
+        };
+        /** MarkRunOut */
+        MarkRunOut: {
+            /** Marked */
+            marked: number;
+            /** Scored */
+            scored: number;
+            /** Skipped */
+            skipped: string[];
+        };
+        /** OpenPositionIn */
+        OpenPositionIn: {
+            /**
+             * Recommendation Id
+             * Format: uuid
+             */
+            recommendation_id: string;
+            /** Amount Inr */
+            amount_inr: number | string;
+            /** Price */
+            price?: number | string | null;
+        };
         /** PlanResult */
         PlanResult: {
             /** Version Id */
@@ -347,6 +535,50 @@ export interface components {
             assumptions_version: string;
             /** Sensitivity */
             sensitivity: components["schemas"]["SensitivityRow"][];
+        };
+        /** PositionOut */
+        PositionOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Recommendation Id
+             * Format: uuid
+             */
+            recommendation_id: string;
+            /** Isin */
+            isin: string;
+            /**
+             * Opened On
+             * Format: date
+             */
+            opened_on: string;
+            /** Qty */
+            qty: number;
+            /** Entry Price */
+            entry_price: string;
+            /** Entry Costs Inr */
+            entry_costs_inr: number;
+            /** Closed On */
+            closed_on: string | null;
+            /** Exit Price */
+            exit_price: string | null;
+            /** Close Reason */
+            close_reason: string | null;
+            /** Journal Note */
+            journal_note: string | null;
+            /** Latest Mark */
+            latest_mark: {
+                [key: string]: unknown;
+            } | null;
+            /** Realised Pnl Inr */
+            realised_pnl_inr: number | null;
+            /** Holding Xirr Pct */
+            holding_xirr_pct: string | null;
+            /** Thesis Snapshot Md */
+            thesis_snapshot_md: string;
         };
         /** ProfileIn */
         "ProfileIn-Input": {
@@ -445,6 +677,50 @@ export interface components {
             after_inr: number;
             /** Options */
             options: components["schemas"]["ScenarioOption"][];
+        };
+        /** ThesisOut */
+        ThesisOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Isin */
+            isin: string;
+            /** Tradingsymbol */
+            tradingsymbol: string | null;
+            /** Horizon */
+            horizon: string;
+            /**
+             * Issued At
+             * Format: date-time
+             */
+            issued_at: string;
+            /**
+             * Expires On
+             * Format: date
+             */
+            expires_on: string;
+            /** Ref Price */
+            ref_price: string;
+            /** Band Bear Pct */
+            band_bear_pct: string;
+            /** Band Base Pct */
+            band_base_pct: string;
+            /** Band Bull Pct */
+            band_bull_pct: string;
+            /** Conviction */
+            conviction: string;
+            /** Suggested Size Inr */
+            suggested_size_inr: number;
+            /** Report Md */
+            report_md: string;
+            /** Status */
+            status: string;
+            /** Falsifiers */
+            falsifiers: {
+                [key: string]: unknown;
+            }[];
         };
         /** UserState */
         UserState: {
@@ -742,6 +1018,187 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TemperamentScenario"];
+                };
+            };
+        };
+    };
+    list_theses_sim_theses_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThesisOut"][];
+                };
+            };
+        };
+    };
+    post_thesis_sim_theses_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ManualThesisIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThesisOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_positions_sim_positions_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PositionOut"][];
+                };
+            };
+        };
+    };
+    post_position_sim_positions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OpenPositionIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PositionOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    post_close_sim_positions__position_id__close_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                position_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ClosePositionIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PositionOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    run_daily_sim_run_daily_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MarkRunOut"];
+                };
+            };
+        };
+    };
+    get_calibration_sim_calibration_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HorizonSummary"][];
                 };
             };
         };
