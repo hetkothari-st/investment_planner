@@ -18,6 +18,14 @@ pytestmark = pytest.mark.skipif(not PG_URL, reason="CORPUS_TEST_PG_URL not set")
 
 
 async def test_trigger_rejects_everything_but_status():
+    # Reset the schema: other tests drop tables but leave alembic_version at
+    # head, which would turn `upgrade head` into a no-op.
+    engine0 = create_async_engine(PG_URL, isolation_level="AUTOCOMMIT")
+    async with engine0.connect() as conn:
+        await conn.execute(text("DROP SCHEMA public CASCADE"))
+        await conn.execute(text("CREATE SCHEMA public"))
+    await engine0.dispose()
+
     env = os.environ | {"DATABASE_URL": PG_URL}
     run = subprocess.run(
         [sys.executable, "-m", "alembic", "upgrade", "head"],
@@ -27,11 +35,6 @@ async def test_trigger_rejects_everything_but_status():
 
     engine = create_async_engine(PG_URL)
     async with engine.begin() as conn:
-        await conn.execute(text("DELETE FROM falsifiers"))
-        await conn.execute(text("DELETE FROM calibration_results"))
-        await conn.execute(text("DELETE FROM sim_marks"))
-        await conn.execute(text("DELETE FROM sim_positions"))
-        await conn.execute(text("DELETE FROM recommendations"))
         await conn.execute(
             text(
                 """

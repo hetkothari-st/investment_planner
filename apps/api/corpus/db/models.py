@@ -340,3 +340,90 @@ class CalibrationResult(Base):
     brier: Mapped[Decimal | None] = mapped_column(Numeric(8, 5))
     band_error_pct: Mapped[Decimal | None] = mapped_column(Numeric(10, 4))
     calibration_version: Mapped[str] = mapped_column(Text, nullable=False)
+
+
+# --- M5: fundamentals sources + the deterministic spine — docs/02 ---
+
+
+class FundamentalsPeriod(Base):
+    __tablename__ = "fundamentals_period"
+
+    isin: Mapped[str] = mapped_column(Text, primary_key=True)
+    period_end: Mapped[date] = mapped_column(Date, primary_key=True)
+    period_type: Mapped[str] = mapped_column(Text, primary_key=True)  # Q | H | FY
+    consolidated: Mapped[bool] = mapped_column(Boolean, primary_key=True, default=True)
+    line_item: Mapped[str] = mapped_column(Text, primary_key=True)
+    value: Mapped[Decimal | None] = mapped_column(Numeric(20, 4))
+    unit: Mapped[str] = mapped_column(Text, nullable=False, server_default="INR_CR")
+    source: Mapped[str] = mapped_column(Text, nullable=False)
+    as_of: Mapped[datetime] = mapped_column(TZDateTime, nullable=False)
+
+    __table_args__ = (
+        CheckConstraint("period_type IN ('Q','H','FY')", name="period_type_valid"),
+    )
+
+
+class Filing(Base):
+    __tablename__ = "filings"
+
+    id: Mapped[int] = mapped_column(BigIntPK, primary_key=True, autoincrement=True)
+    isin: Mapped[str] = mapped_column(Text, nullable=False)
+    filed_at: Mapped[datetime] = mapped_column(TZDateTime, nullable=False)
+    category: Mapped[str] = mapped_column(Text, nullable=False)
+    headline: Mapped[str | None] = mapped_column(Text)
+    body: Mapped[str | None] = mapped_column(Text)
+    url: Mapped[str | None] = mapped_column(Text)
+    content_hash: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
+    ingested_at: Mapped[datetime] = mapped_column(
+        TZDateTime, nullable=False, server_default=func.now()
+    )
+
+    __table_args__ = (
+        CheckConstraint(
+            "category IN ('RESULTS','ANNOUNCEMENT','PLEDGE','SHP','CONCALL','AR')",
+            name="category_valid",
+        ),
+    )
+
+
+class Shareholding(Base):
+    __tablename__ = "shareholding"
+
+    isin: Mapped[str] = mapped_column(Text, primary_key=True)
+    period_end: Mapped[date] = mapped_column(Date, primary_key=True)
+    promoter_pct: Mapped[Decimal | None] = mapped_column(Numeric(6, 3))
+    promoter_pledged_pct: Mapped[Decimal | None] = mapped_column(Numeric(6, 3))
+    fii_pct: Mapped[Decimal | None] = mapped_column(Numeric(6, 3))
+    dii_pct: Mapped[Decimal | None] = mapped_column(Numeric(6, 3))
+    public_pct: Mapped[Decimal | None] = mapped_column(Numeric(6, 3))
+    source: Mapped[str] = mapped_column(Text, nullable=False)
+
+
+class MetricValueRow(Base):
+    __tablename__ = "metric_values"
+
+    isin: Mapped[str] = mapped_column(Text, primary_key=True)
+    field_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    as_of: Mapped[date] = mapped_column(Date, primary_key=True)
+    value: Mapped[Decimal | None] = mapped_column(Numeric(20, 6))
+    unit: Mapped[str] = mapped_column(Text, nullable=False)
+    inputs_hash: Mapped[str] = mapped_column(Text, nullable=False)
+    computed_at: Mapped[datetime] = mapped_column(
+        TZDateTime, nullable=False, server_default=func.now()
+    )
+
+
+class MetricGap(Base):
+    __tablename__ = "metric_gaps"
+
+    isin: Mapped[str] = mapped_column(Text, primary_key=True)
+    field_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    as_of: Mapped[date] = mapped_column(Date, primary_key=True)
+    reason: Mapped[str] = mapped_column(Text, nullable=False)
+
+    __table_args__ = (
+        CheckConstraint(
+            "reason IN ('INSUFFICIENT_HISTORY','SOURCE_STALE','NOT_APPLICABLE')",
+            name="reason_valid",
+        ),
+    )
