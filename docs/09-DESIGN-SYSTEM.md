@@ -44,7 +44,7 @@ Six values. Everything else is derived by opacity.
 /* Text */
 --text-primary:   #E6EAEC;
 --text-secondary: #96A3AB;
---text-tertiary:  #5E6D76;
+--text-tertiary:  #82909A;   /* raised from #5E6D76 (3.3:1) to clear 4.5:1 — see quality floor */
 
 /* Paper mode — engineering vellum, for reading long reports. NOT cream. */
 --paper:          #E8E9E4;
@@ -90,6 +90,10 @@ Three faces, three jobs. All free.
   for page titles and the hero moment. Tight tracking (`-0.02em`), weight 700, `wdth` 96.
   Never in tables, never below 20px.
 - **General Sans** (Fontshare) — UI, labels, prose. Weight 400/500/600.
+  *Implementation note (M2):* the build environment could not reach Fontshare, so
+  **Instrument Sans Variable** ships as the stand-in UI face. To swap: drop
+  `GeneralSans-Variable.woff2` into `src/design/fonts/` and update the one
+  `@font-face` in `src/design/fonts.css`. Everything else uses `var(--font-ui)`.
 - **Geist Mono** — **every number in the application, without exception**, with
   `font-variant-numeric: tabular-nums`. Digits must align in columns and must not
   reflow when animating. This is non-negotiable in a finance app.
