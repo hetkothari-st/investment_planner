@@ -1,0 +1,8 @@
+{
+  "name": "@corpus/contracts",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "TS types generated from Pydantic models via OpenAPI. Never hand-written — see docs/01-ARCHITECTURE.md. Generation lands with the first real API contract.",
+  "main": "src/index.ts"
+}
