@@ -130,6 +130,8 @@ class PositionOut(BaseModel):
     exit_price: Decimal | None
     close_reason: str | None
     journal_note: str | None
+    flagged_at: datetime | None
+    flag_reason: str | None
     latest_mark: dict | None
     realised_pnl_inr: int | None  # paise
     holding_xirr_pct: Decimal | None
@@ -171,6 +173,8 @@ async def _position_out(session: AsyncSession, pos: SimPosition) -> PositionOut:
         exit_price=pos.exit_price,
         close_reason=pos.close_reason,
         journal_note=pos.journal_note,
+        flagged_at=pos.flagged_at,
+        flag_reason=pos.flag_reason,
         latest_mark=(
             {
                 "trade_date": latest.trade_date.isoformat(),

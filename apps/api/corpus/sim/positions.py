@@ -23,14 +23,24 @@ class SimError(Exception):
 
 
 async def last_close(
-    session: AsyncSession, instrument_token: int, on_or_before: date
+    session: AsyncSession,
+    instrument_token: int,
+    on_or_before: date,
+    strict: bool = False,
 ) -> tuple[date, Decimal] | None:
+    """Latest close on or before the date; strict=True means strictly
+    before (the prior session, used by CROSSES_* falsifiers)."""
+    cutoff = (
+        OhlcvDaily.trade_date < on_or_before
+        if strict
+        else OhlcvDaily.trade_date <= on_or_before
+    )
     row = (
         await session.execute(
             select(OhlcvDaily.trade_date, OhlcvDaily.close)
             .where(
                 OhlcvDaily.instrument_token == instrument_token,
-                OhlcvDaily.trade_date <= on_or_before,
+                cutoff,
                 OhlcvDaily.close.is_not(None),
             )
             .order_by(OhlcvDaily.trade_date.desc())

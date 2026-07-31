@@ -16,6 +16,7 @@ from sqlalchemy import (
     UniqueConstraint,
     Uuid,
     func,
+    true,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
@@ -313,6 +314,10 @@ class SimPosition(Base):
     exit_costs_inr: Mapped[Decimal | None] = mapped_column(Numeric(18, 2))
     close_reason: Mapped[str | None] = mapped_column(Text)
     journal_note: Mapped[str | None] = mapped_column(Text)  # "Why now?"
+    # set by a falsifier breach (docs/05): flagged, never auto-closed —
+    # the close is the user's decision and that decision is scored later
+    flagged_at: Mapped[datetime | None] = mapped_column(TZDateTime)
+    flag_reason: Mapped[str | None] = mapped_column(Text)
 
     __table_args__ = (
         CheckConstraint(
@@ -478,3 +483,39 @@ class CascadeGap(Base):
     occurred_at: Mapped[datetime] = mapped_column(
         TZDateTime, nullable=False, server_default=func.now()
     )
+
+
+class Alert(Base):
+    """Thesis-breakage alerts (docs/05): a stock down 8% with an intact
+    thesis is noise; a stock flat with a broken thesis is urgent. One alert
+    per breached falsifier, ever — the unique constraint is the idempotency."""
+
+    __tablename__ = "alerts"
+
+    id: Mapped[int] = mapped_column(BigIntPK, primary_key=True, autoincrement=True)
+    kind: Mapped[str] = mapped_column(Text, nullable=False, default="FALSIFIER_BREACH")
+    falsifier_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("falsifiers.id"), nullable=False, unique=True
+    )
+    recommendation_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("recommendations.id"), nullable=False
+    )
+    isin: Mapped[str] = mapped_column(Text, nullable=False)
+    tradingsymbol: Mapped[str | None] = mapped_column(Text)
+    horizon: Mapped[str] = mapped_column(Text, nullable=False)
+    field_id: Mapped[str] = mapped_column(Text, nullable=False)
+    operator: Mapped[str] = mapped_column(Text, nullable=False)
+    threshold: Mapped[Decimal] = mapped_column(Numeric(20, 6), nullable=False)
+    observed_value: Mapped[Decimal] = mapped_column(Numeric(20, 6), nullable=False)
+    observed_as_of: Mapped[date] = mapped_column(Date, nullable=False)
+    # the original thesis line this breach contradicts, quoted verbatim from
+    # the frozen report_md; thesis_line_found=False marks the honest fallback
+    # (the falsifier text itself) when the frozen thesis never contained it
+    thesis_line: Mapped[str] = mapped_column(Text, nullable=False)
+    thesis_line_found: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=true()
+    )
+    raised_at: Mapped[datetime] = mapped_column(
+        TZDateTime, nullable=False, server_default=func.now()
+    )
+    acknowledged_at: Mapped[datetime | None] = mapped_column(TZDateTime)

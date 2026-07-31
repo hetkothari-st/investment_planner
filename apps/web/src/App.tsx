@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router'
 import { Shell } from './app/Shell'
+import { AlertsPage } from './features/alerts/AlertsPage'
 import { AllocationPage } from './features/allocation/AllocationPage'
 import { CalibrationPage } from './features/calibration/CalibrationPage'
 import { EquityPage } from './features/equity/EquityPage'
@@ -16,6 +17,7 @@ export function App() {
         <Route path="/allocation" element={<AllocationPage />} />
         <Route path="/equity" element={<EquityPage />} />
         <Route path="/simulator" element={<SimulatorPage />} />
+        <Route path="/alerts" element={<AlertsPage />} />
         <Route path="/calibration" element={<CalibrationPage />} />
         <Route path="/kitchen-sink" element={<KitchenSink />} />
       </Routes>

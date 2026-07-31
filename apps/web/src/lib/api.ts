@@ -104,6 +104,20 @@ export const allocationApi = {
     }),
 }
 
+// --- M8: alert centre ---
+
+export type AlertOut = components['schemas']['AlertOut']
+export type LiveFalsifierOut = components['schemas']['LiveFalsifierOut']
+export type CheckOut = components['schemas']['CheckOut']
+
+export const alertsApi = {
+  list: (includeAcknowledged = false) =>
+    request<AlertOut[]>(`/alerts?include_acknowledged=${includeAcknowledged}`),
+  check: () => request<CheckOut>('/alerts/check', { method: 'POST' }),
+  ack: (id: number) => request<AlertOut>(`/alerts/${id}/ack`, { method: 'POST' }),
+  liveFalsifiers: () => request<LiveFalsifierOut[]>('/alerts/live-falsifiers'),
+}
+
 // --- M6: equity research ---
 
 export type CandidatesOut = components['schemas']['CandidatesOut']

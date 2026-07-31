@@ -4,6 +4,83 @@
  */
 
 export interface paths {
+    "/alerts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Alerts */
+        get: operations["list_alerts_alerts_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/alerts/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Run Check
+         * @description Evaluate every unbreached falsifier on every LIVE recommendation.
+         *     Safe to re-run: a breached falsifier is never re-alerted.
+         */
+        post: operations["run_check_alerts_check_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/alerts/live-falsifiers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Live Falsifiers
+         * @description Every falsifier on a LIVE thesis with its current reading — the
+         *     watch-list view. Distance to breach is the UI's arithmetic; the values
+         *     here are the record.
+         */
+        get: operations["live_falsifiers_alerts_live_falsifiers_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/alerts/{alert_id}/ack": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Acknowledge */
+        post: operations["acknowledge_alerts__alert_id__ack_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/allocation": {
         parameters: {
             query?: never;
@@ -366,6 +443,42 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AlertOut */
+        AlertOut: {
+            /** Acknowledged At */
+            acknowledged_at: string | null;
+            /** Field Id */
+            field_id: string;
+            /** Horizon */
+            horizon: string;
+            /** Id */
+            id: number;
+            /** Isin */
+            isin: string;
+            /** Kind */
+            kind: string;
+            /** Observed As Of */
+            observed_as_of: string;
+            /** Observed Value */
+            observed_value: string;
+            /** Operator */
+            operator: string;
+            /**
+             * Raised At
+             * Format: date-time
+             */
+            raised_at: string;
+            /** Recommendation Id */
+            recommendation_id: string;
+            /** Thesis Line */
+            thesis_line: string;
+            /** Thesis Line Found */
+            thesis_line_found: boolean;
+            /** Threshold */
+            threshold: string;
+            /** Tradingsymbol */
+            tradingsymbol: string | null;
+        };
         /** Allocation */
         Allocation: {
             /** Assumptions Version */
@@ -454,6 +567,17 @@ export interface components {
             horizon: string;
             /** Message */
             message: string | null;
+        };
+        /** CheckOut */
+        CheckOut: {
+            /** As Of */
+            as_of: string;
+            /** Breached */
+            breached: number;
+            /** Checked */
+            checked: number;
+            /** Skipped */
+            skipped: string[];
         };
         /** ClosePositionIn */
         ClosePositionIn: {
@@ -630,6 +754,33 @@ export interface components {
          * @enum {string}
          */
         Knowledge: "LOW" | "MEDIUM" | "HIGH";
+        /** LiveFalsifierOut */
+        LiveFalsifierOut: {
+            /** Breached */
+            breached: boolean | null;
+            /** Current Value */
+            current_value: string | null;
+            /** Falsifier Id */
+            falsifier_id: string;
+            /** Field Id */
+            field_id: string;
+            /** Horizon */
+            horizon: string;
+            /** Human Text */
+            human_text: string;
+            /** Isin */
+            isin: string;
+            /** Observed As Of */
+            observed_as_of: string | null;
+            /** Operator */
+            operator: string;
+            /** Recommendation Id */
+            recommendation_id: string;
+            /** Threshold */
+            threshold: string;
+            /** Tradingsymbol */
+            tradingsymbol: string | null;
+        };
         /** ManualThesisIn */
         ManualThesisIn: {
             /** Band Base Pct */
@@ -731,6 +882,10 @@ export interface components {
             entry_price: string;
             /** Exit Price */
             exit_price: string | null;
+            /** Flag Reason */
+            flag_reason: string | null;
+            /** Flagged At */
+            flagged_at: string | null;
             /** Holding Xirr Pct */
             holding_xirr_pct: string | null;
             /**
@@ -984,6 +1139,108 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    list_alerts_alerts_get: {
+        parameters: {
+            query?: {
+                include_acknowledged?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlertOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    run_check_alerts_check_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckOut"];
+                };
+            };
+        };
+    };
+    live_falsifiers_alerts_live_falsifiers_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveFalsifierOut"][];
+                };
+            };
+        };
+    };
+    acknowledge_alerts__alert_id__ack_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                alert_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlertOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_allocation_allocation_get: {
         parameters: {
             query?: never;

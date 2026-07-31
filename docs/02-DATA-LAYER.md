@@ -276,6 +276,27 @@ CREATE TABLE calibration_results (
   band_error_pct NUMERIC(10,4)
 );
 
+-- M8 (migration 0007): the breach flow from docs/05 needs two additions.
+-- One alert per breached falsifier, ever — the UNIQUE is the idempotency.
+CREATE TABLE alerts (
+  id BIGSERIAL PRIMARY KEY,
+  kind TEXT NOT NULL,                          -- FALSIFIER_BREACH
+  falsifier_id UUID NOT NULL UNIQUE REFERENCES falsifiers(id),
+  recommendation_id UUID NOT NULL REFERENCES recommendations(id),
+  isin TEXT NOT NULL, tradingsymbol TEXT, horizon TEXT NOT NULL,
+  field_id TEXT NOT NULL, operator TEXT NOT NULL,
+  threshold NUMERIC(20,6) NOT NULL,
+  observed_value NUMERIC(20,6) NOT NULL,
+  observed_as_of DATE NOT NULL,
+  thesis_line TEXT NOT NULL,                   -- quoted verbatim from report_md
+  thesis_line_found BOOLEAN NOT NULL DEFAULT true,  -- false = honest fallback
+  raised_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  acknowledged_at TIMESTAMPTZ
+);
+-- sim_positions grows: flagged_at TIMESTAMPTZ, flag_reason TEXT.
+-- Flagged, never auto-closed — the close is the user's decision and that
+-- decision is itself scored.
+
 CREATE TABLE cascade_gap (
   id BIGSERIAL PRIMARY KEY,
   stage TEXT NOT NULL,

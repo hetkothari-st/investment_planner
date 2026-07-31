@@ -218,6 +218,21 @@ function PositionRow({ position: p, onClosed }: { position: PositionOut; onClose
         alignItems: 'end',
       }}
     >
+      {p.flagged_at && !p.closed_on && (
+        <div
+          style={{
+            gridColumn: '1 / -1',
+            borderLeft: '2px solid var(--madder)',
+            padding: '2px var(--spacing-2)',
+            font: '400 var(--t-body) var(--font-ui)',
+            color: 'var(--text-primary)',
+          }}
+        >
+          <span style={{ color: 'var(--madder)', fontWeight: 600 }}>FLAGGED</span>{' '}
+          — {p.flag_reason} · Not auto-closed: closing is your call, and the call
+          gets scored.
+        </div>
+      )}
       <Metric label={p.isin} value={`${p.qty} sh @ ${p.entry_price}`} provenance="COMPUTED" />
       <Metric label="Entry costs" value={inr(p.entry_costs_inr)} provenance="COMPUTED" />
       <Metric

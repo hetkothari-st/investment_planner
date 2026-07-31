@@ -1,6 +1,107 @@
 {
   "components": {
     "schemas": {
+      "AlertOut": {
+        "properties": {
+          "acknowledged_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acknowledged At"
+          },
+          "field_id": {
+            "title": "Field Id",
+            "type": "string"
+          },
+          "horizon": {
+            "title": "Horizon",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "isin": {
+            "title": "Isin",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "observed_as_of": {
+            "title": "Observed As Of",
+            "type": "string"
+          },
+          "observed_value": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Observed Value",
+            "type": "string"
+          },
+          "operator": {
+            "title": "Operator",
+            "type": "string"
+          },
+          "raised_at": {
+            "format": "date-time",
+            "title": "Raised At",
+            "type": "string"
+          },
+          "recommendation_id": {
+            "title": "Recommendation Id",
+            "type": "string"
+          },
+          "thesis_line": {
+            "title": "Thesis Line",
+            "type": "string"
+          },
+          "thesis_line_found": {
+            "title": "Thesis Line Found",
+            "type": "boolean"
+          },
+          "threshold": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Threshold",
+            "type": "string"
+          },
+          "tradingsymbol": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tradingsymbol"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "recommendation_id",
+          "isin",
+          "tradingsymbol",
+          "horizon",
+          "field_id",
+          "operator",
+          "threshold",
+          "observed_value",
+          "observed_as_of",
+          "thesis_line",
+          "thesis_line_found",
+          "raised_at",
+          "acknowledged_at"
+        ],
+        "title": "AlertOut",
+        "type": "object"
+      },
       "Allocation": {
         "properties": {
           "assumptions_version": {
@@ -263,6 +364,37 @@
           "message"
         ],
         "title": "CandidatesOut",
+        "type": "object"
+      },
+      "CheckOut": {
+        "properties": {
+          "as_of": {
+            "title": "As Of",
+            "type": "string"
+          },
+          "breached": {
+            "title": "Breached",
+            "type": "integer"
+          },
+          "checked": {
+            "title": "Checked",
+            "type": "integer"
+          },
+          "skipped": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Skipped",
+            "type": "array"
+          }
+        },
+        "required": [
+          "as_of",
+          "checked",
+          "breached",
+          "skipped"
+        ],
+        "title": "CheckOut",
         "type": "object"
       },
       "ClosePositionIn": {
@@ -733,6 +865,104 @@
         "title": "Knowledge",
         "type": "string"
       },
+      "LiveFalsifierOut": {
+        "properties": {
+          "breached": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Breached"
+          },
+          "current_value": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Value"
+          },
+          "falsifier_id": {
+            "title": "Falsifier Id",
+            "type": "string"
+          },
+          "field_id": {
+            "title": "Field Id",
+            "type": "string"
+          },
+          "horizon": {
+            "title": "Horizon",
+            "type": "string"
+          },
+          "human_text": {
+            "title": "Human Text",
+            "type": "string"
+          },
+          "isin": {
+            "title": "Isin",
+            "type": "string"
+          },
+          "observed_as_of": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Observed As Of"
+          },
+          "operator": {
+            "title": "Operator",
+            "type": "string"
+          },
+          "recommendation_id": {
+            "title": "Recommendation Id",
+            "type": "string"
+          },
+          "threshold": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Threshold",
+            "type": "string"
+          },
+          "tradingsymbol": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tradingsymbol"
+          }
+        },
+        "required": [
+          "falsifier_id",
+          "recommendation_id",
+          "isin",
+          "tradingsymbol",
+          "horizon",
+          "field_id",
+          "operator",
+          "threshold",
+          "human_text",
+          "current_value",
+          "observed_as_of",
+          "breached"
+        ],
+        "title": "LiveFalsifierOut",
+        "type": "object"
+      },
       "ManualThesisIn": {
         "properties": {
           "band_base_pct": {
@@ -1097,6 +1327,29 @@
             ],
             "title": "Exit Price"
           },
+          "flag_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Flag Reason"
+          },
+          "flagged_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Flagged At"
+          },
           "holding_xirr_pct": {
             "anyOf": [
               {
@@ -1183,6 +1436,8 @@
           "exit_price",
           "close_reason",
           "journal_note",
+          "flagged_at",
+          "flag_reason",
           "latest_mark",
           "realised_pnl_inr",
           "holding_xirr_pct",
@@ -1766,6 +2021,143 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/alerts": {
+      "get": {
+        "operationId": "list_alerts_alerts_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "include_acknowledged",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include Acknowledged",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AlertOut"
+                  },
+                  "title": "Response List Alerts Alerts Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Alerts",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
+    "/alerts/check": {
+      "post": {
+        "description": "Evaluate every unbreached falsifier on every LIVE recommendation.\nSafe to re-run: a breached falsifier is never re-alerted.",
+        "operationId": "run_check_alerts_check_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Run Check",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
+    "/alerts/live-falsifiers": {
+      "get": {
+        "description": "Every falsifier on a LIVE thesis with its current reading \u2014 the\nwatch-list view. Distance to breach is the UI's arithmetic; the values\nhere are the record.",
+        "operationId": "live_falsifiers_alerts_live_falsifiers_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LiveFalsifierOut"
+                  },
+                  "title": "Response Live Falsifiers Alerts Live Falsifiers Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Live Falsifiers",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
+    "/alerts/{alert_id}/ack": {
+      "post": {
+        "operationId": "acknowledge_alerts__alert_id__ack_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "alert_id",
+            "required": true,
+            "schema": {
+              "title": "Alert Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Acknowledge",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
     "/allocation": {
       "get": {
         "operationId": "get_allocation_allocation_get",

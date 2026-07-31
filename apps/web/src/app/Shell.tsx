@@ -9,6 +9,7 @@ const NAV = [
   { to: '/allocation', title: 'Allocation', glyph: 'A' },
   { to: '/equity', title: 'Equity research', glyph: 'E' },
   { to: '/simulator', title: 'Simulator', glyph: 'S' },
+  { to: '/alerts', title: 'Alerts', glyph: '!' },
   { to: '/calibration', title: 'Calibration', glyph: 'C' },
   { to: '/kitchen-sink', title: 'Kitchen sink', glyph: 'K' },
 ]
