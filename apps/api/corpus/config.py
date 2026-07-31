@@ -1,5 +1,6 @@
 from functools import lru_cache
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -12,6 +13,17 @@ class Settings(BaseSettings):
     kite_api_key: str = ""
     kite_api_secret: str = ""
     anthropic_api_key: str = ""
+
+    @field_validator("database_url")
+    @classmethod
+    def _asyncpg_scheme(cls, v: str) -> str:
+        """Managed providers (Railway, Heroku-style) hand out postgres:// or
+        postgresql:// URLs; SQLAlchemy async needs the asyncpg driver spelled
+        out. Normalise here so both the app and alembic get the same URL."""
+        for prefix in ("postgres://", "postgresql://"):
+            if v.startswith(prefix) and "+asyncpg" not in v:
+                return "postgresql+asyncpg://" + v[len(prefix):]
+        return v
 
 
 @lru_cache
