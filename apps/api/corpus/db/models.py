@@ -167,6 +167,12 @@ class Profile(Base):
     job_stability: Mapped[str | None] = mapped_column(Text)
     income_variability: Mapped[Decimal | None] = mapped_column(Numeric(6, 4))
     temperament_choice: Mapped[str | None] = mapped_column(Text)
+    # allocation preferences (docs/04 gate inputs). LOW is the conservative
+    # default; max_lock_in_months None = no constraint stated.
+    self_rated_knowledge: Mapped[str | None] = mapped_column(
+        Text, server_default="LOW"
+    )
+    max_lock_in_months: Mapped[int | None] = mapped_column(Integer)
     updated_at: Mapped[datetime] = mapped_column(
         TZDateTime, nullable=False, server_default=func.now(), onupdate=func.now()
     )
@@ -175,6 +181,10 @@ class Profile(Base):
         CheckConstraint("id = 1", name="single_user"),
         CheckConstraint(
             "job_stability IN ('LOW','MEDIUM','HIGH')", name="job_stability_valid"
+        ),
+        CheckConstraint(
+            "self_rated_knowledge IN ('LOW','MEDIUM','HIGH')",
+            name="self_rated_knowledge_valid",
         ),
     )
 

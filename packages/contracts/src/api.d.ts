@@ -4,15 +4,50 @@
  */
 
 export interface paths {
-    "/health": {
+    "/allocation": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Health */
-        get: operations["health_health_get"];
+        /** Get Allocation */
+        get: operations["get_allocation_allocation_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/allocation/preferences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Preferences */
+        get: operations["get_preferences_allocation_preferences_get"];
+        /** Put Preferences */
+        put: operations["put_preferences_allocation_preferences_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/kite/callback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Callback */
+        get: operations["callback_auth_kite_callback_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -38,23 +73,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/auth/kite/callback": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Callback */
-        get: operations["callback_auth_kite_callback_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/auth/kite/status": {
         parameters: {
             query?: never;
@@ -72,33 +90,16 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/planner/state": {
+    "/health": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Get State */
-        get: operations["get_state_planner_state_get"];
+        /** Health */
+        get: operations["health_health_get"];
         put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/planner/profile": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        /** Put Profile */
-        put: operations["put_profile_planner_profile_put"];
         post?: never;
         delete?: never;
         options?: never;
@@ -174,6 +175,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/planner/profile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Put Profile */
+        put: operations["put_profile_planner_profile_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/planner/state": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get State */
+        get: operations["get_state_planner_state_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/planner/temperament-scenario": {
         parameters: {
             query?: never;
@@ -194,18 +229,59 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sim/theses": {
+    "/research/candidates": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** List Theses */
-        get: operations["list_theses_sim_theses_get"];
+        /**
+         * Candidates
+         * @description Deterministic ranking from stored metric_values. Empty is a valid,
+         *     explained result — not a failure state.
+         */
+        get: operations["candidates_research_candidates_get"];
         put?: never;
-        /** Post Thesis */
-        post: operations["post_thesis_sim_theses_post"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/research/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Generate Report
+         * @description On-demand report generation — 20-60s when the LLM is wired. Refuses
+         *     below 60% coverage (docs/07 anti-patterns) and without an API key.
+         */
+        post: operations["generate_report_research_reports_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sim/calibration": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Calibration */
+        get: operations["get_calibration_sim_calibration_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -268,59 +344,18 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sim/calibration": {
+    "/sim/theses": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Get Calibration */
-        get: operations["get_calibration_sim_calibration_get"];
+        /** List Theses */
+        get: operations["list_theses_sim_theses_get"];
         put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/research/candidates": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Candidates
-         * @description Deterministic ranking from stored metric_values. Empty is a valid,
-         *     explained result — not a failure state.
-         */
-        get: operations["candidates_research_candidates_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/research/reports": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Generate Report
-         * @description On-demand report generation — 20-60s when the LLM is wired. Refuses
-         *     below 60% coverage (docs/07 anti-patterns) and without an API key.
-         */
-        post: operations["generate_report_research_reports_post"];
+        /** Post Thesis */
+        post: operations["post_thesis_sim_theses_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -331,6 +366,55 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** Allocation */
+        Allocation: {
+            /** Assumptions Version */
+            assumptions_version: string;
+            /** Diversification Notes */
+            diversification_notes: string[];
+            /** Gated Out */
+            gated_out: components["schemas"]["GatedVehicle"][];
+            /** Horizon Months */
+            horizon_months: number;
+            /** Lines */
+            lines: components["schemas"]["AllocationLine"][];
+            /** Plan Version Id */
+            plan_version_id: string | null;
+            preferences: components["schemas"]["AllocationPreferences"];
+            /** Ranked Vehicles */
+            ranked_vehicles: components["schemas"]["VehicleScore"][];
+            /** Vehicles Version */
+            vehicles_version: string;
+        };
+        /** AllocationLine */
+        AllocationLine: {
+            bucket: components["schemas"]["HorizonBucket"];
+            /** Label */
+            label: string;
+            /** Lumpsum Inr */
+            lumpsum_inr: number;
+            /** Monthly Inr */
+            monthly_inr: number;
+            /** Rationale */
+            rationale: string;
+            /** Vehicle Id */
+            vehicle_id: string;
+        };
+        /**
+         * AllocationPreferences
+         * @description The two allocation inputs the planner does not already hold.
+         *
+         *     self_rated_knowledge defaults LOW: the conservative reading gates
+         *     HIGH-knowledge vehicles out until the user claims otherwise.
+         *     max_lock_in_months None means the user has stated no constraint;
+         *     the lock-in gate then passes and the UI says so.
+         */
+        AllocationPreferences: {
+            /** Max Lock In Months */
+            max_lock_in_months?: number | null;
+            /** @default LOW */
+            self_rated_knowledge: components["schemas"]["Knowledge"];
+        };
         /** AuthStatus */
         AuthStatus: {
             /** Authenticated */
@@ -340,59 +424,59 @@ export interface components {
         };
         /** BlockOut */
         BlockOut: {
-            /** Provenance */
-            provenance: string;
-            /** Kind */
-            kind: string;
             /** Content */
             content: string;
+            /** Kind */
+            kind: string;
+            /** Provenance */
+            provenance: string;
         };
         /** CandidateOut */
         CandidateOut: {
+            /** Composite Pctl */
+            composite_pctl: number;
+            /** Conviction */
+            conviction: string;
+            /** Coverage */
+            coverage: number;
             /** Isin */
             isin: string;
             /** Tradingsymbol */
             tradingsymbol: string | null;
-            /** Composite Pctl */
-            composite_pctl: number;
-            /** Coverage */
-            coverage: number;
-            /** Conviction */
-            conviction: string;
         };
         /** CandidatesOut */
         CandidatesOut: {
-            /** Horizon */
-            horizon: string;
             /** As Of */
             as_of: string | null;
             /** Candidates */
             candidates: components["schemas"]["CandidateOut"][];
+            /** Horizon */
+            horizon: string;
             /** Message */
             message: string | null;
         };
         /** ClosePositionIn */
         ClosePositionIn: {
-            /** Reason */
-            reason: string;
             /** Journal Note */
             journal_note: string;
             /** Price */
             price?: number | string | null;
+            /** Reason */
+            reason: string;
         };
         /** DebtIn */
         "DebtIn-Input": {
-            /** Label */
-            label: string;
-            /** Principal Outstanding */
-            principal_outstanding: number | string;
             /** Annual Rate Pct */
             annual_rate_pct: number | string;
+            /** Label */
+            label: string;
             /**
              * Min Emi
              * @default 0
              */
             min_emi: number | string;
+            /** Principal Outstanding */
+            principal_outstanding: number | string;
             /**
              * Tax Deductible
              * @default false
@@ -401,17 +485,17 @@ export interface components {
         };
         /** DebtIn */
         "DebtIn-Output": {
-            /** Label */
-            label: string;
-            /** Principal Outstanding */
-            principal_outstanding: number;
             /** Annual Rate Pct */
             annual_rate_pct: string;
+            /** Label */
+            label: string;
             /**
              * Min Emi
              * @default 0
              */
             min_emi: number;
+            /** Principal Outstanding */
+            principal_outstanding: number;
             /**
              * Tax Deductible
              * @default false
@@ -422,34 +506,55 @@ export interface components {
         FalsifierIn: {
             /** Field Id */
             field_id: string;
+            /** Human Text */
+            human_text: string;
             /** Operator */
             operator: string;
             /** Threshold */
             threshold: number | string;
-            /** Human Text */
-            human_text: string;
         };
         /** GateResult */
         GateResult: {
+            /** Amount */
+            amount: number;
             /** Gate */
             gate: string;
             /** Label */
             label: string;
-            status: components["schemas"]["GateStatus"];
-            /** Amount */
-            amount: number;
             /** Reason */
             reason: string;
+            status: components["schemas"]["GateStatus"];
         };
         /**
          * GateStatus
          * @enum {string}
          */
         GateStatus: "PASSED" | "BLOCKED" | "INFO";
+        /** GatedVehicle */
+        GatedVehicle: {
+            /** Explanation */
+            explanation: string;
+            /** Gate */
+            gate: string;
+            /** Label */
+            label: string;
+            /** Liquidity Days */
+            liquidity_days: number;
+            /** Lock In Months */
+            lock_in_months: number;
+            /** Net Expected Return Pct */
+            net_expected_return_pct: string;
+            /** Vehicle Id */
+            vehicle_id: string;
+            /** Volatility Annual Pct */
+            volatility_annual_pct: string;
+        };
         /** GoalIn */
         "GoalIn-Input": {
             /** Label */
             label: string;
+            /** @default SHOULD */
+            priority: components["schemas"]["GoalPriority"];
             /** Target Amount */
             target_amount: number | string;
             /**
@@ -457,13 +562,13 @@ export interface components {
              * Format: date
              */
             target_date: string;
-            /** @default SHOULD */
-            priority: components["schemas"]["GoalPriority"];
         };
         /** GoalIn */
         "GoalIn-Output": {
             /** Label */
             label: string;
+            /** @default SHOULD */
+            priority: components["schemas"]["GoalPriority"];
             /** Target Amount */
             target_amount: number;
             /**
@@ -471,8 +576,6 @@ export interface components {
              * Format: date
              */
             target_date: string;
-            /** @default SHOULD */
-            priority: components["schemas"]["GoalPriority"];
         };
         /**
          * GoalPriority
@@ -486,10 +589,10 @@ export interface components {
         };
         /** Health */
         Health: {
-            /** Status */
-            status: string;
             /** Service */
             service: string;
+            /** Status */
+            status: string;
         };
         /**
          * HorizonBucket
@@ -498,55 +601,60 @@ export interface components {
         HorizonBucket: "LIQUID_0_12" | "DEBT_12_36" | "HYBRID_36_60" | "EQUITY_60_PLUS";
         /** HorizonSummary */
         HorizonSummary: {
+            /** Band Coverage Pct */
+            band_coverage_pct: string | null;
+            /** Hit Rate Pct */
+            hit_rate_pct: string | null;
             /** Horizon */
             horizon: string;
+            /** Mean Brier */
+            mean_brier: string | null;
             /** N */
             n: number;
             /** N Needed */
             n_needed: number;
-            /** Hit Rate Pct */
-            hit_rate_pct: string | null;
-            /** Band Coverage Pct */
-            band_coverage_pct: string | null;
-            /** Mean Brier */
-            mean_brier: string | null;
             /** Net Alpha Pct */
             net_alpha_pct: string | null;
-            /** Verdict */
-            verdict: string;
             /** Severity */
             severity: string;
+            /** Verdict */
+            verdict: string;
         };
         /**
          * JobStability
          * @enum {string}
          */
         JobStability: "LOW" | "MEDIUM" | "HIGH";
+        /**
+         * Knowledge
+         * @enum {string}
+         */
+        Knowledge: "LOW" | "MEDIUM" | "HIGH";
         /** ManualThesisIn */
         ManualThesisIn: {
-            /** Isin */
-            isin: string;
-            /** Tradingsymbol */
-            tradingsymbol?: string | null;
-            /** Instrument Token */
-            instrument_token?: number | null;
-            /** Horizon */
-            horizon: string;
+            /** Band Base Pct */
+            band_base_pct: number | string;
+            /** Band Bear Pct */
+            band_bear_pct: number | string;
+            /** Band Bull Pct */
+            band_bull_pct: number | string;
+            /** Conviction */
+            conviction: string;
             /**
              * Expires On
              * Format: date
              */
             expires_on: string;
+            /** Falsifiers */
+            falsifiers: components["schemas"]["FalsifierIn"][];
+            /** Horizon */
+            horizon: string;
+            /** Instrument Token */
+            instrument_token?: number | null;
+            /** Isin */
+            isin: string;
             /** Ref Price */
             ref_price: number | string;
-            /** Band Bear Pct */
-            band_bear_pct: number | string;
-            /** Band Base Pct */
-            band_base_pct: number | string;
-            /** Band Bull Pct */
-            band_bull_pct: number | string;
-            /** Conviction */
-            conviction: string;
             /** Suggested Size Inr */
             suggested_size_inr: number | string;
             /**
@@ -554,8 +662,8 @@ export interface components {
              * @description Your reasoning, frozen at issue
              */
             thesis_md: string;
-            /** Falsifiers */
-            falsifiers: components["schemas"]["FalsifierIn"][];
+            /** Tradingsymbol */
+            tradingsymbol?: string | null;
         };
         /** MarkRunOut */
         MarkRunOut: {
@@ -568,63 +676,76 @@ export interface components {
         };
         /** OpenPositionIn */
         OpenPositionIn: {
+            /** Amount Inr */
+            amount_inr: number | string;
+            /** Price */
+            price?: number | string | null;
             /**
              * Recommendation Id
              * Format: uuid
              */
             recommendation_id: string;
-            /** Amount Inr */
-            amount_inr: number | string;
-            /** Price */
-            price?: number | string | null;
         };
         /** PlanResult */
         PlanResult: {
-            /** Version Id */
-            version_id?: string | null;
-            /** Generated At */
-            generated_at?: string | null;
-            /** Gates */
-            gates: components["schemas"]["GateResult"][];
-            /** Investable Monthly */
-            investable_monthly: number;
-            /** Investable Lumpsum */
-            investable_lumpsum: number;
-            /** Buffer Target */
-            buffer_target: number;
+            /** Assumptions Version */
+            assumptions_version: string;
+            /** Blocking Reasons */
+            blocking_reasons: string[];
             /** Buffer Current */
             buffer_current: number;
             /** Buffer Eta Months */
             buffer_eta_months: number | null;
-            /** Blocking Reasons */
-            blocking_reasons: string[];
-            /** Spending Recommendations */
-            spending_recommendations: string[];
-            /** Max Equity Fraction */
-            max_equity_fraction: string;
+            /** Buffer Target */
+            buffer_target: number;
+            /** Gates */
+            gates: components["schemas"]["GateResult"][];
+            /** Generated At */
+            generated_at?: string | null;
             /** Horizon Buckets */
             horizon_buckets: {
                 [key: string]: number;
             };
-            /** Assumptions Version */
-            assumptions_version: string;
+            /** Investable Lumpsum */
+            investable_lumpsum: number;
+            /** Investable Monthly */
+            investable_monthly: number;
+            /** Max Equity Fraction */
+            max_equity_fraction: string;
             /** Sensitivity */
             sensitivity: components["schemas"]["SensitivityRow"][];
+            /** Spending Recommendations */
+            spending_recommendations: string[];
+            /** Version Id */
+            version_id?: string | null;
         };
         /** PositionOut */
         PositionOut: {
+            /** Close Reason */
+            close_reason: string | null;
+            /** Closed On */
+            closed_on: string | null;
+            /** Entry Costs Inr */
+            entry_costs_inr: number;
+            /** Entry Price */
+            entry_price: string;
+            /** Exit Price */
+            exit_price: string | null;
+            /** Holding Xirr Pct */
+            holding_xirr_pct: string | null;
             /**
              * Id
              * Format: uuid
              */
             id: string;
-            /**
-             * Recommendation Id
-             * Format: uuid
-             */
-            recommendation_id: string;
             /** Isin */
             isin: string;
+            /** Journal Note */
+            journal_note: string | null;
+            /** Latest Mark */
+            latest_mark: {
+                [key: string]: unknown;
+            } | null;
             /**
              * Opened On
              * Format: date
@@ -632,112 +753,99 @@ export interface components {
             opened_on: string;
             /** Qty */
             qty: number;
-            /** Entry Price */
-            entry_price: string;
-            /** Entry Costs Inr */
-            entry_costs_inr: number;
-            /** Closed On */
-            closed_on: string | null;
-            /** Exit Price */
-            exit_price: string | null;
-            /** Close Reason */
-            close_reason: string | null;
-            /** Journal Note */
-            journal_note: string | null;
-            /** Latest Mark */
-            latest_mark: {
-                [key: string]: unknown;
-            } | null;
             /** Realised Pnl Inr */
             realised_pnl_inr: number | null;
-            /** Holding Xirr Pct */
-            holding_xirr_pct: string | null;
+            /**
+             * Recommendation Id
+             * Format: uuid
+             */
+            recommendation_id: string;
             /** Thesis Snapshot Md */
             thesis_snapshot_md: string;
         };
         /** ProfileIn */
         "ProfileIn-Input": {
+            /**
+             * Dependants
+             * @default 0
+             */
+            dependants: number;
             /** Display Name */
             display_name?: string | null;
-            /** Monthly Inflow */
-            monthly_inflow: number | string;
-            /** Fixed Outflow */
-            fixed_outflow: number | string;
-            /** Variable Outflow */
-            variable_outflow: number | string;
-            /** Liquid Balance */
-            liquid_balance: number | string;
             /**
              * Existing Investments
              * @default 0
              */
             existing_investments: number | string;
-            /**
-             * Dependants
-             * @default 0
-             */
-            dependants: number;
-            /** @default MEDIUM */
-            job_stability: components["schemas"]["JobStability"];
+            /** Fixed Outflow */
+            fixed_outflow: number | string;
             /**
              * Income Variability
              * @default 0
              */
             income_variability: number | string;
+            /** @default MEDIUM */
+            job_stability: components["schemas"]["JobStability"];
+            /** Liquid Balance */
+            liquid_balance: number | string;
+            /** Monthly Inflow */
+            monthly_inflow: number | string;
             /** @default SELL_SOME */
             temperament_choice: components["schemas"]["TemperamentChoice"];
+            /** Variable Outflow */
+            variable_outflow: number | string;
         };
         /** ProfileIn */
         "ProfileIn-Output": {
-            /** Display Name */
-            display_name?: string | null;
-            /** Monthly Inflow */
-            monthly_inflow: number;
-            /** Fixed Outflow */
-            fixed_outflow: number;
-            /** Variable Outflow */
-            variable_outflow: number;
-            /** Liquid Balance */
-            liquid_balance: number;
-            /**
-             * Existing Investments
-             * @default 0
-             */
-            existing_investments: number;
             /**
              * Dependants
              * @default 0
              */
             dependants: number;
-            /** @default MEDIUM */
-            job_stability: components["schemas"]["JobStability"];
+            /** Display Name */
+            display_name?: string | null;
+            /**
+             * Existing Investments
+             * @default 0
+             */
+            existing_investments: number;
+            /** Fixed Outflow */
+            fixed_outflow: number;
             /**
              * Income Variability
              * @default 0
              */
             income_variability: string;
+            /** @default MEDIUM */
+            job_stability: components["schemas"]["JobStability"];
+            /** Liquid Balance */
+            liquid_balance: number;
+            /** Monthly Inflow */
+            monthly_inflow: number;
             /** @default SELL_SOME */
             temperament_choice: components["schemas"]["TemperamentChoice"];
+            /** Variable Outflow */
+            variable_outflow: number;
         };
         /** ReportOut */
         ReportOut: {
-            /** Isin */
-            isin: string;
-            /** Horizon */
-            horizon: string;
-            /** Narrative Included */
-            narrative_included: boolean;
-            /** Coverage */
-            coverage: number;
             /** Blocks */
             blocks: components["schemas"]["BlockOut"][];
+            /** Coverage */
+            coverage: number;
+            /** Horizon */
+            horizon: string;
+            /** Isin */
+            isin: string;
+            /** Narrative Included */
+            narrative_included: boolean;
         };
         /** ReportRequest */
         ReportRequest: {
-            /** Isin */
-            isin: string;
             /** Horizon */
             horizon: string;
+            /** Isin */
+            isin: string;
         };
         /** ScenarioOption */
         ScenarioOption: {
@@ -766,15 +874,34 @@ export interface components {
         TemperamentChoice: "SELL_EVERYTHING" | "SELL_SOME" | "HOLD" | "BUY_MORE";
         /** TemperamentScenario */
         TemperamentScenario: {
-            /** Before Inr */
-            before_inr: number;
             /** After Inr */
             after_inr: number;
+            /** Before Inr */
+            before_inr: number;
             /** Options */
             options: components["schemas"]["ScenarioOption"][];
         };
         /** ThesisOut */
         ThesisOut: {
+            /** Band Base Pct */
+            band_base_pct: string;
+            /** Band Bear Pct */
+            band_bear_pct: string;
+            /** Band Bull Pct */
+            band_bull_pct: string;
+            /** Conviction */
+            conviction: string;
+            /**
+             * Expires On
+             * Format: date
+             */
+            expires_on: string;
+            /** Falsifiers */
+            falsifiers: {
+                [key: string]: unknown;
+            }[];
+            /** Horizon */
+            horizon: string;
             /**
              * Id
              * Format: uuid
@@ -782,61 +909,71 @@ export interface components {
             id: string;
             /** Isin */
             isin: string;
-            /** Tradingsymbol */
-            tradingsymbol: string | null;
-            /** Horizon */
-            horizon: string;
             /**
              * Issued At
              * Format: date-time
              */
             issued_at: string;
-            /**
-             * Expires On
-             * Format: date
-             */
-            expires_on: string;
             /** Ref Price */
             ref_price: string;
-            /** Band Bear Pct */
-            band_bear_pct: string;
-            /** Band Base Pct */
-            band_base_pct: string;
-            /** Band Bull Pct */
-            band_bull_pct: string;
-            /** Conviction */
-            conviction: string;
-            /** Suggested Size Inr */
-            suggested_size_inr: number;
             /** Report Md */
             report_md: string;
             /** Status */
             status: string;
-            /** Falsifiers */
-            falsifiers: {
-                [key: string]: unknown;
-            }[];
+            /** Suggested Size Inr */
+            suggested_size_inr: number;
+            /** Tradingsymbol */
+            tradingsymbol: string | null;
         };
         /** UserState */
         UserState: {
-            profile: components["schemas"]["ProfileIn-Output"] | null;
             /** Debts */
             debts: components["schemas"]["DebtIn-Output"][];
             /** Goals */
             goals: components["schemas"]["GoalIn-Output"][];
+            profile: components["schemas"]["ProfileIn-Output"] | null;
         };
         /** ValidationError */
         ValidationError: {
+            /** Context */
+            ctx?: Record<string, never>;
+            /** Input */
+            input?: unknown;
             /** Location */
             loc: (string | number)[];
             /** Message */
             msg: string;
             /** Error Type */
             type: string;
-            /** Input */
-            input?: unknown;
-            /** Context */
-            ctx?: Record<string, never>;
+        };
+        /** VehicleScore */
+        VehicleScore: {
+            /** Allocated Lumpsum */
+            allocated_lumpsum: number;
+            /** Allocated Monthly */
+            allocated_monthly: number;
+            /** Components */
+            components: {
+                [key: string]: string;
+            };
+            /** Effort */
+            effort: string;
+            /** Knowledge Required */
+            knowledge_required: string;
+            /** Label */
+            label: string;
+            /** Liquidity Days */
+            liquidity_days: number;
+            /** Lock In Months */
+            lock_in_months: number;
+            /** Net Expected Return Pct */
+            net_expected_return_pct: string;
+            /** Suitability Pct */
+            suitability_pct: string;
+            /** Vehicle Id */
+            vehicle_id: string;
+            /** Volatility Annual Pct */
+            volatility_annual_pct: string;
         };
     };
     responses: never;
@@ -847,7 +984,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    health_health_get: {
+    get_allocation_allocation_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -862,12 +999,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Health"];
+                    "application/json": components["schemas"]["Allocation"];
                 };
             };
         };
     };
-    login_auth_kite_login_get: {
+    get_preferences_allocation_preferences_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -882,7 +1019,40 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["AllocationPreferences"];
+                };
+            };
+        };
+    };
+    put_preferences_allocation_preferences_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AllocationPreferences"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AllocationPreferences"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -918,6 +1088,26 @@ export interface operations {
             };
         };
     };
+    login_auth_kite_login_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
     status_auth_kite_status_get: {
         parameters: {
             query?: never;
@@ -938,7 +1128,7 @@ export interface operations {
             };
         };
     };
-    get_state_planner_state_get: {
+    health_health_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -953,40 +1143,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UserState"];
-                };
-            };
-        };
-    };
-    put_profile_planner_profile_put: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ProfileIn-Input"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProfileIn-Output"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
+                    "application/json": components["schemas"]["Health"];
                 };
             };
         };
@@ -1097,6 +1254,59 @@ export interface operations {
             };
         };
     };
+    put_profile_planner_profile_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProfileIn-Input"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProfileIn-Output"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_state_planner_state_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserState"];
+                };
+            };
+        };
+    };
     temperament_scenario_planner_temperament_scenario_get: {
         parameters: {
             query?: never;
@@ -1117,7 +1327,71 @@ export interface operations {
             };
         };
     };
-    list_theses_sim_theses_get: {
+    candidates_research_candidates_get: {
+        parameters: {
+            query?: {
+                horizon?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CandidatesOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    generate_report_research_reports_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReportRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_calibration_sim_calibration_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -1132,40 +1406,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ThesisOut"][];
-                };
-            };
-        };
-    };
-    post_thesis_sim_theses_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ManualThesisIn"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ThesisOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
+                    "application/json": components["schemas"]["HorizonSummary"][];
                 };
             };
         };
@@ -1278,7 +1519,7 @@ export interface operations {
             };
         };
     };
-    get_calibration_sim_calibration_get: {
+    list_theses_sim_theses_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -1293,43 +1534,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HorizonSummary"][];
+                    "application/json": components["schemas"]["ThesisOut"][];
                 };
             };
         };
     };
-    candidates_research_candidates_get: {
-        parameters: {
-            query?: {
-                horizon?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CandidatesOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    generate_report_research_reports_post: {
+    post_thesis_sim_theses_post: {
         parameters: {
             query?: never;
             header?: never;
@@ -1338,7 +1548,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ReportRequest"];
+                "application/json": components["schemas"]["ManualThesisIn"];
             };
         };
         responses: {
@@ -1348,7 +1558,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ReportOut"];
+                    "application/json": components["schemas"]["ThesisOut"];
                 };
             };
             /** @description Validation Error */

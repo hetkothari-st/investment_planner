@@ -1,0 +1,332 @@
+# Vehicle taxonomy + declared characteristics — docs/04-ALLOCATION-ENGINE.md.
+# These are assumptions with a version number, not measurements. The UI shows
+# them and lets the user edit a copy. Never edit in place: copy to
+# vehicles.v2.yaml and bump the version.
+#
+# Conventions:
+#   expected_real_return_pct   after inflation (assumptions.v1: 5.0%), before
+#                              cost and tax. Deliberately conservative.
+#   volatility_annual_pct      annualised stdev of returns.
+#   max_historical_dd_pct      worst historical peak-to-trough, honest numbers.
+#   liquidity_days             days from sell decision to cash in bank.
+#   lock_in_months             hard lock (exit impossible/penal), 0 if none.
+#   min_horizon_months         below this the vehicle is gated out, not scored.
+#   natural_horizon_months     the holding period the vehicle is built for;
+#                              drives fit_horizon = min(h/nat, nat/h).
+#   cost_drag_pct              brokerage + slippage + spreads, annualised.
+#   expense_ratio_pct          fund TER where applicable.
+#   tax                        short_term {rate, threshold_months}: the rate
+#                              paid when horizon < threshold; long_term {rate,
+#                              exemption_inr} otherwise. Slab-taxed vehicles
+#                              carry 0.30 on both sides (single-user system:
+#                              owner is in the top bracket; edit if not).
+#   effort / knowledge_required  LOW | MEDIUM | HIGH.
+version: v1
+
+scoring:
+  # suitability = w_horizon*fit_h + w_drawdown*fit_d + w_liquidity*fit_l
+  #             + w_return*fit_r + w_effort*fit_e            (docs/04)
+  w_horizon: "0.25"
+  w_drawdown: "0.20"
+  w_liquidity: "0.15"
+  w_return: "0.30"
+  w_effort: "0.10"
+  # fit_r = clamp(net_expected_return_pct / return_norm_pct, 0, 1)
+  return_norm_pct: "12.0"
+
+construction:
+  max_vehicle_weight: "0.40"   # no single vehicle > 40% of a bucket
+  index_floor: "0.50"          # equity bucket: >=50% index if knowledge != HIGH
+  gold_ceiling: "0.15"         # commodity.* ceiling, fraction of total
+  intl_ceiling: "0.20"         # intl.* ceiling, fraction of total
+  sip_round_inr: "500"         # round lines to sensible SIP amounts
+
+vehicles:
+  - id: liquid.savings
+    label: Savings account
+    expected_real_return_pct: "-1.5"
+    volatility_annual_pct: "0.1"
+    max_historical_dd_pct: "0.0"
+    liquidity_days: 0
+    lock_in_months: 0
+    min_horizon_months: 0
+    natural_horizon_months: 3
+    cost_drag_pct: "0.0"
+    expense_ratio_pct: "0.0"
+    tax: {short_term: {rate: "0.30", threshold_months: 12}, long_term: {rate: "0.30", exemption_inr: "0"}}
+    effort: LOW
+    knowledge_required: LOW
+
+  - id: liquid.overnight_fund
+    label: Overnight / liquid fund
+    expected_real_return_pct: "1.0"
+    volatility_annual_pct: "0.3"
+    max_historical_dd_pct: "0.5"
+    liquidity_days: 1
+    lock_in_months: 0
+    min_horizon_months: 0
+    natural_horizon_months: 6
+    cost_drag_pct: "0.0"
+    expense_ratio_pct: "0.15"
+    tax: {short_term: {rate: "0.30", threshold_months: 12}, long_term: {rate: "0.30", exemption_inr: "0"}}
+    effort: LOW
+    knowledge_required: LOW
+
+  - id: liquid.fd
+    label: Fixed deposit (sweep-in)
+    expected_real_return_pct: "1.5"
+    volatility_annual_pct: "0.0"
+    max_historical_dd_pct: "0.0"
+    liquidity_days: 1
+    lock_in_months: 0
+    min_horizon_months: 3
+    natural_horizon_months: 12
+    cost_drag_pct: "0.1"       # premature-withdrawal penalty, amortised
+    expense_ratio_pct: "0.0"
+    tax: {short_term: {rate: "0.30", threshold_months: 12}, long_term: {rate: "0.30", exemption_inr: "0"}}
+    effort: LOW
+    knowledge_required: LOW
+
+  - id: debt.short_duration
+    label: Short-duration debt fund
+    expected_real_return_pct: "1.8"
+    volatility_annual_pct: "1.5"
+    max_historical_dd_pct: "4.0"
+    liquidity_days: 2
+    lock_in_months: 0
+    min_horizon_months: 12
+    natural_horizon_months: 24
+    cost_drag_pct: "0.0"
+    expense_ratio_pct: "0.40"
+    tax: {short_term: {rate: "0.30", threshold_months: 12}, long_term: {rate: "0.30", exemption_inr: "0"}}
+    effort: LOW
+    knowledge_required: LOW
+
+  - id: debt.corporate_bond
+    label: Corporate bond fund
+    expected_real_return_pct: "2.2"
+    volatility_annual_pct: "2.5"
+    max_historical_dd_pct: "8.0"
+    liquidity_days: 3
+    lock_in_months: 0
+    min_horizon_months: 24
+    natural_horizon_months: 36
+    cost_drag_pct: "0.0"
+    expense_ratio_pct: "0.55"
+    tax: {short_term: {rate: "0.30", threshold_months: 12}, long_term: {rate: "0.30", exemption_inr: "0"}}
+    effort: LOW
+    knowledge_required: MEDIUM
+
+  - id: debt.gilt
+    label: Gilt fund
+    expected_real_return_pct: "2.0"
+    volatility_annual_pct: "4.0"
+    max_historical_dd_pct: "12.0"
+    liquidity_days: 2
+    lock_in_months: 0
+    min_horizon_months: 36
+    natural_horizon_months: 60
+    cost_drag_pct: "0.0"
+    expense_ratio_pct: "0.45"
+    tax: {short_term: {rate: "0.30", threshold_months: 12}, long_term: {rate: "0.30", exemption_inr: "0"}}
+    effort: LOW
+    knowledge_required: MEDIUM
+
+  - id: hybrid.balanced_advantage
+    label: Balanced advantage fund
+    expected_real_return_pct: "4.0"
+    volatility_annual_pct: "9.0"
+    max_historical_dd_pct: "22.0"
+    liquidity_days: 3
+    lock_in_months: 0
+    min_horizon_months: 36
+    natural_horizon_months: 48
+    cost_drag_pct: "0.0"
+    expense_ratio_pct: "0.80"
+    tax: {short_term: {rate: "0.20", threshold_months: 12}, long_term: {rate: "0.125", exemption_inr: "125000"}}
+    effort: LOW
+    knowledge_required: LOW
+
+  - id: hybrid.multi_asset
+    label: Multi-asset fund
+    expected_real_return_pct: "4.2"
+    volatility_annual_pct: "10.0"
+    max_historical_dd_pct: "25.0"
+    liquidity_days: 3
+    lock_in_months: 0
+    min_horizon_months: 36
+    natural_horizon_months: 48
+    cost_drag_pct: "0.0"
+    expense_ratio_pct: "0.90"
+    tax: {short_term: {rate: "0.20", threshold_months: 12}, long_term: {rate: "0.125", exemption_inr: "125000"}}
+    effort: LOW
+    knowledge_required: MEDIUM
+
+  - id: equity.index_largecap
+    label: Large-cap index fund
+    expected_real_return_pct: "7.0"
+    volatility_annual_pct: "17.0"
+    max_historical_dd_pct: "55.0"
+    liquidity_days: 3
+    lock_in_months: 0
+    min_horizon_months: 60
+    natural_horizon_months: 96
+    cost_drag_pct: "0.05"
+    expense_ratio_pct: "0.20"
+    tax: {short_term: {rate: "0.20", threshold_months: 12}, long_term: {rate: "0.125", exemption_inr: "125000"}}
+    effort: LOW
+    knowledge_required: LOW
+
+  - id: equity.index_midcap
+    label: Mid-cap index fund
+    expected_real_return_pct: "7.8"
+    volatility_annual_pct: "21.0"
+    max_historical_dd_pct: "65.0"
+    liquidity_days: 3
+    lock_in_months: 0
+    min_horizon_months: 72
+    natural_horizon_months: 108
+    cost_drag_pct: "0.05"
+    expense_ratio_pct: "0.30"
+    tax: {short_term: {rate: "0.20", threshold_months: 12}, long_term: {rate: "0.125", exemption_inr: "125000"}}
+    effort: LOW
+    knowledge_required: MEDIUM
+
+  - id: equity.flexicap_active
+    label: Flexi-cap active fund
+    expected_real_return_pct: "7.2"
+    volatility_annual_pct: "18.0"
+    max_historical_dd_pct: "58.0"
+    liquidity_days: 3
+    lock_in_months: 0
+    min_horizon_months: 60
+    natural_horizon_months: 96
+    cost_drag_pct: "0.0"
+    expense_ratio_pct: "1.00"
+    tax: {short_term: {rate: "0.20", threshold_months: 12}, long_term: {rate: "0.125", exemption_inr: "125000"}}
+    effort: MEDIUM
+    knowledge_required: MEDIUM
+
+  - id: equity.direct_largecap
+    label: Direct equity — large cap
+    expected_real_return_pct: "7.5"
+    volatility_annual_pct: "19.0"
+    max_historical_dd_pct: "60.0"
+    liquidity_days: 1
+    lock_in_months: 0
+    min_horizon_months: 60
+    natural_horizon_months: 96
+    cost_drag_pct: "0.25"
+    expense_ratio_pct: "0.0"
+    tax: {short_term: {rate: "0.20", threshold_months: 12}, long_term: {rate: "0.125", exemption_inr: "125000"}}
+    effort: HIGH
+    knowledge_required: HIGH
+
+  - id: equity.direct_midsmall
+    label: Direct equity — mid/small cap
+    expected_real_return_pct: "8.5"
+    volatility_annual_pct: "26.0"
+    max_historical_dd_pct: "62.0"
+    liquidity_days: 1
+    lock_in_months: 0
+    min_horizon_months: 84
+    natural_horizon_months: 120
+    cost_drag_pct: "0.35"
+    expense_ratio_pct: "0.0"
+    tax: {short_term: {rate: "0.20", threshold_months: 12}, long_term: {rate: "0.125", exemption_inr: "125000"}}
+    effort: HIGH
+    knowledge_required: HIGH
+
+  - id: derivatives.fno
+    label: Futures & options
+    enabled: false
+    disabled_reason: >-
+      Gated off until the F&O module exists (docs/10: not before M9 and 100
+      scored equity recommendations).
+    expected_real_return_pct: "0.0"
+    volatility_annual_pct: "60.0"
+    max_historical_dd_pct: "100.0"
+    liquidity_days: 0
+    lock_in_months: 0
+    min_horizon_months: 0
+    natural_horizon_months: 1
+    cost_drag_pct: "2.0"
+    expense_ratio_pct: "0.0"
+    tax: {short_term: {rate: "0.30", threshold_months: 12}, long_term: {rate: "0.30", exemption_inr: "0"}}
+    effort: HIGH
+    knowledge_required: HIGH
+
+  - id: commodity.gold_etf
+    label: Gold ETF
+    expected_real_return_pct: "1.5"
+    volatility_annual_pct: "14.0"
+    max_historical_dd_pct: "30.0"
+    liquidity_days: 2
+    lock_in_months: 0
+    min_horizon_months: 36
+    natural_horizon_months: 60
+    cost_drag_pct: "0.10"
+    expense_ratio_pct: "0.50"
+    tax: {short_term: {rate: "0.20", threshold_months: 12}, long_term: {rate: "0.125", exemption_inr: "0"}}
+    effort: LOW
+    knowledge_required: LOW
+
+  - id: commodity.sgb
+    label: Sovereign gold bond
+    expected_real_return_pct: "4.0"   # gold real + 2.5% coupon
+    volatility_annual_pct: "14.0"
+    max_historical_dd_pct: "30.0"
+    liquidity_days: 5                 # thin secondary market
+    lock_in_months: 60                # early-redemption window opens at year 5
+    min_horizon_months: 60
+    natural_horizon_months: 96
+    cost_drag_pct: "0.50"             # secondary-market spread if exited early
+    expense_ratio_pct: "0.0"
+    tax: {short_term: {rate: "0.20", threshold_months: 12}, long_term: {rate: "0.0", exemption_inr: "0"}}  # CG exempt at maturity
+    effort: MEDIUM
+    knowledge_required: MEDIUM
+
+  - id: reit
+    label: REIT
+    expected_real_return_pct: "3.5"
+    volatility_annual_pct: "15.0"
+    max_historical_dd_pct: "35.0"
+    liquidity_days: 2
+    lock_in_months: 0
+    min_horizon_months: 60
+    natural_horizon_months: 84
+    cost_drag_pct: "0.20"
+    expense_ratio_pct: "0.0"
+    tax: {short_term: {rate: "0.20", threshold_months: 12}, long_term: {rate: "0.125", exemption_inr: "0"}}
+    effort: MEDIUM
+    knowledge_required: MEDIUM
+
+  - id: invit
+    label: InvIT
+    expected_real_return_pct: "4.0"
+    volatility_annual_pct: "16.0"
+    max_historical_dd_pct: "40.0"
+    liquidity_days: 3
+    lock_in_months: 0
+    min_horizon_months: 60
+    natural_horizon_months: 84
+    cost_drag_pct: "0.25"
+    expense_ratio_pct: "0.0"
+    tax: {short_term: {rate: "0.20", threshold_months: 12}, long_term: {rate: "0.125", exemption_inr: "0"}}
+    effort: MEDIUM
+    knowledge_required: HIGH
+
+  - id: intl.us_index
+    label: US index fund (FoF)
+    expected_real_return_pct: "6.5"
+    volatility_annual_pct: "18.0"
+    max_historical_dd_pct: "55.0"
+    liquidity_days: 5
+    lock_in_months: 0
+    min_horizon_months: 60
+    natural_horizon_months: 96
+    cost_drag_pct: "0.10"
+    expense_ratio_pct: "0.60"
+    tax: {short_term: {rate: "0.30", threshold_months: 24}, long_term: {rate: "0.125", exemption_inr: "0"}}
+    effort: LOW
+    knowledge_required: MEDIUM

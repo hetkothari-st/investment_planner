@@ -89,6 +89,21 @@ export const simApi = {
   calibration: () => request<HorizonSummary[]>('/sim/calibration'),
 }
 
+// --- M7: allocation ---
+
+export type AllocationOut = components['schemas']['Allocation']
+export type AllocationPreferences = components['schemas']['AllocationPreferences']
+
+export const allocationApi = {
+  get: () => request<AllocationOut>('/allocation'),
+  preferences: () => request<AllocationPreferences>('/allocation/preferences'),
+  putPreferences: (p: AllocationPreferences) =>
+    request<AllocationPreferences>('/allocation/preferences', {
+      method: 'PUT',
+      body: JSON.stringify(p),
+    }),
+}
+
 // --- M6: equity research ---
 
 export type CandidatesOut = components['schemas']['CandidatesOut']

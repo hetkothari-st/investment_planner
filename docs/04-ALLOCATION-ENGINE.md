@@ -87,6 +87,20 @@ HARD_GATES = [
 A gated-out vehicle is **shown, greyed, with the gate that killed it named**. That's more
 educational than hiding it, and it prevents the user wondering why F&O never appears.
 
+> **Implementation notes (M7).** (1) The drawdown gate evaluates at the vehicle's
+> *maximum permitted weight* (the 40% single-vehicle ceiling), not at 100% of corpus:
+> `dd% × 0.40 × corpus ≤ max_tolerable_drawdown_inr`. At 100% the gate would kill every
+> equity vehicle (historical drawdowns 55–65%) under every temperament (max tolerated
+> fraction 0.45), contradicting the reachability test below. (2) Each planner bucket is
+> scored at a representative horizon: LIQUID 6, DEBT 24, HYBRID 48, EQUITY 96 months.
+> (3) The monthly surplus mirrors the lumpsum bucket split; with no lumpsum it flows
+> through the EQUITY_60_PLUS filling rules (recurring money is long-horizon), noted in
+> the output. (4) Where the equity-index floor conflicts with the single-vehicle
+> ceiling (only one index vehicle eligible), the floor wins and the output says so.
+> (5) `fit_horizon` uses a declared `natural_horizon_months` per vehicle:
+> `min(h/nat, nat/h)` — a savings account scores poorly for 10-year money, not just
+> the reverse.
+
 ### `net_expected_return` — the honest one
 
 ```python

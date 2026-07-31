@@ -1,2146 +1,2492 @@
 {
- "openapi": "3.1.0",
- "info": {
-  "title": "CORPUS",
-  "version": "0.1.0"
- },
- "paths": {
-  "/health": {
-   "get": {
-    "tags": [
-     "health"
-    ],
-    "summary": "Health",
-    "operationId": "health_health_get",
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/Health"
-        }
-       }
-      }
-     }
-    }
-   }
-  },
-  "/auth/kite/login": {
-   "get": {
-    "tags": [
-     "auth"
-    ],
-    "summary": "Login",
-    "operationId": "login_auth_kite_login_get",
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {}
-       }
-      }
-     }
-    }
-   }
-  },
-  "/auth/kite/callback": {
-   "get": {
-    "tags": [
-     "auth"
-    ],
-    "summary": "Callback",
-    "operationId": "callback_auth_kite_callback_get",
-    "parameters": [
-     {
-      "name": "request_token",
-      "in": "query",
-      "required": true,
-      "schema": {
-       "type": "string",
-       "title": "Request Token"
-      }
-     }
-    ],
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/AuthStatus"
-        }
-       }
-      }
-     },
-     "422": {
-      "description": "Validation Error",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/HTTPValidationError"
-        }
-       }
-      }
-     }
-    }
-   }
-  },
-  "/auth/kite/status": {
-   "get": {
-    "tags": [
-     "auth"
-    ],
-    "summary": "Status",
-    "operationId": "status_auth_kite_status_get",
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/AuthStatus"
-        }
-       }
-      }
-     }
-    }
-   }
-  },
-  "/planner/state": {
-   "get": {
-    "tags": [
-     "planner"
-    ],
-    "summary": "Get State",
-    "operationId": "get_state_planner_state_get",
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/UserState"
-        }
-       }
-      }
-     }
-    }
-   }
-  },
-  "/planner/profile": {
-   "put": {
-    "tags": [
-     "planner"
-    ],
-    "summary": "Put Profile",
-    "operationId": "put_profile_planner_profile_put",
-    "requestBody": {
-     "content": {
-      "application/json": {
-       "schema": {
-        "$ref": "#/components/schemas/ProfileIn-Input"
-       }
-      }
-     },
-     "required": true
-    },
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/ProfileIn-Output"
-        }
-       }
-      }
-     },
-     "422": {
-      "description": "Validation Error",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/HTTPValidationError"
-        }
-       }
-      }
-     }
-    }
-   }
-  },
-  "/planner/debts": {
-   "put": {
-    "tags": [
-     "planner"
-    ],
-    "summary": "Put Debts",
-    "operationId": "put_debts_planner_debts_put",
-    "requestBody": {
-     "content": {
-      "application/json": {
-       "schema": {
-        "items": {
-         "$ref": "#/components/schemas/DebtIn-Input"
+  "components": {
+    "schemas": {
+      "Allocation": {
+        "properties": {
+          "assumptions_version": {
+            "title": "Assumptions Version",
+            "type": "string"
+          },
+          "diversification_notes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Diversification Notes",
+            "type": "array"
+          },
+          "gated_out": {
+            "items": {
+              "$ref": "#/components/schemas/GatedVehicle"
+            },
+            "title": "Gated Out",
+            "type": "array"
+          },
+          "horizon_months": {
+            "title": "Horizon Months",
+            "type": "integer"
+          },
+          "lines": {
+            "items": {
+              "$ref": "#/components/schemas/AllocationLine"
+            },
+            "title": "Lines",
+            "type": "array"
+          },
+          "plan_version_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Version Id"
+          },
+          "preferences": {
+            "$ref": "#/components/schemas/AllocationPreferences"
+          },
+          "ranked_vehicles": {
+            "items": {
+              "$ref": "#/components/schemas/VehicleScore"
+            },
+            "title": "Ranked Vehicles",
+            "type": "array"
+          },
+          "vehicles_version": {
+            "title": "Vehicles Version",
+            "type": "string"
+          }
         },
-        "type": "array",
-        "title": "Body"
-       }
-      }
-     },
-     "required": true
-    },
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "items": {
-          "$ref": "#/components/schemas/DebtIn-Output"
-         },
-         "type": "array",
-         "title": "Response Put Debts Planner Debts Put"
-        }
-       }
-      }
-     },
-     "422": {
-      "description": "Validation Error",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/HTTPValidationError"
-        }
-       }
-      }
-     }
-    }
-   }
-  },
-  "/planner/goals": {
-   "put": {
-    "tags": [
-     "planner"
-    ],
-    "summary": "Put Goals",
-    "operationId": "put_goals_planner_goals_put",
-    "requestBody": {
-     "content": {
-      "application/json": {
-       "schema": {
-        "items": {
-         "$ref": "#/components/schemas/GoalIn-Input"
-        },
-        "type": "array",
-        "title": "Body"
-       }
-      }
-     },
-     "required": true
-    },
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "items": {
-          "$ref": "#/components/schemas/GoalIn-Output"
-         },
-         "type": "array",
-         "title": "Response Put Goals Planner Goals Put"
-        }
-       }
-      }
-     },
-     "422": {
-      "description": "Validation Error",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/HTTPValidationError"
-        }
-       }
-      }
-     }
-    }
-   }
-  },
-  "/planner/plan": {
-   "post": {
-    "tags": [
-     "planner"
-    ],
-    "summary": "Create Plan",
-    "operationId": "create_plan_planner_plan_post",
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/PlanResult"
-        }
-       }
-      }
-     }
-    }
-   }
-  },
-  "/planner/plan/latest": {
-   "get": {
-    "tags": [
-     "planner"
-    ],
-    "summary": "Get Latest Plan",
-    "operationId": "get_latest_plan_planner_plan_latest_get",
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/PlanResult"
-        }
-       }
-      }
-     }
-    }
-   }
-  },
-  "/planner/temperament-scenario": {
-   "get": {
-    "tags": [
-     "planner"
-    ],
-    "summary": "Temperament Scenario",
-    "description": "The scenario question, scaled to the user's actual corpus.",
-    "operationId": "temperament_scenario_planner_temperament_scenario_get",
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/TemperamentScenario"
-        }
-       }
-      }
-     }
-    }
-   }
-  },
-  "/sim/theses": {
-   "get": {
-    "tags": [
-     "sim"
-    ],
-    "summary": "List Theses",
-    "operationId": "list_theses_sim_theses_get",
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "items": {
-          "$ref": "#/components/schemas/ThesisOut"
-         },
-         "type": "array",
-         "title": "Response List Theses Sim Theses Get"
-        }
-       }
-      }
-     }
-    }
-   },
-   "post": {
-    "tags": [
-     "sim"
-    ],
-    "summary": "Post Thesis",
-    "operationId": "post_thesis_sim_theses_post",
-    "requestBody": {
-     "content": {
-      "application/json": {
-       "schema": {
-        "$ref": "#/components/schemas/ManualThesisIn"
-       }
-      }
-     },
-     "required": true
-    },
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/ThesisOut"
-        }
-       }
-      }
-     },
-     "422": {
-      "description": "Validation Error",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/HTTPValidationError"
-        }
-       }
-      }
-     }
-    }
-   }
-  },
-  "/sim/positions": {
-   "get": {
-    "tags": [
-     "sim"
-    ],
-    "summary": "List Positions",
-    "operationId": "list_positions_sim_positions_get",
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "items": {
-          "$ref": "#/components/schemas/PositionOut"
-         },
-         "type": "array",
-         "title": "Response List Positions Sim Positions Get"
-        }
-       }
-      }
-     }
-    }
-   },
-   "post": {
-    "tags": [
-     "sim"
-    ],
-    "summary": "Post Position",
-    "operationId": "post_position_sim_positions_post",
-    "requestBody": {
-     "content": {
-      "application/json": {
-       "schema": {
-        "$ref": "#/components/schemas/OpenPositionIn"
-       }
-      }
-     },
-     "required": true
-    },
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/PositionOut"
-        }
-       }
-      }
-     },
-     "422": {
-      "description": "Validation Error",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/HTTPValidationError"
-        }
-       }
-      }
-     }
-    }
-   }
-  },
-  "/sim/positions/{position_id}/close": {
-   "post": {
-    "tags": [
-     "sim"
-    ],
-    "summary": "Post Close",
-    "operationId": "post_close_sim_positions__position_id__close_post",
-    "parameters": [
-     {
-      "name": "position_id",
-      "in": "path",
-      "required": true,
-      "schema": {
-       "type": "string",
-       "format": "uuid",
-       "title": "Position Id"
-      }
-     }
-    ],
-    "requestBody": {
-     "required": true,
-     "content": {
-      "application/json": {
-       "schema": {
-        "$ref": "#/components/schemas/ClosePositionIn"
-       }
-      }
-     }
-    },
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/PositionOut"
-        }
-       }
-      }
-     },
-     "422": {
-      "description": "Validation Error",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/HTTPValidationError"
-        }
-       }
-      }
-     }
-    }
-   }
-  },
-  "/sim/run-daily": {
-   "post": {
-    "tags": [
-     "sim"
-    ],
-    "summary": "Run Daily",
-    "description": "Manual trigger for pipeline steps 9-10 until the nightly scheduler\nlands with the full pipeline (M5+).",
-    "operationId": "run_daily_sim_run_daily_post",
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/MarkRunOut"
-        }
-       }
-      }
-     }
-    }
-   }
-  },
-  "/sim/calibration": {
-   "get": {
-    "tags": [
-     "sim"
-    ],
-    "summary": "Get Calibration",
-    "operationId": "get_calibration_sim_calibration_get",
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "items": {
-          "$ref": "#/components/schemas/HorizonSummary"
-         },
-         "type": "array",
-         "title": "Response Get Calibration Sim Calibration Get"
-        }
-       }
-      }
-     }
-    }
-   }
-  },
-  "/research/candidates": {
-   "get": {
-    "tags": [
-     "research"
-    ],
-    "summary": "Candidates",
-    "description": "Deterministic ranking from stored metric_values. Empty is a valid,\nexplained result \u2014 not a failure state.",
-    "operationId": "candidates_research_candidates_get",
-    "parameters": [
-     {
-      "name": "horizon",
-      "in": "query",
-      "required": false,
-      "schema": {
-       "type": "string",
-       "default": "MID",
-       "title": "Horizon"
-      }
-     }
-    ],
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/CandidatesOut"
-        }
-       }
-      }
-     },
-     "422": {
-      "description": "Validation Error",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/HTTPValidationError"
-        }
-       }
-      }
-     }
-    }
-   }
-  },
-  "/research/reports": {
-   "post": {
-    "tags": [
-     "research"
-    ],
-    "summary": "Generate Report",
-    "description": "On-demand report generation \u2014 20-60s when the LLM is wired. Refuses\nbelow 60% coverage (docs/07 anti-patterns) and without an API key.",
-    "operationId": "generate_report_research_reports_post",
-    "requestBody": {
-     "content": {
-      "application/json": {
-       "schema": {
-        "$ref": "#/components/schemas/ReportRequest"
-       }
-      }
-     },
-     "required": true
-    },
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/ReportOut"
-        }
-       }
-      }
-     },
-     "422": {
-      "description": "Validation Error",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/HTTPValidationError"
-        }
-       }
-      }
-     }
-    }
-   }
-  }
- },
- "components": {
-  "schemas": {
-   "AuthStatus": {
-    "properties": {
-     "authenticated": {
-      "type": "boolean",
-      "title": "Authenticated"
-     },
-     "degraded_reason": {
-      "anyOf": [
-       {
-        "type": "string"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Degraded Reason"
-     }
-    },
-    "type": "object",
-    "required": [
-     "authenticated",
-     "degraded_reason"
-    ],
-    "title": "AuthStatus"
-   },
-   "BlockOut": {
-    "properties": {
-     "provenance": {
-      "type": "string",
-      "title": "Provenance"
-     },
-     "kind": {
-      "type": "string",
-      "title": "Kind"
-     },
-     "content": {
-      "type": "string",
-      "title": "Content"
-     }
-    },
-    "type": "object",
-    "required": [
-     "provenance",
-     "kind",
-     "content"
-    ],
-    "title": "BlockOut"
-   },
-   "CandidateOut": {
-    "properties": {
-     "isin": {
-      "type": "string",
-      "title": "Isin"
-     },
-     "tradingsymbol": {
-      "anyOf": [
-       {
-        "type": "string"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Tradingsymbol"
-     },
-     "composite_pctl": {
-      "type": "number",
-      "title": "Composite Pctl"
-     },
-     "coverage": {
-      "type": "number",
-      "title": "Coverage"
-     },
-     "conviction": {
-      "type": "string",
-      "title": "Conviction"
-     }
-    },
-    "type": "object",
-    "required": [
-     "isin",
-     "tradingsymbol",
-     "composite_pctl",
-     "coverage",
-     "conviction"
-    ],
-    "title": "CandidateOut"
-   },
-   "CandidatesOut": {
-    "properties": {
-     "horizon": {
-      "type": "string",
-      "title": "Horizon"
-     },
-     "as_of": {
-      "anyOf": [
-       {
-        "type": "string"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "As Of"
-     },
-     "candidates": {
-      "items": {
-       "$ref": "#/components/schemas/CandidateOut"
-      },
-      "type": "array",
-      "title": "Candidates"
-     },
-     "message": {
-      "anyOf": [
-       {
-        "type": "string"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Message"
-     }
-    },
-    "type": "object",
-    "required": [
-     "horizon",
-     "as_of",
-     "candidates",
-     "message"
-    ],
-    "title": "CandidatesOut"
-   },
-   "ClosePositionIn": {
-    "properties": {
-     "reason": {
-      "type": "string",
-      "title": "Reason"
-     },
-     "journal_note": {
-      "type": "string",
-      "title": "Journal Note"
-     },
-     "price": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Price"
-     }
-    },
-    "type": "object",
-    "required": [
-     "reason",
-     "journal_note"
-    ],
-    "title": "ClosePositionIn"
-   },
-   "DebtIn-Input": {
-    "properties": {
-     "label": {
-      "type": "string",
-      "title": "Label"
-     },
-     "principal_outstanding": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       }
-      ],
-      "title": "Principal Outstanding"
-     },
-     "annual_rate_pct": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       }
-      ],
-      "title": "Annual Rate Pct"
-     },
-     "min_emi": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       }
-      ],
-      "title": "Min Emi",
-      "default": "0"
-     },
-     "tax_deductible": {
-      "type": "boolean",
-      "title": "Tax Deductible",
-      "default": false
-     }
-    },
-    "type": "object",
-    "required": [
-     "label",
-     "principal_outstanding",
-     "annual_rate_pct"
-    ],
-    "title": "DebtIn"
-   },
-   "DebtIn-Output": {
-    "properties": {
-     "label": {
-      "type": "string",
-      "title": "Label"
-     },
-     "principal_outstanding": {
-      "type": "integer",
-      "title": "Principal Outstanding"
-     },
-     "annual_rate_pct": {
-      "type": "string",
-      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
-      "title": "Annual Rate Pct"
-     },
-     "min_emi": {
-      "type": "integer",
-      "title": "Min Emi",
-      "default": 0
-     },
-     "tax_deductible": {
-      "type": "boolean",
-      "title": "Tax Deductible",
-      "default": false
-     }
-    },
-    "type": "object",
-    "required": [
-     "label",
-     "principal_outstanding",
-     "annual_rate_pct"
-    ],
-    "title": "DebtIn"
-   },
-   "FalsifierIn": {
-    "properties": {
-     "field_id": {
-      "type": "string",
-      "title": "Field Id"
-     },
-     "operator": {
-      "type": "string",
-      "title": "Operator"
-     },
-     "threshold": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       }
-      ],
-      "title": "Threshold"
-     },
-     "human_text": {
-      "type": "string",
-      "title": "Human Text"
-     }
-    },
-    "type": "object",
-    "required": [
-     "field_id",
-     "operator",
-     "threshold",
-     "human_text"
-    ],
-    "title": "FalsifierIn"
-   },
-   "GateResult": {
-    "properties": {
-     "gate": {
-      "type": "string",
-      "title": "Gate"
-     },
-     "label": {
-      "type": "string",
-      "title": "Label"
-     },
-     "status": {
-      "$ref": "#/components/schemas/GateStatus"
-     },
-     "amount": {
-      "type": "integer",
-      "title": "Amount"
-     },
-     "reason": {
-      "type": "string",
-      "title": "Reason"
-     }
-    },
-    "type": "object",
-    "required": [
-     "gate",
-     "label",
-     "status",
-     "amount",
-     "reason"
-    ],
-    "title": "GateResult"
-   },
-   "GateStatus": {
-    "type": "string",
-    "enum": [
-     "PASSED",
-     "BLOCKED",
-     "INFO"
-    ],
-    "title": "GateStatus"
-   },
-   "GoalIn-Input": {
-    "properties": {
-     "label": {
-      "type": "string",
-      "title": "Label"
-     },
-     "target_amount": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       }
-      ],
-      "title": "Target Amount"
-     },
-     "target_date": {
-      "type": "string",
-      "format": "date",
-      "title": "Target Date"
-     },
-     "priority": {
-      "$ref": "#/components/schemas/GoalPriority",
-      "default": "SHOULD"
-     }
-    },
-    "type": "object",
-    "required": [
-     "label",
-     "target_amount",
-     "target_date"
-    ],
-    "title": "GoalIn"
-   },
-   "GoalIn-Output": {
-    "properties": {
-     "label": {
-      "type": "string",
-      "title": "Label"
-     },
-     "target_amount": {
-      "type": "integer",
-      "title": "Target Amount"
-     },
-     "target_date": {
-      "type": "string",
-      "format": "date",
-      "title": "Target Date"
-     },
-     "priority": {
-      "$ref": "#/components/schemas/GoalPriority",
-      "default": "SHOULD"
-     }
-    },
-    "type": "object",
-    "required": [
-     "label",
-     "target_amount",
-     "target_date"
-    ],
-    "title": "GoalIn"
-   },
-   "GoalPriority": {
-    "type": "string",
-    "enum": [
-     "MUST",
-     "SHOULD",
-     "WANT"
-    ],
-    "title": "GoalPriority"
-   },
-   "HTTPValidationError": {
-    "properties": {
-     "detail": {
-      "items": {
-       "$ref": "#/components/schemas/ValidationError"
-      },
-      "type": "array",
-      "title": "Detail"
-     }
-    },
-    "type": "object",
-    "title": "HTTPValidationError"
-   },
-   "Health": {
-    "properties": {
-     "status": {
-      "type": "string",
-      "title": "Status"
-     },
-     "service": {
-      "type": "string",
-      "title": "Service"
-     }
-    },
-    "type": "object",
-    "required": [
-     "status",
-     "service"
-    ],
-    "title": "Health"
-   },
-   "HorizonBucket": {
-    "type": "string",
-    "enum": [
-     "LIQUID_0_12",
-     "DEBT_12_36",
-     "HYBRID_36_60",
-     "EQUITY_60_PLUS"
-    ],
-    "title": "HorizonBucket"
-   },
-   "HorizonSummary": {
-    "properties": {
-     "horizon": {
-      "type": "string",
-      "title": "Horizon"
-     },
-     "n": {
-      "type": "integer",
-      "title": "N"
-     },
-     "n_needed": {
-      "type": "integer",
-      "title": "N Needed"
-     },
-     "hit_rate_pct": {
-      "anyOf": [
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Hit Rate Pct"
-     },
-     "band_coverage_pct": {
-      "anyOf": [
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Band Coverage Pct"
-     },
-     "mean_brier": {
-      "anyOf": [
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Mean Brier"
-     },
-     "net_alpha_pct": {
-      "anyOf": [
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Net Alpha Pct"
-     },
-     "verdict": {
-      "type": "string",
-      "title": "Verdict"
-     },
-     "severity": {
-      "type": "string",
-      "title": "Severity"
-     }
-    },
-    "type": "object",
-    "required": [
-     "horizon",
-     "n",
-     "n_needed",
-     "hit_rate_pct",
-     "band_coverage_pct",
-     "mean_brier",
-     "net_alpha_pct",
-     "verdict",
-     "severity"
-    ],
-    "title": "HorizonSummary"
-   },
-   "JobStability": {
-    "type": "string",
-    "enum": [
-     "LOW",
-     "MEDIUM",
-     "HIGH"
-    ],
-    "title": "JobStability"
-   },
-   "ManualThesisIn": {
-    "properties": {
-     "isin": {
-      "type": "string",
-      "title": "Isin"
-     },
-     "tradingsymbol": {
-      "anyOf": [
-       {
-        "type": "string"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Tradingsymbol"
-     },
-     "instrument_token": {
-      "anyOf": [
-       {
-        "type": "integer"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Instrument Token"
-     },
-     "horizon": {
-      "type": "string",
-      "title": "Horizon"
-     },
-     "expires_on": {
-      "type": "string",
-      "format": "date",
-      "title": "Expires On"
-     },
-     "ref_price": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       }
-      ],
-      "title": "Ref Price"
-     },
-     "band_bear_pct": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       }
-      ],
-      "title": "Band Bear Pct"
-     },
-     "band_base_pct": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       }
-      ],
-      "title": "Band Base Pct"
-     },
-     "band_bull_pct": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       }
-      ],
-      "title": "Band Bull Pct"
-     },
-     "conviction": {
-      "type": "string",
-      "title": "Conviction"
-     },
-     "suggested_size_inr": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       }
-      ],
-      "title": "Suggested Size Inr"
-     },
-     "thesis_md": {
-      "type": "string",
-      "minLength": 10,
-      "title": "Thesis Md",
-      "description": "Your reasoning, frozen at issue"
-     },
-     "falsifiers": {
-      "items": {
-       "$ref": "#/components/schemas/FalsifierIn"
-      },
-      "type": "array",
-      "minItems": 1,
-      "title": "Falsifiers"
-     }
-    },
-    "type": "object",
-    "required": [
-     "isin",
-     "horizon",
-     "expires_on",
-     "ref_price",
-     "band_bear_pct",
-     "band_base_pct",
-     "band_bull_pct",
-     "conviction",
-     "suggested_size_inr",
-     "thesis_md",
-     "falsifiers"
-    ],
-    "title": "ManualThesisIn"
-   },
-   "MarkRunOut": {
-    "properties": {
-     "marked": {
-      "type": "integer",
-      "title": "Marked"
-     },
-     "scored": {
-      "type": "integer",
-      "title": "Scored"
-     },
-     "skipped": {
-      "items": {
-       "type": "string"
-      },
-      "type": "array",
-      "title": "Skipped"
-     }
-    },
-    "type": "object",
-    "required": [
-     "marked",
-     "scored",
-     "skipped"
-    ],
-    "title": "MarkRunOut"
-   },
-   "OpenPositionIn": {
-    "properties": {
-     "recommendation_id": {
-      "type": "string",
-      "format": "uuid",
-      "title": "Recommendation Id"
-     },
-     "amount_inr": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       }
-      ],
-      "title": "Amount Inr"
-     },
-     "price": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Price"
-     }
-    },
-    "type": "object",
-    "required": [
-     "recommendation_id",
-     "amount_inr"
-    ],
-    "title": "OpenPositionIn"
-   },
-   "PlanResult": {
-    "properties": {
-     "version_id": {
-      "anyOf": [
-       {
-        "type": "string",
-        "format": "uuid"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Version Id"
-     },
-     "generated_at": {
-      "anyOf": [
-       {
-        "type": "string",
-        "format": "date-time"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Generated At"
-     },
-     "gates": {
-      "items": {
-       "$ref": "#/components/schemas/GateResult"
-      },
-      "type": "array",
-      "title": "Gates"
-     },
-     "investable_monthly": {
-      "type": "integer",
-      "title": "Investable Monthly"
-     },
-     "investable_lumpsum": {
-      "type": "integer",
-      "title": "Investable Lumpsum"
-     },
-     "buffer_target": {
-      "type": "integer",
-      "title": "Buffer Target"
-     },
-     "buffer_current": {
-      "type": "integer",
-      "title": "Buffer Current"
-     },
-     "buffer_eta_months": {
-      "anyOf": [
-       {
-        "type": "integer"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Buffer Eta Months"
-     },
-     "blocking_reasons": {
-      "items": {
-       "type": "string"
-      },
-      "type": "array",
-      "title": "Blocking Reasons"
-     },
-     "spending_recommendations": {
-      "items": {
-       "type": "string"
-      },
-      "type": "array",
-      "title": "Spending Recommendations"
-     },
-     "max_equity_fraction": {
-      "type": "string",
-      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
-      "title": "Max Equity Fraction"
-     },
-     "horizon_buckets": {
-      "additionalProperties": {
-       "type": "integer"
-      },
-      "propertyNames": {
-       "$ref": "#/components/schemas/HorizonBucket"
-      },
-      "type": "object",
-      "title": "Horizon Buckets"
-     },
-     "assumptions_version": {
-      "type": "string",
-      "title": "Assumptions Version"
-     },
-     "sensitivity": {
-      "items": {
-       "$ref": "#/components/schemas/SensitivityRow"
-      },
-      "type": "array",
-      "title": "Sensitivity"
-     }
-    },
-    "type": "object",
-    "required": [
-     "gates",
-     "investable_monthly",
-     "investable_lumpsum",
-     "buffer_target",
-     "buffer_current",
-     "buffer_eta_months",
-     "blocking_reasons",
-     "spending_recommendations",
-     "max_equity_fraction",
-     "horizon_buckets",
-     "assumptions_version",
-     "sensitivity"
-    ],
-    "title": "PlanResult"
-   },
-   "PositionOut": {
-    "properties": {
-     "id": {
-      "type": "string",
-      "format": "uuid",
-      "title": "Id"
-     },
-     "recommendation_id": {
-      "type": "string",
-      "format": "uuid",
-      "title": "Recommendation Id"
-     },
-     "isin": {
-      "type": "string",
-      "title": "Isin"
-     },
-     "opened_on": {
-      "type": "string",
-      "format": "date",
-      "title": "Opened On"
-     },
-     "qty": {
-      "type": "integer",
-      "title": "Qty"
-     },
-     "entry_price": {
-      "type": "string",
-      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
-      "title": "Entry Price"
-     },
-     "entry_costs_inr": {
-      "type": "integer",
-      "title": "Entry Costs Inr"
-     },
-     "closed_on": {
-      "anyOf": [
-       {
-        "type": "string",
-        "format": "date"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Closed On"
-     },
-     "exit_price": {
-      "anyOf": [
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Exit Price"
-     },
-     "close_reason": {
-      "anyOf": [
-       {
-        "type": "string"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Close Reason"
-     },
-     "journal_note": {
-      "anyOf": [
-       {
-        "type": "string"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Journal Note"
-     },
-     "latest_mark": {
-      "anyOf": [
-       {
-        "additionalProperties": true,
+        "required": [
+          "plan_version_id",
+          "horizon_months",
+          "lines",
+          "ranked_vehicles",
+          "gated_out",
+          "vehicles_version",
+          "assumptions_version",
+          "diversification_notes",
+          "preferences"
+        ],
+        "title": "Allocation",
         "type": "object"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Latest Mark"
-     },
-     "realised_pnl_inr": {
-      "anyOf": [
-       {
-        "type": "integer"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Realised Pnl Inr"
-     },
-     "holding_xirr_pct": {
-      "anyOf": [
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Holding Xirr Pct"
-     },
-     "thesis_snapshot_md": {
-      "type": "string",
-      "title": "Thesis Snapshot Md"
-     }
-    },
-    "type": "object",
-    "required": [
-     "id",
-     "recommendation_id",
-     "isin",
-     "opened_on",
-     "qty",
-     "entry_price",
-     "entry_costs_inr",
-     "closed_on",
-     "exit_price",
-     "close_reason",
-     "journal_note",
-     "latest_mark",
-     "realised_pnl_inr",
-     "holding_xirr_pct",
-     "thesis_snapshot_md"
-    ],
-    "title": "PositionOut"
-   },
-   "ProfileIn-Input": {
-    "properties": {
-     "display_name": {
-      "anyOf": [
-       {
-        "type": "string"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Display Name"
-     },
-     "monthly_inflow": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       }
-      ],
-      "title": "Monthly Inflow"
-     },
-     "fixed_outflow": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       }
-      ],
-      "title": "Fixed Outflow"
-     },
-     "variable_outflow": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       }
-      ],
-      "title": "Variable Outflow"
-     },
-     "liquid_balance": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       }
-      ],
-      "title": "Liquid Balance"
-     },
-     "existing_investments": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       }
-      ],
-      "title": "Existing Investments",
-      "default": "0"
-     },
-     "dependants": {
-      "type": "integer",
-      "title": "Dependants",
-      "default": 0
-     },
-     "job_stability": {
-      "$ref": "#/components/schemas/JobStability",
-      "default": "MEDIUM"
-     },
-     "income_variability": {
-      "anyOf": [
-       {
-        "type": "number"
-       },
-       {
-        "type": "string",
-        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
-       }
-      ],
-      "title": "Income Variability",
-      "default": "0"
-     },
-     "temperament_choice": {
-      "$ref": "#/components/schemas/TemperamentChoice",
-      "default": "SELL_SOME"
-     }
-    },
-    "type": "object",
-    "required": [
-     "monthly_inflow",
-     "fixed_outflow",
-     "variable_outflow",
-     "liquid_balance"
-    ],
-    "title": "ProfileIn"
-   },
-   "ProfileIn-Output": {
-    "properties": {
-     "display_name": {
-      "anyOf": [
-       {
-        "type": "string"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Display Name"
-     },
-     "monthly_inflow": {
-      "type": "integer",
-      "title": "Monthly Inflow"
-     },
-     "fixed_outflow": {
-      "type": "integer",
-      "title": "Fixed Outflow"
-     },
-     "variable_outflow": {
-      "type": "integer",
-      "title": "Variable Outflow"
-     },
-     "liquid_balance": {
-      "type": "integer",
-      "title": "Liquid Balance"
-     },
-     "existing_investments": {
-      "type": "integer",
-      "title": "Existing Investments",
-      "default": 0
-     },
-     "dependants": {
-      "type": "integer",
-      "title": "Dependants",
-      "default": 0
-     },
-     "job_stability": {
-      "$ref": "#/components/schemas/JobStability",
-      "default": "MEDIUM"
-     },
-     "income_variability": {
-      "type": "string",
-      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
-      "title": "Income Variability",
-      "default": "0"
-     },
-     "temperament_choice": {
-      "$ref": "#/components/schemas/TemperamentChoice",
-      "default": "SELL_SOME"
-     }
-    },
-    "type": "object",
-    "required": [
-     "monthly_inflow",
-     "fixed_outflow",
-     "variable_outflow",
-     "liquid_balance"
-    ],
-    "title": "ProfileIn"
-   },
-   "ReportOut": {
-    "properties": {
-     "isin": {
-      "type": "string",
-      "title": "Isin"
-     },
-     "horizon": {
-      "type": "string",
-      "title": "Horizon"
-     },
-     "narrative_included": {
-      "type": "boolean",
-      "title": "Narrative Included"
-     },
-     "coverage": {
-      "type": "number",
-      "title": "Coverage"
-     },
-     "blocks": {
-      "items": {
-       "$ref": "#/components/schemas/BlockOut"
       },
-      "type": "array",
-      "title": "Blocks"
-     }
-    },
-    "type": "object",
-    "required": [
-     "isin",
-     "horizon",
-     "narrative_included",
-     "coverage",
-     "blocks"
-    ],
-    "title": "ReportOut"
-   },
-   "ReportRequest": {
-    "properties": {
-     "isin": {
-      "type": "string",
-      "title": "Isin"
-     },
-     "horizon": {
-      "type": "string",
-      "title": "Horizon"
-     }
-    },
-    "type": "object",
-    "required": [
-     "isin",
-     "horizon"
-    ],
-    "title": "ReportRequest"
-   },
-   "ScenarioOption": {
-    "properties": {
-     "choice": {
-      "type": "string",
-      "title": "Choice"
-     },
-     "label": {
-      "type": "string",
-      "title": "Label"
-     },
-     "tolerated_dd_fraction": {
-      "type": "string",
-      "title": "Tolerated Dd Fraction"
-     }
-    },
-    "type": "object",
-    "required": [
-     "choice",
-     "label",
-     "tolerated_dd_fraction"
-    ],
-    "title": "ScenarioOption"
-   },
-   "SensitivityRow": {
-    "properties": {
-     "equity_real_return_pct": {
-      "type": "string",
-      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
-      "title": "Equity Real Return Pct"
-     },
-     "hurdle_pct": {
-      "type": "string",
-      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
-      "title": "Hurdle Pct"
-     },
-     "investable_monthly": {
-      "type": "integer",
-      "title": "Investable Monthly"
-     },
-     "note": {
-      "type": "string",
-      "title": "Note"
-     }
-    },
-    "type": "object",
-    "required": [
-     "equity_real_return_pct",
-     "hurdle_pct",
-     "investable_monthly",
-     "note"
-    ],
-    "title": "SensitivityRow"
-   },
-   "TemperamentChoice": {
-    "type": "string",
-    "enum": [
-     "SELL_EVERYTHING",
-     "SELL_SOME",
-     "HOLD",
-     "BUY_MORE"
-    ],
-    "title": "TemperamentChoice"
-   },
-   "TemperamentScenario": {
-    "properties": {
-     "before_inr": {
-      "type": "integer",
-      "title": "Before Inr"
-     },
-     "after_inr": {
-      "type": "integer",
-      "title": "After Inr"
-     },
-     "options": {
-      "items": {
-       "$ref": "#/components/schemas/ScenarioOption"
-      },
-      "type": "array",
-      "title": "Options"
-     }
-    },
-    "type": "object",
-    "required": [
-     "before_inr",
-     "after_inr",
-     "options"
-    ],
-    "title": "TemperamentScenario"
-   },
-   "ThesisOut": {
-    "properties": {
-     "id": {
-      "type": "string",
-      "format": "uuid",
-      "title": "Id"
-     },
-     "isin": {
-      "type": "string",
-      "title": "Isin"
-     },
-     "tradingsymbol": {
-      "anyOf": [
-       {
-        "type": "string"
-       },
-       {
-        "type": "null"
-       }
-      ],
-      "title": "Tradingsymbol"
-     },
-     "horizon": {
-      "type": "string",
-      "title": "Horizon"
-     },
-     "issued_at": {
-      "type": "string",
-      "format": "date-time",
-      "title": "Issued At"
-     },
-     "expires_on": {
-      "type": "string",
-      "format": "date",
-      "title": "Expires On"
-     },
-     "ref_price": {
-      "type": "string",
-      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
-      "title": "Ref Price"
-     },
-     "band_bear_pct": {
-      "type": "string",
-      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
-      "title": "Band Bear Pct"
-     },
-     "band_base_pct": {
-      "type": "string",
-      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
-      "title": "Band Base Pct"
-     },
-     "band_bull_pct": {
-      "type": "string",
-      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
-      "title": "Band Bull Pct"
-     },
-     "conviction": {
-      "type": "string",
-      "title": "Conviction"
-     },
-     "suggested_size_inr": {
-      "type": "integer",
-      "title": "Suggested Size Inr"
-     },
-     "report_md": {
-      "type": "string",
-      "title": "Report Md"
-     },
-     "status": {
-      "type": "string",
-      "title": "Status"
-     },
-     "falsifiers": {
-      "items": {
-       "additionalProperties": true,
-       "type": "object"
-      },
-      "type": "array",
-      "title": "Falsifiers"
-     }
-    },
-    "type": "object",
-    "required": [
-     "id",
-     "isin",
-     "tradingsymbol",
-     "horizon",
-     "issued_at",
-     "expires_on",
-     "ref_price",
-     "band_bear_pct",
-     "band_base_pct",
-     "band_bull_pct",
-     "conviction",
-     "suggested_size_inr",
-     "report_md",
-     "status",
-     "falsifiers"
-    ],
-    "title": "ThesisOut"
-   },
-   "UserState": {
-    "properties": {
-     "profile": {
-      "anyOf": [
-       {
-        "$ref": "#/components/schemas/ProfileIn-Output"
-       },
-       {
-        "type": "null"
-       }
-      ]
-     },
-     "debts": {
-      "items": {
-       "$ref": "#/components/schemas/DebtIn-Output"
-      },
-      "type": "array",
-      "title": "Debts"
-     },
-     "goals": {
-      "items": {
-       "$ref": "#/components/schemas/GoalIn-Output"
-      },
-      "type": "array",
-      "title": "Goals"
-     }
-    },
-    "type": "object",
-    "required": [
-     "profile",
-     "debts",
-     "goals"
-    ],
-    "title": "UserState"
-   },
-   "ValidationError": {
-    "properties": {
-     "loc": {
-      "items": {
-       "anyOf": [
-        {
-         "type": "string"
+      "AllocationLine": {
+        "properties": {
+          "bucket": {
+            "$ref": "#/components/schemas/HorizonBucket"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "lumpsum_inr": {
+            "title": "Lumpsum Inr",
+            "type": "integer"
+          },
+          "monthly_inr": {
+            "title": "Monthly Inr",
+            "type": "integer"
+          },
+          "rationale": {
+            "title": "Rationale",
+            "type": "string"
+          },
+          "vehicle_id": {
+            "title": "Vehicle Id",
+            "type": "string"
+          }
         },
-        {
-         "type": "integer"
-        }
-       ]
+        "required": [
+          "vehicle_id",
+          "label",
+          "bucket",
+          "lumpsum_inr",
+          "monthly_inr",
+          "rationale"
+        ],
+        "title": "AllocationLine",
+        "type": "object"
       },
-      "type": "array",
-      "title": "Location"
-     },
-     "msg": {
-      "type": "string",
-      "title": "Message"
-     },
-     "type": {
-      "type": "string",
-      "title": "Error Type"
-     },
-     "input": {
-      "title": "Input"
-     },
-     "ctx": {
-      "type": "object",
-      "title": "Context"
-     }
+      "AllocationPreferences": {
+        "description": "The two allocation inputs the planner does not already hold.\n\nself_rated_knowledge defaults LOW: the conservative reading gates\nHIGH-knowledge vehicles out until the user claims otherwise.\nmax_lock_in_months None means the user has stated no constraint;\nthe lock-in gate then passes and the UI says so.",
+        "properties": {
+          "max_lock_in_months": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Lock In Months"
+          },
+          "self_rated_knowledge": {
+            "$ref": "#/components/schemas/Knowledge",
+            "default": "LOW"
+          }
+        },
+        "title": "AllocationPreferences",
+        "type": "object"
+      },
+      "AuthStatus": {
+        "properties": {
+          "authenticated": {
+            "title": "Authenticated",
+            "type": "boolean"
+          },
+          "degraded_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Degraded Reason"
+          }
+        },
+        "required": [
+          "authenticated",
+          "degraded_reason"
+        ],
+        "title": "AuthStatus",
+        "type": "object"
+      },
+      "BlockOut": {
+        "properties": {
+          "content": {
+            "title": "Content",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "provenance": {
+            "title": "Provenance",
+            "type": "string"
+          }
+        },
+        "required": [
+          "provenance",
+          "kind",
+          "content"
+        ],
+        "title": "BlockOut",
+        "type": "object"
+      },
+      "CandidateOut": {
+        "properties": {
+          "composite_pctl": {
+            "title": "Composite Pctl",
+            "type": "number"
+          },
+          "conviction": {
+            "title": "Conviction",
+            "type": "string"
+          },
+          "coverage": {
+            "title": "Coverage",
+            "type": "number"
+          },
+          "isin": {
+            "title": "Isin",
+            "type": "string"
+          },
+          "tradingsymbol": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tradingsymbol"
+          }
+        },
+        "required": [
+          "isin",
+          "tradingsymbol",
+          "composite_pctl",
+          "coverage",
+          "conviction"
+        ],
+        "title": "CandidateOut",
+        "type": "object"
+      },
+      "CandidatesOut": {
+        "properties": {
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          },
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/CandidateOut"
+            },
+            "title": "Candidates",
+            "type": "array"
+          },
+          "horizon": {
+            "title": "Horizon",
+            "type": "string"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          }
+        },
+        "required": [
+          "horizon",
+          "as_of",
+          "candidates",
+          "message"
+        ],
+        "title": "CandidatesOut",
+        "type": "object"
+      },
+      "ClosePositionIn": {
+        "properties": {
+          "journal_note": {
+            "title": "Journal Note",
+            "type": "string"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason",
+          "journal_note"
+        ],
+        "title": "ClosePositionIn",
+        "type": "object"
+      },
+      "DebtIn-Input": {
+        "properties": {
+          "annual_rate_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Annual Rate Pct"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "min_emi": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "default": "0",
+            "title": "Min Emi"
+          },
+          "principal_outstanding": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Principal Outstanding"
+          },
+          "tax_deductible": {
+            "default": false,
+            "title": "Tax Deductible",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "label",
+          "principal_outstanding",
+          "annual_rate_pct"
+        ],
+        "title": "DebtIn",
+        "type": "object"
+      },
+      "DebtIn-Output": {
+        "properties": {
+          "annual_rate_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Annual Rate Pct",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "min_emi": {
+            "default": 0,
+            "title": "Min Emi",
+            "type": "integer"
+          },
+          "principal_outstanding": {
+            "title": "Principal Outstanding",
+            "type": "integer"
+          },
+          "tax_deductible": {
+            "default": false,
+            "title": "Tax Deductible",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "label",
+          "principal_outstanding",
+          "annual_rate_pct"
+        ],
+        "title": "DebtIn",
+        "type": "object"
+      },
+      "FalsifierIn": {
+        "properties": {
+          "field_id": {
+            "title": "Field Id",
+            "type": "string"
+          },
+          "human_text": {
+            "title": "Human Text",
+            "type": "string"
+          },
+          "operator": {
+            "title": "Operator",
+            "type": "string"
+          },
+          "threshold": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Threshold"
+          }
+        },
+        "required": [
+          "field_id",
+          "operator",
+          "threshold",
+          "human_text"
+        ],
+        "title": "FalsifierIn",
+        "type": "object"
+      },
+      "GateResult": {
+        "properties": {
+          "amount": {
+            "title": "Amount",
+            "type": "integer"
+          },
+          "gate": {
+            "title": "Gate",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/GateStatus"
+          }
+        },
+        "required": [
+          "gate",
+          "label",
+          "status",
+          "amount",
+          "reason"
+        ],
+        "title": "GateResult",
+        "type": "object"
+      },
+      "GateStatus": {
+        "enum": [
+          "PASSED",
+          "BLOCKED",
+          "INFO"
+        ],
+        "title": "GateStatus",
+        "type": "string"
+      },
+      "GatedVehicle": {
+        "properties": {
+          "explanation": {
+            "title": "Explanation",
+            "type": "string"
+          },
+          "gate": {
+            "title": "Gate",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "liquidity_days": {
+            "title": "Liquidity Days",
+            "type": "integer"
+          },
+          "lock_in_months": {
+            "title": "Lock In Months",
+            "type": "integer"
+          },
+          "net_expected_return_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Net Expected Return Pct",
+            "type": "string"
+          },
+          "vehicle_id": {
+            "title": "Vehicle Id",
+            "type": "string"
+          },
+          "volatility_annual_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Volatility Annual Pct",
+            "type": "string"
+          }
+        },
+        "required": [
+          "vehicle_id",
+          "label",
+          "gate",
+          "explanation",
+          "net_expected_return_pct",
+          "volatility_annual_pct",
+          "liquidity_days",
+          "lock_in_months"
+        ],
+        "title": "GatedVehicle",
+        "type": "object"
+      },
+      "GoalIn-Input": {
+        "properties": {
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/GoalPriority",
+            "default": "SHOULD"
+          },
+          "target_amount": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Target Amount"
+          },
+          "target_date": {
+            "format": "date",
+            "title": "Target Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "target_amount",
+          "target_date"
+        ],
+        "title": "GoalIn",
+        "type": "object"
+      },
+      "GoalIn-Output": {
+        "properties": {
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/GoalPriority",
+            "default": "SHOULD"
+          },
+          "target_amount": {
+            "title": "Target Amount",
+            "type": "integer"
+          },
+          "target_date": {
+            "format": "date",
+            "title": "Target Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "target_amount",
+          "target_date"
+        ],
+        "title": "GoalIn",
+        "type": "object"
+      },
+      "GoalPriority": {
+        "enum": [
+          "MUST",
+          "SHOULD",
+          "WANT"
+        ],
+        "title": "GoalPriority",
+        "type": "string"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "Health": {
+        "properties": {
+          "service": {
+            "title": "Service",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "service"
+        ],
+        "title": "Health",
+        "type": "object"
+      },
+      "HorizonBucket": {
+        "enum": [
+          "LIQUID_0_12",
+          "DEBT_12_36",
+          "HYBRID_36_60",
+          "EQUITY_60_PLUS"
+        ],
+        "title": "HorizonBucket",
+        "type": "string"
+      },
+      "HorizonSummary": {
+        "properties": {
+          "band_coverage_pct": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Band Coverage Pct"
+          },
+          "hit_rate_pct": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hit Rate Pct"
+          },
+          "horizon": {
+            "title": "Horizon",
+            "type": "string"
+          },
+          "mean_brier": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mean Brier"
+          },
+          "n": {
+            "title": "N",
+            "type": "integer"
+          },
+          "n_needed": {
+            "title": "N Needed",
+            "type": "integer"
+          },
+          "net_alpha_pct": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Net Alpha Pct"
+          },
+          "severity": {
+            "title": "Severity",
+            "type": "string"
+          },
+          "verdict": {
+            "title": "Verdict",
+            "type": "string"
+          }
+        },
+        "required": [
+          "horizon",
+          "n",
+          "n_needed",
+          "hit_rate_pct",
+          "band_coverage_pct",
+          "mean_brier",
+          "net_alpha_pct",
+          "verdict",
+          "severity"
+        ],
+        "title": "HorizonSummary",
+        "type": "object"
+      },
+      "JobStability": {
+        "enum": [
+          "LOW",
+          "MEDIUM",
+          "HIGH"
+        ],
+        "title": "JobStability",
+        "type": "string"
+      },
+      "Knowledge": {
+        "enum": [
+          "LOW",
+          "MEDIUM",
+          "HIGH"
+        ],
+        "title": "Knowledge",
+        "type": "string"
+      },
+      "ManualThesisIn": {
+        "properties": {
+          "band_base_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Band Base Pct"
+          },
+          "band_bear_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Band Bear Pct"
+          },
+          "band_bull_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Band Bull Pct"
+          },
+          "conviction": {
+            "title": "Conviction",
+            "type": "string"
+          },
+          "expires_on": {
+            "format": "date",
+            "title": "Expires On",
+            "type": "string"
+          },
+          "falsifiers": {
+            "items": {
+              "$ref": "#/components/schemas/FalsifierIn"
+            },
+            "minItems": 1,
+            "title": "Falsifiers",
+            "type": "array"
+          },
+          "horizon": {
+            "title": "Horizon",
+            "type": "string"
+          },
+          "instrument_token": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Instrument Token"
+          },
+          "isin": {
+            "title": "Isin",
+            "type": "string"
+          },
+          "ref_price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Ref Price"
+          },
+          "suggested_size_inr": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Suggested Size Inr"
+          },
+          "thesis_md": {
+            "description": "Your reasoning, frozen at issue",
+            "minLength": 10,
+            "title": "Thesis Md",
+            "type": "string"
+          },
+          "tradingsymbol": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tradingsymbol"
+          }
+        },
+        "required": [
+          "isin",
+          "horizon",
+          "expires_on",
+          "ref_price",
+          "band_bear_pct",
+          "band_base_pct",
+          "band_bull_pct",
+          "conviction",
+          "suggested_size_inr",
+          "thesis_md",
+          "falsifiers"
+        ],
+        "title": "ManualThesisIn",
+        "type": "object"
+      },
+      "MarkRunOut": {
+        "properties": {
+          "marked": {
+            "title": "Marked",
+            "type": "integer"
+          },
+          "scored": {
+            "title": "Scored",
+            "type": "integer"
+          },
+          "skipped": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Skipped",
+            "type": "array"
+          }
+        },
+        "required": [
+          "marked",
+          "scored",
+          "skipped"
+        ],
+        "title": "MarkRunOut",
+        "type": "object"
+      },
+      "OpenPositionIn": {
+        "properties": {
+          "amount_inr": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Amount Inr"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price"
+          },
+          "recommendation_id": {
+            "format": "uuid",
+            "title": "Recommendation Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "recommendation_id",
+          "amount_inr"
+        ],
+        "title": "OpenPositionIn",
+        "type": "object"
+      },
+      "PlanResult": {
+        "properties": {
+          "assumptions_version": {
+            "title": "Assumptions Version",
+            "type": "string"
+          },
+          "blocking_reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Blocking Reasons",
+            "type": "array"
+          },
+          "buffer_current": {
+            "title": "Buffer Current",
+            "type": "integer"
+          },
+          "buffer_eta_months": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Buffer Eta Months"
+          },
+          "buffer_target": {
+            "title": "Buffer Target",
+            "type": "integer"
+          },
+          "gates": {
+            "items": {
+              "$ref": "#/components/schemas/GateResult"
+            },
+            "title": "Gates",
+            "type": "array"
+          },
+          "generated_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Generated At"
+          },
+          "horizon_buckets": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "propertyNames": {
+              "$ref": "#/components/schemas/HorizonBucket"
+            },
+            "title": "Horizon Buckets",
+            "type": "object"
+          },
+          "investable_lumpsum": {
+            "title": "Investable Lumpsum",
+            "type": "integer"
+          },
+          "investable_monthly": {
+            "title": "Investable Monthly",
+            "type": "integer"
+          },
+          "max_equity_fraction": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Max Equity Fraction",
+            "type": "string"
+          },
+          "sensitivity": {
+            "items": {
+              "$ref": "#/components/schemas/SensitivityRow"
+            },
+            "title": "Sensitivity",
+            "type": "array"
+          },
+          "spending_recommendations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Spending Recommendations",
+            "type": "array"
+          },
+          "version_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Id"
+          }
+        },
+        "required": [
+          "gates",
+          "investable_monthly",
+          "investable_lumpsum",
+          "buffer_target",
+          "buffer_current",
+          "buffer_eta_months",
+          "blocking_reasons",
+          "spending_recommendations",
+          "max_equity_fraction",
+          "horizon_buckets",
+          "assumptions_version",
+          "sensitivity"
+        ],
+        "title": "PlanResult",
+        "type": "object"
+      },
+      "PositionOut": {
+        "properties": {
+          "close_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Close Reason"
+          },
+          "closed_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Closed On"
+          },
+          "entry_costs_inr": {
+            "title": "Entry Costs Inr",
+            "type": "integer"
+          },
+          "entry_price": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Entry Price",
+            "type": "string"
+          },
+          "exit_price": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exit Price"
+          },
+          "holding_xirr_pct": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Holding Xirr Pct"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "isin": {
+            "title": "Isin",
+            "type": "string"
+          },
+          "journal_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Journal Note"
+          },
+          "latest_mark": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latest Mark"
+          },
+          "opened_on": {
+            "format": "date",
+            "title": "Opened On",
+            "type": "string"
+          },
+          "qty": {
+            "title": "Qty",
+            "type": "integer"
+          },
+          "realised_pnl_inr": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Realised Pnl Inr"
+          },
+          "recommendation_id": {
+            "format": "uuid",
+            "title": "Recommendation Id",
+            "type": "string"
+          },
+          "thesis_snapshot_md": {
+            "title": "Thesis Snapshot Md",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "recommendation_id",
+          "isin",
+          "opened_on",
+          "qty",
+          "entry_price",
+          "entry_costs_inr",
+          "closed_on",
+          "exit_price",
+          "close_reason",
+          "journal_note",
+          "latest_mark",
+          "realised_pnl_inr",
+          "holding_xirr_pct",
+          "thesis_snapshot_md"
+        ],
+        "title": "PositionOut",
+        "type": "object"
+      },
+      "ProfileIn-Input": {
+        "properties": {
+          "dependants": {
+            "default": 0,
+            "title": "Dependants",
+            "type": "integer"
+          },
+          "display_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          },
+          "existing_investments": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "default": "0",
+            "title": "Existing Investments"
+          },
+          "fixed_outflow": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Fixed Outflow"
+          },
+          "income_variability": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "default": "0",
+            "title": "Income Variability"
+          },
+          "job_stability": {
+            "$ref": "#/components/schemas/JobStability",
+            "default": "MEDIUM"
+          },
+          "liquid_balance": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Liquid Balance"
+          },
+          "monthly_inflow": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Monthly Inflow"
+          },
+          "temperament_choice": {
+            "$ref": "#/components/schemas/TemperamentChoice",
+            "default": "SELL_SOME"
+          },
+          "variable_outflow": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Variable Outflow"
+          }
+        },
+        "required": [
+          "monthly_inflow",
+          "fixed_outflow",
+          "variable_outflow",
+          "liquid_balance"
+        ],
+        "title": "ProfileIn",
+        "type": "object"
+      },
+      "ProfileIn-Output": {
+        "properties": {
+          "dependants": {
+            "default": 0,
+            "title": "Dependants",
+            "type": "integer"
+          },
+          "display_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          },
+          "existing_investments": {
+            "default": 0,
+            "title": "Existing Investments",
+            "type": "integer"
+          },
+          "fixed_outflow": {
+            "title": "Fixed Outflow",
+            "type": "integer"
+          },
+          "income_variability": {
+            "default": "0",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Income Variability",
+            "type": "string"
+          },
+          "job_stability": {
+            "$ref": "#/components/schemas/JobStability",
+            "default": "MEDIUM"
+          },
+          "liquid_balance": {
+            "title": "Liquid Balance",
+            "type": "integer"
+          },
+          "monthly_inflow": {
+            "title": "Monthly Inflow",
+            "type": "integer"
+          },
+          "temperament_choice": {
+            "$ref": "#/components/schemas/TemperamentChoice",
+            "default": "SELL_SOME"
+          },
+          "variable_outflow": {
+            "title": "Variable Outflow",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "monthly_inflow",
+          "fixed_outflow",
+          "variable_outflow",
+          "liquid_balance"
+        ],
+        "title": "ProfileIn",
+        "type": "object"
+      },
+      "ReportOut": {
+        "properties": {
+          "blocks": {
+            "items": {
+              "$ref": "#/components/schemas/BlockOut"
+            },
+            "title": "Blocks",
+            "type": "array"
+          },
+          "coverage": {
+            "title": "Coverage",
+            "type": "number"
+          },
+          "horizon": {
+            "title": "Horizon",
+            "type": "string"
+          },
+          "isin": {
+            "title": "Isin",
+            "type": "string"
+          },
+          "narrative_included": {
+            "title": "Narrative Included",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "isin",
+          "horizon",
+          "narrative_included",
+          "coverage",
+          "blocks"
+        ],
+        "title": "ReportOut",
+        "type": "object"
+      },
+      "ReportRequest": {
+        "properties": {
+          "horizon": {
+            "title": "Horizon",
+            "type": "string"
+          },
+          "isin": {
+            "title": "Isin",
+            "type": "string"
+          }
+        },
+        "required": [
+          "isin",
+          "horizon"
+        ],
+        "title": "ReportRequest",
+        "type": "object"
+      },
+      "ScenarioOption": {
+        "properties": {
+          "choice": {
+            "title": "Choice",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "tolerated_dd_fraction": {
+            "title": "Tolerated Dd Fraction",
+            "type": "string"
+          }
+        },
+        "required": [
+          "choice",
+          "label",
+          "tolerated_dd_fraction"
+        ],
+        "title": "ScenarioOption",
+        "type": "object"
+      },
+      "SensitivityRow": {
+        "properties": {
+          "equity_real_return_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Equity Real Return Pct",
+            "type": "string"
+          },
+          "hurdle_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Hurdle Pct",
+            "type": "string"
+          },
+          "investable_monthly": {
+            "title": "Investable Monthly",
+            "type": "integer"
+          },
+          "note": {
+            "title": "Note",
+            "type": "string"
+          }
+        },
+        "required": [
+          "equity_real_return_pct",
+          "hurdle_pct",
+          "investable_monthly",
+          "note"
+        ],
+        "title": "SensitivityRow",
+        "type": "object"
+      },
+      "TemperamentChoice": {
+        "enum": [
+          "SELL_EVERYTHING",
+          "SELL_SOME",
+          "HOLD",
+          "BUY_MORE"
+        ],
+        "title": "TemperamentChoice",
+        "type": "string"
+      },
+      "TemperamentScenario": {
+        "properties": {
+          "after_inr": {
+            "title": "After Inr",
+            "type": "integer"
+          },
+          "before_inr": {
+            "title": "Before Inr",
+            "type": "integer"
+          },
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/ScenarioOption"
+            },
+            "title": "Options",
+            "type": "array"
+          }
+        },
+        "required": [
+          "before_inr",
+          "after_inr",
+          "options"
+        ],
+        "title": "TemperamentScenario",
+        "type": "object"
+      },
+      "ThesisOut": {
+        "properties": {
+          "band_base_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Band Base Pct",
+            "type": "string"
+          },
+          "band_bear_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Band Bear Pct",
+            "type": "string"
+          },
+          "band_bull_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Band Bull Pct",
+            "type": "string"
+          },
+          "conviction": {
+            "title": "Conviction",
+            "type": "string"
+          },
+          "expires_on": {
+            "format": "date",
+            "title": "Expires On",
+            "type": "string"
+          },
+          "falsifiers": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Falsifiers",
+            "type": "array"
+          },
+          "horizon": {
+            "title": "Horizon",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "isin": {
+            "title": "Isin",
+            "type": "string"
+          },
+          "issued_at": {
+            "format": "date-time",
+            "title": "Issued At",
+            "type": "string"
+          },
+          "ref_price": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Ref Price",
+            "type": "string"
+          },
+          "report_md": {
+            "title": "Report Md",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "suggested_size_inr": {
+            "title": "Suggested Size Inr",
+            "type": "integer"
+          },
+          "tradingsymbol": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tradingsymbol"
+          }
+        },
+        "required": [
+          "id",
+          "isin",
+          "tradingsymbol",
+          "horizon",
+          "issued_at",
+          "expires_on",
+          "ref_price",
+          "band_bear_pct",
+          "band_base_pct",
+          "band_bull_pct",
+          "conviction",
+          "suggested_size_inr",
+          "report_md",
+          "status",
+          "falsifiers"
+        ],
+        "title": "ThesisOut",
+        "type": "object"
+      },
+      "UserState": {
+        "properties": {
+          "debts": {
+            "items": {
+              "$ref": "#/components/schemas/DebtIn-Output"
+            },
+            "title": "Debts",
+            "type": "array"
+          },
+          "goals": {
+            "items": {
+              "$ref": "#/components/schemas/GoalIn-Output"
+            },
+            "title": "Goals",
+            "type": "array"
+          },
+          "profile": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProfileIn-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "profile",
+          "debts",
+          "goals"
+        ],
+        "title": "UserState",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "VehicleScore": {
+        "properties": {
+          "allocated_lumpsum": {
+            "title": "Allocated Lumpsum",
+            "type": "integer"
+          },
+          "allocated_monthly": {
+            "title": "Allocated Monthly",
+            "type": "integer"
+          },
+          "components": {
+            "additionalProperties": {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            },
+            "title": "Components",
+            "type": "object"
+          },
+          "effort": {
+            "title": "Effort",
+            "type": "string"
+          },
+          "knowledge_required": {
+            "title": "Knowledge Required",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "liquidity_days": {
+            "title": "Liquidity Days",
+            "type": "integer"
+          },
+          "lock_in_months": {
+            "title": "Lock In Months",
+            "type": "integer"
+          },
+          "net_expected_return_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Net Expected Return Pct",
+            "type": "string"
+          },
+          "suitability_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Suitability Pct",
+            "type": "string"
+          },
+          "vehicle_id": {
+            "title": "Vehicle Id",
+            "type": "string"
+          },
+          "volatility_annual_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Volatility Annual Pct",
+            "type": "string"
+          }
+        },
+        "required": [
+          "vehicle_id",
+          "label",
+          "suitability_pct",
+          "components",
+          "net_expected_return_pct",
+          "volatility_annual_pct",
+          "liquidity_days",
+          "lock_in_months",
+          "effort",
+          "knowledge_required",
+          "allocated_lumpsum",
+          "allocated_monthly"
+        ],
+        "title": "VehicleScore",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "CORPUS",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/allocation": {
+      "get": {
+        "operationId": "get_allocation_allocation_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Allocation"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Allocation",
+        "tags": [
+          "allocation"
+        ]
+      }
     },
-    "type": "object",
-    "required": [
-     "loc",
-     "msg",
-     "type"
-    ],
-    "title": "ValidationError"
-   }
+    "/allocation/preferences": {
+      "get": {
+        "operationId": "get_preferences_allocation_preferences_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllocationPreferences"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Preferences",
+        "tags": [
+          "allocation"
+        ]
+      },
+      "put": {
+        "operationId": "put_preferences_allocation_preferences_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AllocationPreferences"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllocationPreferences"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Put Preferences",
+        "tags": [
+          "allocation"
+        ]
+      }
+    },
+    "/auth/kite/callback": {
+      "get": {
+        "operationId": "callback_auth_kite_callback_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "request_token",
+            "required": true,
+            "schema": {
+              "title": "Request Token",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Callback",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/kite/login": {
+      "get": {
+        "operationId": "login_auth_kite_login_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Login",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/kite/status": {
+      "get": {
+        "operationId": "status_auth_kite_status_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Status",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/planner/debts": {
+      "put": {
+        "operationId": "put_debts_planner_debts_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/DebtIn-Input"
+                },
+                "title": "Body",
+                "type": "array"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DebtIn-Output"
+                  },
+                  "title": "Response Put Debts Planner Debts Put",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Put Debts",
+        "tags": [
+          "planner"
+        ]
+      }
+    },
+    "/planner/goals": {
+      "put": {
+        "operationId": "put_goals_planner_goals_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/GoalIn-Input"
+                },
+                "title": "Body",
+                "type": "array"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/GoalIn-Output"
+                  },
+                  "title": "Response Put Goals Planner Goals Put",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Put Goals",
+        "tags": [
+          "planner"
+        ]
+      }
+    },
+    "/planner/plan": {
+      "post": {
+        "operationId": "create_plan_planner_plan_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Create Plan",
+        "tags": [
+          "planner"
+        ]
+      }
+    },
+    "/planner/plan/latest": {
+      "get": {
+        "operationId": "get_latest_plan_planner_plan_latest_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Latest Plan",
+        "tags": [
+          "planner"
+        ]
+      }
+    },
+    "/planner/profile": {
+      "put": {
+        "operationId": "put_profile_planner_profile_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfileIn-Input"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileIn-Output"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Put Profile",
+        "tags": [
+          "planner"
+        ]
+      }
+    },
+    "/planner/state": {
+      "get": {
+        "operationId": "get_state_planner_state_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserState"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get State",
+        "tags": [
+          "planner"
+        ]
+      }
+    },
+    "/planner/temperament-scenario": {
+      "get": {
+        "description": "The scenario question, scaled to the user's actual corpus.",
+        "operationId": "temperament_scenario_planner_temperament_scenario_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemperamentScenario"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Temperament Scenario",
+        "tags": [
+          "planner"
+        ]
+      }
+    },
+    "/research/candidates": {
+      "get": {
+        "description": "Deterministic ranking from stored metric_values. Empty is a valid,\nexplained result \u2014 not a failure state.",
+        "operationId": "candidates_research_candidates_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "horizon",
+            "required": false,
+            "schema": {
+              "default": "MID",
+              "title": "Horizon",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CandidatesOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Candidates",
+        "tags": [
+          "research"
+        ]
+      }
+    },
+    "/research/reports": {
+      "post": {
+        "description": "On-demand report generation \u2014 20-60s when the LLM is wired. Refuses\nbelow 60% coverage (docs/07 anti-patterns) and without an API key.",
+        "operationId": "generate_report_research_reports_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Generate Report",
+        "tags": [
+          "research"
+        ]
+      }
+    },
+    "/sim/calibration": {
+      "get": {
+        "operationId": "get_calibration_sim_calibration_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/HorizonSummary"
+                  },
+                  "title": "Response Get Calibration Sim Calibration Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Calibration",
+        "tags": [
+          "sim"
+        ]
+      }
+    },
+    "/sim/positions": {
+      "get": {
+        "operationId": "list_positions_sim_positions_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PositionOut"
+                  },
+                  "title": "Response List Positions Sim Positions Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Positions",
+        "tags": [
+          "sim"
+        ]
+      },
+      "post": {
+        "operationId": "post_position_sim_positions_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenPositionIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PositionOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Post Position",
+        "tags": [
+          "sim"
+        ]
+      }
+    },
+    "/sim/positions/{position_id}/close": {
+      "post": {
+        "operationId": "post_close_sim_positions__position_id__close_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "position_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Position Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClosePositionIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PositionOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Post Close",
+        "tags": [
+          "sim"
+        ]
+      }
+    },
+    "/sim/run-daily": {
+      "post": {
+        "description": "Manual trigger for pipeline steps 9-10 until the nightly scheduler\nlands with the full pipeline (M5+).",
+        "operationId": "run_daily_sim_run_daily_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarkRunOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Run Daily",
+        "tags": [
+          "sim"
+        ]
+      }
+    },
+    "/sim/theses": {
+      "get": {
+        "operationId": "list_theses_sim_theses_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ThesisOut"
+                  },
+                  "title": "Response List Theses Sim Theses Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Theses",
+        "tags": [
+          "sim"
+        ]
+      },
+      "post": {
+        "operationId": "post_thesis_sim_theses_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManualThesisIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThesisOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Post Thesis",
+        "tags": [
+          "sim"
+        ]
+      }
+    }
   }
- }
 }
