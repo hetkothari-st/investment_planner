@@ -1,0 +1,1075 @@
+{
+ "openapi": "3.1.0",
+ "info": {
+  "title": "CORPUS",
+  "version": "0.1.0"
+ },
+ "paths": {
+  "/health": {
+   "get": {
+    "tags": [
+     "health"
+    ],
+    "summary": "Health",
+    "operationId": "health_health_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Health"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/auth/kite/login": {
+   "get": {
+    "tags": [
+     "auth"
+    ],
+    "summary": "Login",
+    "operationId": "login_auth_kite_login_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/auth/kite/callback": {
+   "get": {
+    "tags": [
+     "auth"
+    ],
+    "summary": "Callback",
+    "operationId": "callback_auth_kite_callback_get",
+    "parameters": [
+     {
+      "name": "request_token",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Request Token"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/AuthStatus"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/auth/kite/status": {
+   "get": {
+    "tags": [
+     "auth"
+    ],
+    "summary": "Status",
+    "operationId": "status_auth_kite_status_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/AuthStatus"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/planner/state": {
+   "get": {
+    "tags": [
+     "planner"
+    ],
+    "summary": "Get State",
+    "operationId": "get_state_planner_state_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/UserState"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/planner/profile": {
+   "put": {
+    "tags": [
+     "planner"
+    ],
+    "summary": "Put Profile",
+    "operationId": "put_profile_planner_profile_put",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ProfileIn-Input"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ProfileIn-Output"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/planner/debts": {
+   "put": {
+    "tags": [
+     "planner"
+    ],
+    "summary": "Put Debts",
+    "operationId": "put_debts_planner_debts_put",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "items": {
+         "$ref": "#/components/schemas/DebtIn-Input"
+        },
+        "type": "array",
+        "title": "Body"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/DebtIn-Output"
+         },
+         "type": "array",
+         "title": "Response Put Debts Planner Debts Put"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/planner/goals": {
+   "put": {
+    "tags": [
+     "planner"
+    ],
+    "summary": "Put Goals",
+    "operationId": "put_goals_planner_goals_put",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "items": {
+         "$ref": "#/components/schemas/GoalIn-Input"
+        },
+        "type": "array",
+        "title": "Body"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/GoalIn-Output"
+         },
+         "type": "array",
+         "title": "Response Put Goals Planner Goals Put"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/planner/plan": {
+   "post": {
+    "tags": [
+     "planner"
+    ],
+    "summary": "Create Plan",
+    "operationId": "create_plan_planner_plan_post",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/PlanResult"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/planner/plan/latest": {
+   "get": {
+    "tags": [
+     "planner"
+    ],
+    "summary": "Get Latest Plan",
+    "operationId": "get_latest_plan_planner_plan_latest_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/PlanResult"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/planner/temperament-scenario": {
+   "get": {
+    "tags": [
+     "planner"
+    ],
+    "summary": "Temperament Scenario",
+    "description": "The scenario question, scaled to the user's actual corpus.",
+    "operationId": "temperament_scenario_planner_temperament_scenario_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/TemperamentScenario"
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "AuthStatus": {
+    "properties": {
+     "authenticated": {
+      "type": "boolean",
+      "title": "Authenticated"
+     },
+     "degraded_reason": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Degraded Reason"
+     }
+    },
+    "type": "object",
+    "required": [
+     "authenticated",
+     "degraded_reason"
+    ],
+    "title": "AuthStatus"
+   },
+   "DebtIn-Input": {
+    "properties": {
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "principal_outstanding": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       }
+      ],
+      "title": "Principal Outstanding"
+     },
+     "annual_rate_pct": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       }
+      ],
+      "title": "Annual Rate Pct"
+     },
+     "min_emi": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       }
+      ],
+      "title": "Min Emi",
+      "default": "0"
+     },
+     "tax_deductible": {
+      "type": "boolean",
+      "title": "Tax Deductible",
+      "default": false
+     }
+    },
+    "type": "object",
+    "required": [
+     "label",
+     "principal_outstanding",
+     "annual_rate_pct"
+    ],
+    "title": "DebtIn"
+   },
+   "DebtIn-Output": {
+    "properties": {
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "principal_outstanding": {
+      "type": "integer",
+      "title": "Principal Outstanding"
+     },
+     "annual_rate_pct": {
+      "type": "string",
+      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+      "title": "Annual Rate Pct"
+     },
+     "min_emi": {
+      "type": "integer",
+      "title": "Min Emi",
+      "default": 0
+     },
+     "tax_deductible": {
+      "type": "boolean",
+      "title": "Tax Deductible",
+      "default": false
+     }
+    },
+    "type": "object",
+    "required": [
+     "label",
+     "principal_outstanding",
+     "annual_rate_pct"
+    ],
+    "title": "DebtIn"
+   },
+   "GateResult": {
+    "properties": {
+     "gate": {
+      "type": "string",
+      "title": "Gate"
+     },
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "status": {
+      "$ref": "#/components/schemas/GateStatus"
+     },
+     "amount": {
+      "type": "integer",
+      "title": "Amount"
+     },
+     "reason": {
+      "type": "string",
+      "title": "Reason"
+     }
+    },
+    "type": "object",
+    "required": [
+     "gate",
+     "label",
+     "status",
+     "amount",
+     "reason"
+    ],
+    "title": "GateResult"
+   },
+   "GateStatus": {
+    "type": "string",
+    "enum": [
+     "PASSED",
+     "BLOCKED",
+     "INFO"
+    ],
+    "title": "GateStatus"
+   },
+   "GoalIn-Input": {
+    "properties": {
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "target_amount": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       }
+      ],
+      "title": "Target Amount"
+     },
+     "target_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Target Date"
+     },
+     "priority": {
+      "$ref": "#/components/schemas/GoalPriority",
+      "default": "SHOULD"
+     }
+    },
+    "type": "object",
+    "required": [
+     "label",
+     "target_amount",
+     "target_date"
+    ],
+    "title": "GoalIn"
+   },
+   "GoalIn-Output": {
+    "properties": {
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "target_amount": {
+      "type": "integer",
+      "title": "Target Amount"
+     },
+     "target_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Target Date"
+     },
+     "priority": {
+      "$ref": "#/components/schemas/GoalPriority",
+      "default": "SHOULD"
+     }
+    },
+    "type": "object",
+    "required": [
+     "label",
+     "target_amount",
+     "target_date"
+    ],
+    "title": "GoalIn"
+   },
+   "GoalPriority": {
+    "type": "string",
+    "enum": [
+     "MUST",
+     "SHOULD",
+     "WANT"
+    ],
+    "title": "GoalPriority"
+   },
+   "HTTPValidationError": {
+    "properties": {
+     "detail": {
+      "items": {
+       "$ref": "#/components/schemas/ValidationError"
+      },
+      "type": "array",
+      "title": "Detail"
+     }
+    },
+    "type": "object",
+    "title": "HTTPValidationError"
+   },
+   "Health": {
+    "properties": {
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "service": {
+      "type": "string",
+      "title": "Service"
+     }
+    },
+    "type": "object",
+    "required": [
+     "status",
+     "service"
+    ],
+    "title": "Health"
+   },
+   "HorizonBucket": {
+    "type": "string",
+    "enum": [
+     "LIQUID_0_12",
+     "DEBT_12_36",
+     "HYBRID_36_60",
+     "EQUITY_60_PLUS"
+    ],
+    "title": "HorizonBucket"
+   },
+   "JobStability": {
+    "type": "string",
+    "enum": [
+     "LOW",
+     "MEDIUM",
+     "HIGH"
+    ],
+    "title": "JobStability"
+   },
+   "PlanResult": {
+    "properties": {
+     "version_id": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "uuid"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Version Id"
+     },
+     "generated_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Generated At"
+     },
+     "gates": {
+      "items": {
+       "$ref": "#/components/schemas/GateResult"
+      },
+      "type": "array",
+      "title": "Gates"
+     },
+     "investable_monthly": {
+      "type": "integer",
+      "title": "Investable Monthly"
+     },
+     "investable_lumpsum": {
+      "type": "integer",
+      "title": "Investable Lumpsum"
+     },
+     "buffer_target": {
+      "type": "integer",
+      "title": "Buffer Target"
+     },
+     "buffer_current": {
+      "type": "integer",
+      "title": "Buffer Current"
+     },
+     "buffer_eta_months": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Buffer Eta Months"
+     },
+     "blocking_reasons": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Blocking Reasons"
+     },
+     "spending_recommendations": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Spending Recommendations"
+     },
+     "max_equity_fraction": {
+      "type": "string",
+      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+      "title": "Max Equity Fraction"
+     },
+     "horizon_buckets": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "propertyNames": {
+       "$ref": "#/components/schemas/HorizonBucket"
+      },
+      "type": "object",
+      "title": "Horizon Buckets"
+     },
+     "assumptions_version": {
+      "type": "string",
+      "title": "Assumptions Version"
+     },
+     "sensitivity": {
+      "items": {
+       "$ref": "#/components/schemas/SensitivityRow"
+      },
+      "type": "array",
+      "title": "Sensitivity"
+     }
+    },
+    "type": "object",
+    "required": [
+     "gates",
+     "investable_monthly",
+     "investable_lumpsum",
+     "buffer_target",
+     "buffer_current",
+     "buffer_eta_months",
+     "blocking_reasons",
+     "spending_recommendations",
+     "max_equity_fraction",
+     "horizon_buckets",
+     "assumptions_version",
+     "sensitivity"
+    ],
+    "title": "PlanResult"
+   },
+   "ProfileIn-Input": {
+    "properties": {
+     "display_name": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Display Name"
+     },
+     "monthly_inflow": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       }
+      ],
+      "title": "Monthly Inflow"
+     },
+     "fixed_outflow": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       }
+      ],
+      "title": "Fixed Outflow"
+     },
+     "variable_outflow": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       }
+      ],
+      "title": "Variable Outflow"
+     },
+     "liquid_balance": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       }
+      ],
+      "title": "Liquid Balance"
+     },
+     "existing_investments": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       }
+      ],
+      "title": "Existing Investments",
+      "default": "0"
+     },
+     "dependants": {
+      "type": "integer",
+      "title": "Dependants",
+      "default": 0
+     },
+     "job_stability": {
+      "$ref": "#/components/schemas/JobStability",
+      "default": "MEDIUM"
+     },
+     "income_variability": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+       }
+      ],
+      "title": "Income Variability",
+      "default": "0"
+     },
+     "temperament_choice": {
+      "$ref": "#/components/schemas/TemperamentChoice",
+      "default": "SELL_SOME"
+     }
+    },
+    "type": "object",
+    "required": [
+     "monthly_inflow",
+     "fixed_outflow",
+     "variable_outflow",
+     "liquid_balance"
+    ],
+    "title": "ProfileIn"
+   },
+   "ProfileIn-Output": {
+    "properties": {
+     "display_name": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Display Name"
+     },
+     "monthly_inflow": {
+      "type": "integer",
+      "title": "Monthly Inflow"
+     },
+     "fixed_outflow": {
+      "type": "integer",
+      "title": "Fixed Outflow"
+     },
+     "variable_outflow": {
+      "type": "integer",
+      "title": "Variable Outflow"
+     },
+     "liquid_balance": {
+      "type": "integer",
+      "title": "Liquid Balance"
+     },
+     "existing_investments": {
+      "type": "integer",
+      "title": "Existing Investments",
+      "default": 0
+     },
+     "dependants": {
+      "type": "integer",
+      "title": "Dependants",
+      "default": 0
+     },
+     "job_stability": {
+      "$ref": "#/components/schemas/JobStability",
+      "default": "MEDIUM"
+     },
+     "income_variability": {
+      "type": "string",
+      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+      "title": "Income Variability",
+      "default": "0"
+     },
+     "temperament_choice": {
+      "$ref": "#/components/schemas/TemperamentChoice",
+      "default": "SELL_SOME"
+     }
+    },
+    "type": "object",
+    "required": [
+     "monthly_inflow",
+     "fixed_outflow",
+     "variable_outflow",
+     "liquid_balance"
+    ],
+    "title": "ProfileIn"
+   },
+   "ScenarioOption": {
+    "properties": {
+     "choice": {
+      "type": "string",
+      "title": "Choice"
+     },
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "tolerated_dd_fraction": {
+      "type": "string",
+      "title": "Tolerated Dd Fraction"
+     }
+    },
+    "type": "object",
+    "required": [
+     "choice",
+     "label",
+     "tolerated_dd_fraction"
+    ],
+    "title": "ScenarioOption"
+   },
+   "SensitivityRow": {
+    "properties": {
+     "equity_real_return_pct": {
+      "type": "string",
+      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+      "title": "Equity Real Return Pct"
+     },
+     "hurdle_pct": {
+      "type": "string",
+      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+      "title": "Hurdle Pct"
+     },
+     "investable_monthly": {
+      "type": "integer",
+      "title": "Investable Monthly"
+     },
+     "note": {
+      "type": "string",
+      "title": "Note"
+     }
+    },
+    "type": "object",
+    "required": [
+     "equity_real_return_pct",
+     "hurdle_pct",
+     "investable_monthly",
+     "note"
+    ],
+    "title": "SensitivityRow"
+   },
+   "TemperamentChoice": {
+    "type": "string",
+    "enum": [
+     "SELL_EVERYTHING",
+     "SELL_SOME",
+     "HOLD",
+     "BUY_MORE"
+    ],
+    "title": "TemperamentChoice"
+   },
+   "TemperamentScenario": {
+    "properties": {
+     "before_inr": {
+      "type": "integer",
+      "title": "Before Inr"
+     },
+     "after_inr": {
+      "type": "integer",
+      "title": "After Inr"
+     },
+     "options": {
+      "items": {
+       "$ref": "#/components/schemas/ScenarioOption"
+      },
+      "type": "array",
+      "title": "Options"
+     }
+    },
+    "type": "object",
+    "required": [
+     "before_inr",
+     "after_inr",
+     "options"
+    ],
+    "title": "TemperamentScenario"
+   },
+   "UserState": {
+    "properties": {
+     "profile": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ProfileIn-Output"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "debts": {
+      "items": {
+       "$ref": "#/components/schemas/DebtIn-Output"
+      },
+      "type": "array",
+      "title": "Debts"
+     },
+     "goals": {
+      "items": {
+       "$ref": "#/components/schemas/GoalIn-Output"
+      },
+      "type": "array",
+      "title": "Goals"
+     }
+    },
+    "type": "object",
+    "required": [
+     "profile",
+     "debts",
+     "goals"
+    ],
+    "title": "UserState"
+   },
+   "ValidationError": {
+    "properties": {
+     "loc": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "type": "array",
+      "title": "Location"
+     },
+     "msg": {
+      "type": "string",
+      "title": "Message"
+     },
+     "type": {
+      "type": "string",
+      "title": "Error Type"
+     },
+     "input": {
+      "title": "Input"
+     },
+     "ctx": {
+      "type": "object",
+      "title": "Context"
+     }
+    },
+    "type": "object",
+    "required": [
+     "loc",
+     "msg",
+     "type"
+    ],
+    "title": "ValidationError"
+   }
+  }
+ }
+}

@@ -3,6 +3,16 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "TS types generated from Pydantic models via OpenAPI. Never hand-written — see docs/01-ARCHITECTURE.md. Generation lands with the first real API contract.",
-  "main": "src/index.ts"
+  "description": "TS types generated from Pydantic models via OpenAPI. Never hand-written \u2014 see docs/01-ARCHITECTURE.md. Generation lands with the first real API contract.",
+  "scripts": {
+    "generate": "openapi-typescript openapi.json -o src/api.d.ts"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.9.1"
+  },
+  "exports": {
+    "./api": {
+      "types": "./src/api.d.ts"
+    }
+  }
 }

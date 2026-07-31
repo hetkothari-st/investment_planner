@@ -1,5 +1,6 @@
-"""M1 data-spine tables. Schema follows docs/02-DATA-LAYER.md."""
+"""Data-spine (M1) and user-state (M3) tables. Schema follows docs/02-DATA-LAYER.md."""
 
+import uuid
 from datetime import date, datetime
 from decimal import Decimal
 
@@ -13,6 +14,7 @@ from sqlalchemy import (
     Numeric,
     Text,
     UniqueConstraint,
+    Uuid,
     func,
 )
 from sqlalchemy.dialects.postgresql import JSONB
@@ -146,3 +148,70 @@ class IngestRun(Base):
             "status IN ('RUNNING','OK','PARTIAL','FAILED')", name="status_valid"
         ),
     )
+
+
+# --- M3: user state — docs/02 "User state" + docs/03 ---
+
+
+class Profile(Base):
+    __tablename__ = "profile"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, default=1)
+    display_name: Mapped[str | None] = mapped_column(Text)
+    monthly_inflow: Mapped[Decimal | None] = mapped_column(Numeric(18, 2))
+    fixed_outflow: Mapped[Decimal | None] = mapped_column(Numeric(18, 2))
+    variable_outflow: Mapped[Decimal | None] = mapped_column(Numeric(18, 2))
+    liquid_balance: Mapped[Decimal | None] = mapped_column(Numeric(18, 2))
+    existing_investments: Mapped[Decimal | None] = mapped_column(Numeric(18, 2))
+    dependants: Mapped[int] = mapped_column(Integer, server_default="0")
+    job_stability: Mapped[str | None] = mapped_column(Text)
+    income_variability: Mapped[Decimal | None] = mapped_column(Numeric(6, 4))
+    temperament_choice: Mapped[str | None] = mapped_column(Text)
+    updated_at: Mapped[datetime] = mapped_column(
+        TZDateTime, nullable=False, server_default=func.now(), onupdate=func.now()
+    )
+
+    __table_args__ = (
+        CheckConstraint("id = 1", name="single_user"),
+        CheckConstraint(
+            "job_stability IN ('LOW','MEDIUM','HIGH')", name="job_stability_valid"
+        ),
+    )
+
+
+class Debt(Base):
+    __tablename__ = "debts"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    label: Mapped[str] = mapped_column(Text, nullable=False)
+    principal_outstanding: Mapped[Decimal] = mapped_column(Numeric(18, 2), nullable=False)
+    annual_rate_pct: Mapped[Decimal] = mapped_column(Numeric(6, 3), nullable=False)
+    min_emi: Mapped[Decimal | None] = mapped_column(Numeric(18, 2))
+    tax_deductible: Mapped[bool] = mapped_column(Boolean, server_default="false")
+
+
+class Goal(Base):
+    __tablename__ = "goals"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    label: Mapped[str] = mapped_column(Text, nullable=False)
+    target_amount: Mapped[Decimal] = mapped_column(Numeric(18, 2), nullable=False)
+    target_date: Mapped[date] = mapped_column(Date, nullable=False)
+    priority: Mapped[str | None] = mapped_column(Text)
+
+    __table_args__ = (
+        CheckConstraint("priority IN ('MUST','SHOULD','WANT')", name="priority_valid"),
+    )
+
+
+class PlanVersion(Base):
+    __tablename__ = "plan_versions"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    created_at: Mapped[datetime] = mapped_column(
+        TZDateTime, nullable=False, server_default=func.now()
+    )
+    profile_snapshot: Mapped[dict] = mapped_column(JsonB, nullable=False)
+    plan_result: Mapped[dict] = mapped_column(JsonB, nullable=False)
+    rationale_md: Mapped[str] = mapped_column(Text, nullable=False)
+    superseded_by: Mapped[uuid.UUID | None] = mapped_column(Uuid)

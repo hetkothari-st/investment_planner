@@ -48,3 +48,7 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+# FastAPI's Depends-in-default is the framework idiom, not a bug.
+"corpus/api/routers/*" = ["B008"]

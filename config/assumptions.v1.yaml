@@ -1,0 +1,13 @@
+# Return, inflation and tax-drag assumptions — docs/03-PLANNER-ENGINE.md.
+# These are assumptions, not forecasts. Shown to the user as such.
+# Never edit in place: copy to assumptions.v2.yaml and bump the version.
+version: v1
+inflation_expectation_pct: 5.0
+equity_real_return_pct: 7.0            # long-run, deliberately conservative
+debt_return_pct: 6.5
+gold_real_return_pct: 1.5
+effective_ltcg_drag: 0.125
+effective_stcg_drag: 0.20
+assumed_equity_max_dd: 0.45            # Indian large-cap has done worse; be honest
+buffer_liquid_vehicles: "sweep-in FD, overnight/liquid fund, savings"
+confidence: "These are assumptions, not forecasts. Shown to the user as such."

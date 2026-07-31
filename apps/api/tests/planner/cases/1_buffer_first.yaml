@@ -1,0 +1,20 @@
+# High income, no debt, no buffer -> everything to buffer, zero investable
+name: high income, no buffer
+profile:
+  monthly_inflow: "300000"
+  fixed_outflow: "70000"
+  variable_outflow: "50000"
+  liquid_balance: "40000"
+  existing_investments: "0"
+  dependants: 0
+  job_stability: MEDIUM
+  income_variability: "0.05"
+  temperament_choice: HOLD
+debts: []
+goals: []
+expect:
+  investable_monthly: "0"
+  investable_lumpsum: "0"
+  gate_status: {G3: BLOCKED}
+  blocking_contains: "Emergency buffer"
+  buffer_eta_months: 4          # (720000-40000)/180000 -> ceil(3.78)

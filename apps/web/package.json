@@ -12,7 +12,9 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@corpus/contracts": "workspace:*",
     "@tailwindcss/vite": "^4.3.3",
+    "@tanstack/react-query": "^5.101.4",
     "motion": "^12.43.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

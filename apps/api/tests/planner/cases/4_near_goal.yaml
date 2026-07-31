@@ -1,0 +1,24 @@
+# Goal in 18 months for ~60% of investable lumpsum -> that portion locked out of equity
+name: near-dated goal locks equity for its portion
+profile:
+  monthly_inflow: "250000"
+  fixed_outflow: "60000"
+  variable_outflow: "40000"
+  liquid_balance: "1500000"       # buffer target 500000 -> lumpsum 1000000
+  existing_investments: "0"
+  dependants: 0
+  job_stability: HIGH
+  income_variability: "0.05"
+  temperament_choice: BUY_MORE
+debts: []
+goals:
+  - label: Car down payment
+    target_amount: "600000"
+    target_date: 2028-01-31       # 18 months from as_of 2026-07-31
+    priority: MUST
+expect:
+  investable_monthly: "150000"
+  investable_lumpsum: "1000000"
+  gate_status: {G5: INFO}
+  bucket: {DEBT_12_36: "600000", EQUITY_60_PLUS: "400000"}
+  gate_reason_contains: {G5: "locked to capital preservation"}
