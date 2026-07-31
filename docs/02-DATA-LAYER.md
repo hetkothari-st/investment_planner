@@ -25,7 +25,7 @@ Kite access tokens expire daily. For a personal single-user app:
 | Instrument master | `kite.instruments()` | Full dump, refresh daily. ~1.5MB CSV. |
 | Daily OHLCV | `kite.historical_data(token, from, to, "day")` | Max ~2000 candles/request. Backfill in chunks. |
 | Intraday | same, interval `minute`/`5minute` | Only fetch for pinned symbols; storage grows fast. |
-| Live quotes | WebSocket `KiteTicker` | Proxy through your API; don't expose creds to browser. |
+| Live quotes | WebSocket `KiteTicker` | Proxy through your API; don't expose creds to browser. *M9 note:* the upstream is pluggable — `CORPUS_FEED` = `kite` (KiteTicker, token from the daily login), `hub` (a JSON websocket relay via `WS_HUB_URL`, e.g. a Railway hub holding the Kite session), `replay` (deterministic demo), `off`. The browser only ever connects to `/live/ws` on our own API. |
 | Corporate actions | **not reliably** | Use `historical_data(..., continuous=False)` unadjusted + separate CA source. |
 
 ### What Kite does NOT give you — plan for these separately

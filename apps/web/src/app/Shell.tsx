@@ -5,6 +5,7 @@ import { NavLink } from 'react-router'
  * on the left edge — a physical switch indicator, not a filled pill. */
 
 const NAV = [
+  { to: '/', title: 'Dashboard', glyph: 'D' },
   { to: '/planner', title: 'Planner', glyph: 'P' },
   { to: '/allocation', title: 'Allocation', glyph: 'A' },
   { to: '/equity', title: 'Equity research', glyph: 'E' },

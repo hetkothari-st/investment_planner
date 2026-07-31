@@ -184,6 +184,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/live/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Market Overview */
+        get: operations["market_overview_live_overview_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/live/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Live Status */
+        get: operations["live_status_live_status_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/planner/debts": {
         parameters: {
             query?: never;
@@ -781,6 +815,23 @@ export interface components {
             /** Tradingsymbol */
             tradingsymbol: string | null;
         };
+        /** LiveStatus */
+        LiveStatus: {
+            /** Clients */
+            clients: number;
+            /** Detail */
+            detail: string;
+            /** Feed */
+            feed: string;
+            /** Last Tick At */
+            last_tick_at: string | null;
+            /** Reconnects */
+            reconnects: number;
+            /** Status */
+            status: string;
+            /** Tracked */
+            tracked: number;
+        };
         /** ManualThesisIn */
         ManualThesisIn: {
             /** Band Base Pct */
@@ -824,6 +875,21 @@ export interface components {
             scored: number;
             /** Skipped */
             skipped: string[];
+        };
+        /** MarketOverview */
+        MarketOverview: {
+            /** Feed */
+            feed: string;
+            /** Gainers */
+            gainers: components["schemas"]["QuoteOut"][];
+            /** Indices */
+            indices: components["schemas"]["QuoteOut"][];
+            /** Losers */
+            losers: components["schemas"]["QuoteOut"][];
+            /** Message */
+            message: string | null;
+            /** Status */
+            status: string;
         };
         /** OpenPositionIn */
         OpenPositionIn: {
@@ -981,6 +1047,22 @@ export interface components {
             temperament_choice: components["schemas"]["TemperamentChoice"];
             /** Variable Outflow */
             variable_outflow: number;
+        };
+        /** QuoteOut */
+        QuoteOut: {
+            /** Change Pct */
+            change_pct: string | null;
+            /** Instrument Token */
+            instrument_token: number;
+            /** Last Price */
+            last_price: string;
+            /**
+             * Received At
+             * Format: date-time
+             */
+            received_at: string;
+            /** Symbol */
+            symbol: string;
         };
         /** ReportOut */
         ReportOut: {
@@ -1401,6 +1483,46 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Health"];
+                };
+            };
+        };
+    };
+    market_overview_live_overview_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MarketOverview"];
+                };
+            };
+        };
+    };
+    live_status_live_status_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveStatus"];
                 };
             };
         };

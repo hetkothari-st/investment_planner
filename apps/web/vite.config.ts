@@ -10,6 +10,7 @@ export default defineConfig({
       '/api': {
         target: process.env.CORPUS_API_URL ?? 'http://localhost:8000',
         changeOrigin: true,
+        ws: true, // /api/live/ws rides the same proxy — creds stay server-side
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },

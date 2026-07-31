@@ -104,6 +104,14 @@ export const allocationApi = {
     }),
 }
 
+// --- M9: live layer ---
+
+export type LiveStatusOut = components['schemas']['LiveStatus']
+
+export const liveApi = {
+  status: () => request<LiveStatusOut>('/live/status'),
+}
+
 // --- M8: alert centre ---
 
 export type AlertOut = components['schemas']['AlertOut']

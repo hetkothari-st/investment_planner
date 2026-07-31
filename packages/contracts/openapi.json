@@ -963,6 +963,57 @@
         "title": "LiveFalsifierOut",
         "type": "object"
       },
+      "LiveStatus": {
+        "properties": {
+          "clients": {
+            "title": "Clients",
+            "type": "integer"
+          },
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          },
+          "feed": {
+            "title": "Feed",
+            "type": "string"
+          },
+          "last_tick_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Tick At"
+          },
+          "reconnects": {
+            "title": "Reconnects",
+            "type": "integer"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "tracked": {
+            "title": "Tracked",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "feed",
+          "detail",
+          "status",
+          "reconnects",
+          "last_tick_at",
+          "tracked",
+          "clients"
+        ],
+        "title": "LiveStatus",
+        "type": "object"
+      },
       "ManualThesisIn": {
         "properties": {
           "band_base_pct": {
@@ -1119,6 +1170,60 @@
           "skipped"
         ],
         "title": "MarkRunOut",
+        "type": "object"
+      },
+      "MarketOverview": {
+        "properties": {
+          "feed": {
+            "title": "Feed",
+            "type": "string"
+          },
+          "gainers": {
+            "items": {
+              "$ref": "#/components/schemas/QuoteOut"
+            },
+            "title": "Gainers",
+            "type": "array"
+          },
+          "indices": {
+            "items": {
+              "$ref": "#/components/schemas/QuoteOut"
+            },
+            "title": "Indices",
+            "type": "array"
+          },
+          "losers": {
+            "items": {
+              "$ref": "#/components/schemas/QuoteOut"
+            },
+            "title": "Losers",
+            "type": "array"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "feed",
+          "status",
+          "indices",
+          "gainers",
+          "losers",
+          "message"
+        ],
+        "title": "MarketOverview",
         "type": "object"
       },
       "OpenPositionIn": {
@@ -1617,6 +1722,47 @@
           "liquid_balance"
         ],
         "title": "ProfileIn",
+        "type": "object"
+      },
+      "QuoteOut": {
+        "properties": {
+          "change_pct": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Change Pct"
+          },
+          "instrument_token": {
+            "title": "Instrument Token",
+            "type": "integer"
+          },
+          "last_price": {
+            "title": "Last Price",
+            "type": "string"
+          },
+          "received_at": {
+            "format": "date-time",
+            "title": "Received At",
+            "type": "string"
+          },
+          "symbol": {
+            "title": "Symbol",
+            "type": "string"
+          }
+        },
+        "required": [
+          "instrument_token",
+          "symbol",
+          "last_price",
+          "change_pct",
+          "received_at"
+        ],
+        "title": "QuoteOut",
         "type": "object"
       },
       "ReportOut": {
@@ -2339,6 +2485,48 @@
         "summary": "Health",
         "tags": [
           "health"
+        ]
+      }
+    },
+    "/live/overview": {
+      "get": {
+        "operationId": "market_overview_live_overview_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketOverview"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Market Overview",
+        "tags": [
+          "live"
+        ]
+      }
+    },
+    "/live/status": {
+      "get": {
+        "operationId": "live_status_live_status_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Live Status",
+        "tags": [
+          "live"
         ]
       }
     },
