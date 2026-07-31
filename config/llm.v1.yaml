@@ -1,0 +1,15 @@
+# LLM roles — docs/07. Versioned; models are named by the stack table in
+# CLAUDE.md. Bump the version to change models, never edit in place.
+version: v1
+extraction:
+  model: claude-sonnet-4-6      # high volume, structured output, cheap
+  temperature: 0.0
+  max_tokens: 2000
+composition:
+  model: claude-opus-4-6        # low volume, quality matters, still constrained
+  temperature: 0.3
+  max_tokens: 3000
+falsifier_phrasing:
+  model: claude-sonnet-4-6      # template-filling only
+  temperature: 0.0
+  max_tokens: 400

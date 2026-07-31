@@ -427,3 +427,44 @@ class MetricGap(Base):
             name="reason_valid",
         ),
     )
+
+
+# --- M6: qualitative facts + the failure log — docs/02 ---
+
+
+class QualFact(Base):
+    __tablename__ = "qual_facts"
+
+    id: Mapped[int] = mapped_column(BigIntPK, primary_key=True, autoincrement=True)
+    isin: Mapped[str] = mapped_column(Text, nullable=False)
+    filing_id: Mapped[int | None] = mapped_column(BigInteger, ForeignKey("filings.id"))
+    fact_type: Mapped[str] = mapped_column(Text, nullable=False)
+    direction: Mapped[str | None] = mapped_column(Text)
+    magnitude_band: Mapped[str | None] = mapped_column(Text)
+    horizon_relevance: Mapped[dict | None] = mapped_column(JsonB)  # list serialised
+    summary: Mapped[str] = mapped_column(Text, nullable=False)
+    evidence_span: Mapped[str | None] = mapped_column(Text)
+    extracted_by: Mapped[str] = mapped_column(Text, nullable=False)
+    extracted_at: Mapped[datetime] = mapped_column(
+        TZDateTime, nullable=False, server_default=func.now()
+    )
+
+    __table_args__ = (
+        CheckConstraint(
+            "direction IN ('POSITIVE','NEGATIVE','NEUTRAL')", name="direction_valid"
+        ),
+    )
+
+
+class CascadeGap(Base):
+    __tablename__ = "cascade_gap"
+
+    id: Mapped[int] = mapped_column(BigIntPK, primary_key=True, autoincrement=True)
+    stage: Mapped[str] = mapped_column(Text, nullable=False)
+    isin: Mapped[str | None] = mapped_column(Text)
+    horizon: Mapped[str | None] = mapped_column(Text)
+    reason: Mapped[str] = mapped_column(Text, nullable=False)
+    raw_output: Mapped[str | None] = mapped_column(Text)
+    occurred_at: Mapped[datetime] = mapped_column(
+        TZDateTime, nullable=False, server_default=func.now()
+    )

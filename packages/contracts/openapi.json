@@ -559,6 +559,92 @@
      }
     }
    }
+  },
+  "/research/candidates": {
+   "get": {
+    "tags": [
+     "research"
+    ],
+    "summary": "Candidates",
+    "description": "Deterministic ranking from stored metric_values. Empty is a valid,\nexplained result \u2014 not a failure state.",
+    "operationId": "candidates_research_candidates_get",
+    "parameters": [
+     {
+      "name": "horizon",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "string",
+       "default": "MID",
+       "title": "Horizon"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/CandidatesOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/research/reports": {
+   "post": {
+    "tags": [
+     "research"
+    ],
+    "summary": "Generate Report",
+    "description": "On-demand report generation \u2014 20-60s when the LLM is wired. Refuses\nbelow 60% coverage (docs/07 anti-patterns) and without an API key.",
+    "operationId": "generate_report_research_reports_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ReportRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ReportOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
   }
  },
  "components": {
@@ -587,6 +673,114 @@
      "degraded_reason"
     ],
     "title": "AuthStatus"
+   },
+   "BlockOut": {
+    "properties": {
+     "provenance": {
+      "type": "string",
+      "title": "Provenance"
+     },
+     "kind": {
+      "type": "string",
+      "title": "Kind"
+     },
+     "content": {
+      "type": "string",
+      "title": "Content"
+     }
+    },
+    "type": "object",
+    "required": [
+     "provenance",
+     "kind",
+     "content"
+    ],
+    "title": "BlockOut"
+   },
+   "CandidateOut": {
+    "properties": {
+     "isin": {
+      "type": "string",
+      "title": "Isin"
+     },
+     "tradingsymbol": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Tradingsymbol"
+     },
+     "composite_pctl": {
+      "type": "number",
+      "title": "Composite Pctl"
+     },
+     "coverage": {
+      "type": "number",
+      "title": "Coverage"
+     },
+     "conviction": {
+      "type": "string",
+      "title": "Conviction"
+     }
+    },
+    "type": "object",
+    "required": [
+     "isin",
+     "tradingsymbol",
+     "composite_pctl",
+     "coverage",
+     "conviction"
+    ],
+    "title": "CandidateOut"
+   },
+   "CandidatesOut": {
+    "properties": {
+     "horizon": {
+      "type": "string",
+      "title": "Horizon"
+     },
+     "as_of": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "As Of"
+     },
+     "candidates": {
+      "items": {
+       "$ref": "#/components/schemas/CandidateOut"
+      },
+      "type": "array",
+      "title": "Candidates"
+     },
+     "message": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Message"
+     }
+    },
+    "type": "object",
+    "required": [
+     "horizon",
+     "as_of",
+     "candidates",
+     "message"
+    ],
+    "title": "CandidatesOut"
    },
    "ClosePositionIn": {
     "properties": {
@@ -1627,6 +1821,60 @@
      "liquid_balance"
     ],
     "title": "ProfileIn"
+   },
+   "ReportOut": {
+    "properties": {
+     "isin": {
+      "type": "string",
+      "title": "Isin"
+     },
+     "horizon": {
+      "type": "string",
+      "title": "Horizon"
+     },
+     "narrative_included": {
+      "type": "boolean",
+      "title": "Narrative Included"
+     },
+     "coverage": {
+      "type": "number",
+      "title": "Coverage"
+     },
+     "blocks": {
+      "items": {
+       "$ref": "#/components/schemas/BlockOut"
+      },
+      "type": "array",
+      "title": "Blocks"
+     }
+    },
+    "type": "object",
+    "required": [
+     "isin",
+     "horizon",
+     "narrative_included",
+     "coverage",
+     "blocks"
+    ],
+    "title": "ReportOut"
+   },
+   "ReportRequest": {
+    "properties": {
+     "isin": {
+      "type": "string",
+      "title": "Isin"
+     },
+     "horizon": {
+      "type": "string",
+      "title": "Horizon"
+     }
+    },
+    "type": "object",
+    "required": [
+     "isin",
+     "horizon"
+    ],
+    "title": "ReportRequest"
    },
    "ScenarioOption": {
     "properties": {

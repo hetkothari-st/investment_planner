@@ -88,3 +88,18 @@ export const simApi = {
   runDaily: () => request<MarkRunOut>('/sim/run-daily', { method: 'POST' }),
   calibration: () => request<HorizonSummary[]>('/sim/calibration'),
 }
+
+// --- M6: equity research ---
+
+export type CandidatesOut = components['schemas']['CandidatesOut']
+export type ReportOut = components['schemas']['ReportOut']
+
+export const researchApi = {
+  candidates: (horizon: string) =>
+    request<CandidatesOut>(`/research/candidates?horizon=${horizon}`),
+  generateReport: (isin: string, horizon: string) =>
+    request<ReportOut>('/research/reports', {
+      method: 'POST',
+      body: JSON.stringify({ isin, horizon }),
+    }),
+}

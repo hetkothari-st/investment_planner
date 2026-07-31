@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from corpus.api.routers import auth_kite, health, planner, sim
+from corpus.api.routers import auth_kite, health, planner, research, sim
 
 
 def create_app() -> FastAPI:
@@ -9,6 +9,7 @@ def create_app() -> FastAPI:
     app.include_router(auth_kite.router)
     app.include_router(planner.router)
     app.include_router(sim.router)
+    app.include_router(research.router)
     return app
 
 

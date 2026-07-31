@@ -285,6 +285,48 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/research/candidates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Candidates
+         * @description Deterministic ranking from stored metric_values. Empty is a valid,
+         *     explained result — not a failure state.
+         */
+        get: operations["candidates_research_candidates_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/research/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Generate Report
+         * @description On-demand report generation — 20-60s when the LLM is wired. Refuses
+         *     below 60% coverage (docs/07 anti-patterns) and without an API key.
+         */
+        post: operations["generate_report_research_reports_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -295,6 +337,39 @@ export interface components {
             authenticated: boolean;
             /** Degraded Reason */
             degraded_reason: string | null;
+        };
+        /** BlockOut */
+        BlockOut: {
+            /** Provenance */
+            provenance: string;
+            /** Kind */
+            kind: string;
+            /** Content */
+            content: string;
+        };
+        /** CandidateOut */
+        CandidateOut: {
+            /** Isin */
+            isin: string;
+            /** Tradingsymbol */
+            tradingsymbol: string | null;
+            /** Composite Pctl */
+            composite_pctl: number;
+            /** Coverage */
+            coverage: number;
+            /** Conviction */
+            conviction: string;
+        };
+        /** CandidatesOut */
+        CandidatesOut: {
+            /** Horizon */
+            horizon: string;
+            /** As Of */
+            as_of: string | null;
+            /** Candidates */
+            candidates: components["schemas"]["CandidateOut"][];
+            /** Message */
+            message: string | null;
         };
         /** ClosePositionIn */
         ClosePositionIn: {
@@ -643,6 +718,26 @@ export interface components {
             income_variability: string;
             /** @default SELL_SOME */
             temperament_choice: components["schemas"]["TemperamentChoice"];
+        };
+        /** ReportOut */
+        ReportOut: {
+            /** Isin */
+            isin: string;
+            /** Horizon */
+            horizon: string;
+            /** Narrative Included */
+            narrative_included: boolean;
+            /** Coverage */
+            coverage: number;
+            /** Blocks */
+            blocks: components["schemas"]["BlockOut"][];
+        };
+        /** ReportRequest */
+        ReportRequest: {
+            /** Isin */
+            isin: string;
+            /** Horizon */
+            horizon: string;
         };
         /** ScenarioOption */
         ScenarioOption: {
@@ -1199,6 +1294,70 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HorizonSummary"][];
+                };
+            };
+        };
+    };
+    candidates_research_candidates_get: {
+        parameters: {
+            query?: {
+                horizon?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CandidatesOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    generate_report_research_reports_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReportRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
