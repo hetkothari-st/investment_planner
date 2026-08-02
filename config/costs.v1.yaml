@@ -1,0 +1,14 @@
+# Round-trip cost model for NSE equity delivery — docs/00 commitment 3.
+# Rates as of 2026; verify against your broker's contract note and bump the
+# version when they change. Never edit in place.
+version: v1
+brokerage_buy_inr: "0"            # discount-broker delivery
+brokerage_sell_inr: "0"
+stt_buy_pct: "0.1"                # securities transaction tax, delivery
+stt_sell_pct: "0.1"
+exchange_txn_pct: "0.00297"       # NSE transaction charge
+sebi_pct: "0.0001"
+stamp_buy_pct: "0.015"            # buy side only
+gst_pct: "18"                     # on brokerage + exchange + SEBI
+dp_charge_sell_inr: "15.93"       # depository participant, per sell
+slippage_floor_pct: "0.05"        # floor until spread/ADV data exists (M5)

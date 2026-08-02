@@ -1,0 +1,66 @@
+services:
+  db:
+    image: timescale/timescaledb:latest-pg16
+    environment:
+      POSTGRES_USER: corpus
+      POSTGRES_PASSWORD: corpus
+      POSTGRES_DB: corpus
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U corpus -d corpus"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    environment:
+      DATABASE_URL: postgresql+asyncpg://corpus:corpus@db:5432/corpus
+      REDIS_URL: redis://redis:6379/0
+      CORPUS_FEED: ${CORPUS_FEED:-replay}
+      CORPUS_SCHEDULER: ${CORPUS_SCHEDULER:-1}
+    env_file:
+      - path: .env
+        required: false
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./apps/api/corpus:/app/apps/api/corpus
+      - ./config:/app/config
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    environment:
+      CORPUS_API_URL: http://api:8000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+    volumes:
+      - ./apps/web/src:/repo/apps/web/src
+      - ./packages/contracts/src:/repo/packages/contracts/src
+
+volumes:
+  pgdata:

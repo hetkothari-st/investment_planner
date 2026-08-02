@@ -1,0 +1,23 @@
+# Buffer full, only 8.4% home loan -> invests, prepayment not recommended
+name: buffer full, home loan below hurdle
+profile:
+  monthly_inflow: "250000"
+  fixed_outflow: "60000"
+  variable_outflow: "40000"
+  liquid_balance: "800000"
+  existing_investments: "500000"
+  dependants: 0
+  job_stability: HIGH
+  income_variability: "0.05"
+  temperament_choice: HOLD
+debts:
+  - label: Home loan
+    principal_outstanding: "2500000"
+    annual_rate_pct: "8.4"
+    min_emi: "22000"
+goals: []
+expect:
+  investable_monthly: "128000"   # 250000 - (60000+22000) - 40000
+  gate_status: {G3: PASSED, G4: PASSED}
+  blocking_empty: true
+  gate_reason_contains: {G4: "stays on schedule"}

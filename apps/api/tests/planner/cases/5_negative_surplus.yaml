@@ -1,0 +1,18 @@
+# Negative surplus -> spending-side recommendations only
+name: spending exceeds inflow
+profile:
+  monthly_inflow: "90000"
+  fixed_outflow: "70000"
+  variable_outflow: "45000"
+  liquid_balance: "100000"
+  existing_investments: "0"
+  dependants: 1
+  job_stability: LOW
+  income_variability: "0.30"
+  temperament_choice: SELL_SOME
+debts: []
+goals: []
+expect:
+  investable_monthly: "0"
+  blocking_contains: "Spending exceeds inflow"
+  spending_recommendations_min: 2

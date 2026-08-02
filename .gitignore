@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# JS
+node_modules/
+dist/
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Playwright
+playwright-report/
+test-results/
+
+# TS build info
+*.tsbuildinfo

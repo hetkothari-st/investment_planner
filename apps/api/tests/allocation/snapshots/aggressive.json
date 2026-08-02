@@ -1,0 +1,411 @@
+{
+  "assumptions_version": "v1",
+  "diversification_notes": [],
+  "gated_out": [
+    {
+      "explanation": "Gated off until the F&O module exists (docs/10: not before M9 and 100 scored equity recommendations).",
+      "gate": "module_disabled",
+      "label": "Futures & options",
+      "liquidity_days": 0,
+      "lock_in_months": 0,
+      "net_expected_return_pct": "2.10",
+      "vehicle_id": "derivatives.fno",
+      "volatility_annual_pct": "60.0"
+    }
+  ],
+  "horizon_months": 96,
+  "lines": [
+    {
+      "bucket": "EQUITY_60_PLUS",
+      "label": "Large-cap index fund",
+      "lumpsum_inr": 60000000,
+      "monthly_inr": 4000000,
+      "rationale": "#1 by suitability in EQUITY_60_PLUS; net expected 10.28%/yr after cost and tax at 96 months.",
+      "vehicle_id": "equity.index_largecap"
+    },
+    {
+      "bucket": "EQUITY_60_PLUS",
+      "label": "US index fund (FoF)",
+      "lumpsum_inr": 30000000,
+      "monthly_inr": 2000000,
+      "rationale": "#2 by suitability in EQUITY_60_PLUS; net expected 9.45%/yr after cost and tax at 96 months.",
+      "vehicle_id": "intl.us_index"
+    },
+    {
+      "bucket": "EQUITY_60_PLUS",
+      "label": "Mid-cap index fund",
+      "lumpsum_inr": 60000000,
+      "monthly_inr": 4000000,
+      "rationale": "#3 by suitability in EQUITY_60_PLUS; net expected 10.89%/yr after cost and tax at 96 months.",
+      "vehicle_id": "equity.index_midcap"
+    }
+  ],
+  "plan_version_id": null,
+  "preferences": {
+    "max_lock_in_months": null,
+    "self_rated_knowledge": "MEDIUM"
+  },
+  "ranked_vehicles": [
+    {
+      "allocated_lumpsum": 60000000,
+      "allocated_monthly": 4000000,
+      "components": {
+        "fit_drawdown": "0.5111",
+        "fit_effort": "1.0",
+        "fit_horizon": "1.0000",
+        "fit_liquidity": "0.9918",
+        "fit_return": "0.8567"
+      },
+      "effort": "LOW",
+      "knowledge_required": "LOW",
+      "label": "Large-cap index fund",
+      "liquidity_days": 3,
+      "lock_in_months": 0,
+      "net_expected_return_pct": "10.28",
+      "suitability_pct": "85.8",
+      "vehicle_id": "equity.index_largecap",
+      "volatility_annual_pct": "17.0"
+    },
+    {
+      "allocated_lumpsum": 30000000,
+      "allocated_monthly": 2000000,
+      "components": {
+        "fit_drawdown": "0.5111",
+        "fit_effort": "1.0",
+        "fit_horizon": "1.0000",
+        "fit_liquidity": "0.9863",
+        "fit_return": "0.7875"
+      },
+      "effort": "LOW",
+      "knowledge_required": "MEDIUM",
+      "label": "US index fund (FoF)",
+      "liquidity_days": 5,
+      "lock_in_months": 0,
+      "net_expected_return_pct": "9.45",
+      "suitability_pct": "83.6",
+      "vehicle_id": "intl.us_index",
+      "volatility_annual_pct": "18.0"
+    },
+    {
+      "allocated_lumpsum": 60000000,
+      "allocated_monthly": 4000000,
+      "components": {
+        "fit_drawdown": "0.4222",
+        "fit_effort": "1.0",
+        "fit_horizon": "0.8889",
+        "fit_liquidity": "0.9918",
+        "fit_return": "0.9075"
+      },
+      "effort": "LOW",
+      "knowledge_required": "MEDIUM",
+      "label": "Mid-cap index fund",
+      "liquidity_days": 3,
+      "lock_in_months": 0,
+      "net_expected_return_pct": "10.89",
+      "suitability_pct": "82.8",
+      "vehicle_id": "equity.index_midcap",
+      "volatility_annual_pct": "21.0"
+    },
+    {
+      "allocated_lumpsum": 0,
+      "allocated_monthly": 0,
+      "components": {
+        "fit_drawdown": "0.4844",
+        "fit_effort": "0.6",
+        "fit_horizon": "1.0000",
+        "fit_liquidity": "0.9918",
+        "fit_return": "0.8167"
+      },
+      "effort": "MEDIUM",
+      "knowledge_required": "MEDIUM",
+      "label": "Flexi-cap active fund",
+      "liquidity_days": 3,
+      "lock_in_months": 0,
+      "net_expected_return_pct": "9.80",
+      "suitability_pct": "80.1",
+      "vehicle_id": "equity.flexicap_active",
+      "volatility_annual_pct": "18.0"
+    },
+    {
+      "allocated_lumpsum": 0,
+      "allocated_monthly": 0,
+      "components": {
+        "fit_drawdown": "0.4667",
+        "fit_effort": "0.25",
+        "fit_horizon": "1.0000",
+        "fit_liquidity": "0.9973",
+        "fit_return": "0.8933"
+      },
+      "effort": "HIGH",
+      "knowledge_required": "HIGH",
+      "label": "Direct equity \u2014 large cap",
+      "liquidity_days": 1,
+      "lock_in_months": 0,
+      "net_expected_return_pct": "10.72",
+      "suitability_pct": "78.6",
+      "vehicle_id": "equity.direct_largecap",
+      "volatility_annual_pct": "19.0"
+    },
+    {
+      "allocated_lumpsum": 0,
+      "allocated_monthly": 0,
+      "components": {
+        "fit_drawdown": "0.4489",
+        "fit_effort": "0.25",
+        "fit_horizon": "0.8000",
+        "fit_liquidity": "0.9973",
+        "fit_return": "0.9592"
+      },
+      "effort": "HIGH",
+      "knowledge_required": "HIGH",
+      "label": "Direct equity \u2014 mid/small cap",
+      "liquidity_days": 1,
+      "lock_in_months": 0,
+      "net_expected_return_pct": "11.51",
+      "suitability_pct": "75.2",
+      "vehicle_id": "equity.direct_midsmall",
+      "volatility_annual_pct": "26.0"
+    },
+    {
+      "allocated_lumpsum": 0,
+      "allocated_monthly": 0,
+      "components": {
+        "fit_drawdown": "0.6444",
+        "fit_effort": "0.6",
+        "fit_horizon": "0.8750",
+        "fit_liquidity": "0.9918",
+        "fit_return": "0.6383"
+      },
+      "effort": "MEDIUM",
+      "knowledge_required": "HIGH",
+      "label": "InvIT",
+      "liquidity_days": 3,
+      "lock_in_months": 0,
+      "net_expected_return_pct": "7.66",
+      "suitability_pct": "74.8",
+      "vehicle_id": "invit",
+      "volatility_annual_pct": "16.0"
+    },
+    {
+      "allocated_lumpsum": 0,
+      "allocated_monthly": 0,
+      "components": {
+        "fit_drawdown": "0.6889",
+        "fit_effort": "0.6",
+        "fit_horizon": "0.8750",
+        "fit_liquidity": "0.9945",
+        "fit_return": "0.6050"
+      },
+      "effort": "MEDIUM",
+      "knowledge_required": "MEDIUM",
+      "label": "REIT",
+      "liquidity_days": 2,
+      "lock_in_months": 0,
+      "net_expected_return_pct": "7.26",
+      "suitability_pct": "74.7",
+      "vehicle_id": "reit",
+      "volatility_annual_pct": "15.0"
+    },
+    {
+      "allocated_lumpsum": 0,
+      "allocated_monthly": 0,
+      "components": {
+        "fit_drawdown": "0.8044",
+        "fit_effort": "1.0",
+        "fit_horizon": "0.5000",
+        "fit_liquidity": "0.9918",
+        "fit_return": "0.5983"
+      },
+      "effort": "LOW",
+      "knowledge_required": "LOW",
+      "label": "Balanced advantage fund",
+      "liquidity_days": 3,
+      "lock_in_months": 0,
+      "net_expected_return_pct": "7.18",
+      "suitability_pct": "71.4",
+      "vehicle_id": "hybrid.balanced_advantage",
+      "volatility_annual_pct": "9.0"
+    },
+    {
+      "allocated_lumpsum": 0,
+      "allocated_monthly": 0,
+      "components": {
+        "fit_drawdown": "0.7778",
+        "fit_effort": "1.0",
+        "fit_horizon": "0.5000",
+        "fit_liquidity": "0.9918",
+        "fit_return": "0.6050"
+      },
+      "effort": "LOW",
+      "knowledge_required": "MEDIUM",
+      "label": "Multi-asset fund",
+      "liquidity_days": 3,
+      "lock_in_months": 0,
+      "net_expected_return_pct": "7.26",
+      "suitability_pct": "71.1",
+      "vehicle_id": "hybrid.multi_asset",
+      "volatility_annual_pct": "10.0"
+    },
+    {
+      "allocated_lumpsum": 0,
+      "allocated_monthly": 0,
+      "components": {
+        "fit_drawdown": "0.8933",
+        "fit_effort": "1.0",
+        "fit_horizon": "0.6250",
+        "fit_liquidity": "0.9945",
+        "fit_return": "0.3825"
+      },
+      "effort": "LOW",
+      "knowledge_required": "MEDIUM",
+      "label": "Gilt fund",
+      "liquidity_days": 2,
+      "lock_in_months": 0,
+      "net_expected_return_pct": "4.59",
+      "suitability_pct": "69.9",
+      "vehicle_id": "debt.gilt",
+      "volatility_annual_pct": "4.0"
+    },
+    {
+      "allocated_lumpsum": 0,
+      "allocated_monthly": 0,
+      "components": {
+        "fit_drawdown": "0.7333",
+        "fit_effort": "1.0",
+        "fit_horizon": "0.6250",
+        "fit_liquidity": "0.9945",
+        "fit_return": "0.4300"
+      },
+      "effort": "LOW",
+      "knowledge_required": "LOW",
+      "label": "Gold ETF",
+      "liquidity_days": 2,
+      "lock_in_months": 0,
+      "net_expected_return_pct": "5.16",
+      "suitability_pct": "68.1",
+      "vehicle_id": "commodity.gold_etf",
+      "volatility_annual_pct": "14.0"
+    },
+    {
+      "allocated_lumpsum": 0,
+      "allocated_monthly": 0,
+      "components": {
+        "fit_drawdown": "0.7333",
+        "fit_effort": "0.6",
+        "fit_horizon": "1.0000",
+        "fit_liquidity": "0.0000",
+        "fit_return": "0.7083"
+      },
+      "effort": "MEDIUM",
+      "knowledge_required": "MEDIUM",
+      "label": "Sovereign gold bond",
+      "liquidity_days": 5,
+      "lock_in_months": 60,
+      "net_expected_return_pct": "8.50",
+      "suitability_pct": "66.9",
+      "vehicle_id": "commodity.sgb",
+      "volatility_annual_pct": "14.0"
+    },
+    {
+      "allocated_lumpsum": 0,
+      "allocated_monthly": 0,
+      "components": {
+        "fit_drawdown": "0.9289",
+        "fit_effort": "1.0",
+        "fit_horizon": "0.3750",
+        "fit_liquidity": "0.9918",
+        "fit_return": "0.3883"
+      },
+      "effort": "LOW",
+      "knowledge_required": "MEDIUM",
+      "label": "Corporate bond fund",
+      "liquidity_days": 3,
+      "lock_in_months": 0,
+      "net_expected_return_pct": "4.66",
+      "suitability_pct": "64.5",
+      "vehicle_id": "debt.corporate_bond",
+      "volatility_annual_pct": "2.5"
+    },
+    {
+      "allocated_lumpsum": 0,
+      "allocated_monthly": 0,
+      "components": {
+        "fit_drawdown": "0.9644",
+        "fit_effort": "1.0",
+        "fit_horizon": "0.2500",
+        "fit_liquidity": "0.9945",
+        "fit_return": "0.3733"
+      },
+      "effort": "LOW",
+      "knowledge_required": "LOW",
+      "label": "Short-duration debt fund",
+      "liquidity_days": 2,
+      "lock_in_months": 0,
+      "net_expected_return_pct": "4.48",
+      "suitability_pct": "61.7",
+      "vehicle_id": "debt.short_duration",
+      "volatility_annual_pct": "1.5"
+    },
+    {
+      "allocated_lumpsum": 0,
+      "allocated_monthly": 0,
+      "components": {
+        "fit_drawdown": "1.0000",
+        "fit_effort": "1.0",
+        "fit_horizon": "0.1250",
+        "fit_liquidity": "0.9973",
+        "fit_return": "0.3733"
+      },
+      "effort": "LOW",
+      "knowledge_required": "LOW",
+      "label": "Fixed deposit (sweep-in)",
+      "liquidity_days": 1,
+      "lock_in_months": 0,
+      "net_expected_return_pct": "4.48",
+      "suitability_pct": "59.3",
+      "vehicle_id": "liquid.fd",
+      "volatility_annual_pct": "0.0"
+    },
+    {
+      "allocated_lumpsum": 0,
+      "allocated_monthly": 0,
+      "components": {
+        "fit_drawdown": "0.9956",
+        "fit_effort": "1.0",
+        "fit_horizon": "0.0625",
+        "fit_liquidity": "0.9973",
+        "fit_return": "0.3417"
+      },
+      "effort": "LOW",
+      "knowledge_required": "LOW",
+      "label": "Overnight / liquid fund",
+      "liquidity_days": 1,
+      "lock_in_months": 0,
+      "net_expected_return_pct": "4.10",
+      "suitability_pct": "56.7",
+      "vehicle_id": "liquid.overnight_fund",
+      "volatility_annual_pct": "0.3"
+    },
+    {
+      "allocated_lumpsum": 0,
+      "allocated_monthly": 0,
+      "components": {
+        "fit_drawdown": "1.0000",
+        "fit_effort": "1.0",
+        "fit_horizon": "0.0312",
+        "fit_liquidity": "1.0000",
+        "fit_return": "0.2042"
+      },
+      "effort": "LOW",
+      "knowledge_required": "LOW",
+      "label": "Savings account",
+      "liquidity_days": 0,
+      "lock_in_months": 0,
+      "net_expected_return_pct": "2.45",
+      "suitability_pct": "51.9",
+      "vehicle_id": "liquid.savings",
+      "volatility_annual_pct": "0.1"
+    }
+  ],
+  "vehicles_version": "v1"
+}

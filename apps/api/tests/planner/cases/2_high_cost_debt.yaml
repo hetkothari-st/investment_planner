@@ -1,0 +1,22 @@
+# Buffer full, 14% personal loan -> all surplus to debt, zero investable
+name: buffer full, personal loan at 14 percent
+profile:
+  monthly_inflow: "250000"
+  fixed_outflow: "60000"
+  variable_outflow: "40000"
+  liquid_balance: "800000"
+  existing_investments: "200000"
+  dependants: 0
+  job_stability: HIGH
+  income_variability: "0.05"
+  temperament_choice: HOLD
+debts:
+  - label: Personal loan
+    principal_outstanding: "600000"
+    annual_rate_pct: "14.0"
+    min_emi: "15000"
+goals: []
+expect:
+  investable_monthly: "0"
+  gate_status: {G3: PASSED, G4: BLOCKED}
+  blocking_contains: "Personal loan at 14.0%"

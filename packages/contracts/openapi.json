@@ -1,0 +1,3072 @@
+{
+  "components": {
+    "schemas": {
+      "AlertOut": {
+        "properties": {
+          "acknowledged_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acknowledged At"
+          },
+          "field_id": {
+            "title": "Field Id",
+            "type": "string"
+          },
+          "horizon": {
+            "title": "Horizon",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "isin": {
+            "title": "Isin",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "observed_as_of": {
+            "title": "Observed As Of",
+            "type": "string"
+          },
+          "observed_value": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Observed Value",
+            "type": "string"
+          },
+          "operator": {
+            "title": "Operator",
+            "type": "string"
+          },
+          "raised_at": {
+            "format": "date-time",
+            "title": "Raised At",
+            "type": "string"
+          },
+          "recommendation_id": {
+            "title": "Recommendation Id",
+            "type": "string"
+          },
+          "thesis_line": {
+            "title": "Thesis Line",
+            "type": "string"
+          },
+          "thesis_line_found": {
+            "title": "Thesis Line Found",
+            "type": "boolean"
+          },
+          "threshold": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Threshold",
+            "type": "string"
+          },
+          "tradingsymbol": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tradingsymbol"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "recommendation_id",
+          "isin",
+          "tradingsymbol",
+          "horizon",
+          "field_id",
+          "operator",
+          "threshold",
+          "observed_value",
+          "observed_as_of",
+          "thesis_line",
+          "thesis_line_found",
+          "raised_at",
+          "acknowledged_at"
+        ],
+        "title": "AlertOut",
+        "type": "object"
+      },
+      "Allocation": {
+        "properties": {
+          "assumptions_version": {
+            "title": "Assumptions Version",
+            "type": "string"
+          },
+          "diversification_notes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Diversification Notes",
+            "type": "array"
+          },
+          "gated_out": {
+            "items": {
+              "$ref": "#/components/schemas/GatedVehicle"
+            },
+            "title": "Gated Out",
+            "type": "array"
+          },
+          "horizon_months": {
+            "title": "Horizon Months",
+            "type": "integer"
+          },
+          "lines": {
+            "items": {
+              "$ref": "#/components/schemas/AllocationLine"
+            },
+            "title": "Lines",
+            "type": "array"
+          },
+          "plan_version_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Version Id"
+          },
+          "preferences": {
+            "$ref": "#/components/schemas/AllocationPreferences"
+          },
+          "ranked_vehicles": {
+            "items": {
+              "$ref": "#/components/schemas/VehicleScore"
+            },
+            "title": "Ranked Vehicles",
+            "type": "array"
+          },
+          "vehicles_version": {
+            "title": "Vehicles Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "plan_version_id",
+          "horizon_months",
+          "lines",
+          "ranked_vehicles",
+          "gated_out",
+          "vehicles_version",
+          "assumptions_version",
+          "diversification_notes",
+          "preferences"
+        ],
+        "title": "Allocation",
+        "type": "object"
+      },
+      "AllocationLine": {
+        "properties": {
+          "bucket": {
+            "$ref": "#/components/schemas/HorizonBucket"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "lumpsum_inr": {
+            "title": "Lumpsum Inr",
+            "type": "integer"
+          },
+          "monthly_inr": {
+            "title": "Monthly Inr",
+            "type": "integer"
+          },
+          "rationale": {
+            "title": "Rationale",
+            "type": "string"
+          },
+          "vehicle_id": {
+            "title": "Vehicle Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "vehicle_id",
+          "label",
+          "bucket",
+          "lumpsum_inr",
+          "monthly_inr",
+          "rationale"
+        ],
+        "title": "AllocationLine",
+        "type": "object"
+      },
+      "AllocationPreferences": {
+        "description": "The two allocation inputs the planner does not already hold.\n\nself_rated_knowledge defaults LOW: the conservative reading gates\nHIGH-knowledge vehicles out until the user claims otherwise.\nmax_lock_in_months None means the user has stated no constraint;\nthe lock-in gate then passes and the UI says so.",
+        "properties": {
+          "max_lock_in_months": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Lock In Months"
+          },
+          "self_rated_knowledge": {
+            "$ref": "#/components/schemas/Knowledge",
+            "default": "LOW"
+          }
+        },
+        "title": "AllocationPreferences",
+        "type": "object"
+      },
+      "AuthStatus": {
+        "properties": {
+          "authenticated": {
+            "title": "Authenticated",
+            "type": "boolean"
+          },
+          "degraded_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Degraded Reason"
+          }
+        },
+        "required": [
+          "authenticated",
+          "degraded_reason"
+        ],
+        "title": "AuthStatus",
+        "type": "object"
+      },
+      "BlockOut": {
+        "properties": {
+          "content": {
+            "title": "Content",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "provenance": {
+            "title": "Provenance",
+            "type": "string"
+          }
+        },
+        "required": [
+          "provenance",
+          "kind",
+          "content"
+        ],
+        "title": "BlockOut",
+        "type": "object"
+      },
+      "CandidateOut": {
+        "properties": {
+          "composite_pctl": {
+            "title": "Composite Pctl",
+            "type": "number"
+          },
+          "conviction": {
+            "title": "Conviction",
+            "type": "string"
+          },
+          "coverage": {
+            "title": "Coverage",
+            "type": "number"
+          },
+          "isin": {
+            "title": "Isin",
+            "type": "string"
+          },
+          "tradingsymbol": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tradingsymbol"
+          }
+        },
+        "required": [
+          "isin",
+          "tradingsymbol",
+          "composite_pctl",
+          "coverage",
+          "conviction"
+        ],
+        "title": "CandidateOut",
+        "type": "object"
+      },
+      "CandidatesOut": {
+        "properties": {
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          },
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/CandidateOut"
+            },
+            "title": "Candidates",
+            "type": "array"
+          },
+          "horizon": {
+            "title": "Horizon",
+            "type": "string"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          }
+        },
+        "required": [
+          "horizon",
+          "as_of",
+          "candidates",
+          "message"
+        ],
+        "title": "CandidatesOut",
+        "type": "object"
+      },
+      "CheckOut": {
+        "properties": {
+          "as_of": {
+            "title": "As Of",
+            "type": "string"
+          },
+          "breached": {
+            "title": "Breached",
+            "type": "integer"
+          },
+          "checked": {
+            "title": "Checked",
+            "type": "integer"
+          },
+          "skipped": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Skipped",
+            "type": "array"
+          }
+        },
+        "required": [
+          "as_of",
+          "checked",
+          "breached",
+          "skipped"
+        ],
+        "title": "CheckOut",
+        "type": "object"
+      },
+      "ClosePositionIn": {
+        "properties": {
+          "journal_note": {
+            "title": "Journal Note",
+            "type": "string"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason",
+          "journal_note"
+        ],
+        "title": "ClosePositionIn",
+        "type": "object"
+      },
+      "DebtIn-Input": {
+        "properties": {
+          "annual_rate_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Annual Rate Pct"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "min_emi": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "default": "0",
+            "title": "Min Emi"
+          },
+          "principal_outstanding": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Principal Outstanding"
+          },
+          "tax_deductible": {
+            "default": false,
+            "title": "Tax Deductible",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "label",
+          "principal_outstanding",
+          "annual_rate_pct"
+        ],
+        "title": "DebtIn",
+        "type": "object"
+      },
+      "DebtIn-Output": {
+        "properties": {
+          "annual_rate_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Annual Rate Pct",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "min_emi": {
+            "default": 0,
+            "title": "Min Emi",
+            "type": "integer"
+          },
+          "principal_outstanding": {
+            "title": "Principal Outstanding",
+            "type": "integer"
+          },
+          "tax_deductible": {
+            "default": false,
+            "title": "Tax Deductible",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "label",
+          "principal_outstanding",
+          "annual_rate_pct"
+        ],
+        "title": "DebtIn",
+        "type": "object"
+      },
+      "FalsifierIn": {
+        "properties": {
+          "field_id": {
+            "title": "Field Id",
+            "type": "string"
+          },
+          "human_text": {
+            "title": "Human Text",
+            "type": "string"
+          },
+          "operator": {
+            "title": "Operator",
+            "type": "string"
+          },
+          "threshold": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Threshold"
+          }
+        },
+        "required": [
+          "field_id",
+          "operator",
+          "threshold",
+          "human_text"
+        ],
+        "title": "FalsifierIn",
+        "type": "object"
+      },
+      "GateResult": {
+        "properties": {
+          "amount": {
+            "title": "Amount",
+            "type": "integer"
+          },
+          "gate": {
+            "title": "Gate",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/GateStatus"
+          }
+        },
+        "required": [
+          "gate",
+          "label",
+          "status",
+          "amount",
+          "reason"
+        ],
+        "title": "GateResult",
+        "type": "object"
+      },
+      "GateStatus": {
+        "enum": [
+          "PASSED",
+          "BLOCKED",
+          "INFO"
+        ],
+        "title": "GateStatus",
+        "type": "string"
+      },
+      "GatedVehicle": {
+        "properties": {
+          "explanation": {
+            "title": "Explanation",
+            "type": "string"
+          },
+          "gate": {
+            "title": "Gate",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "liquidity_days": {
+            "title": "Liquidity Days",
+            "type": "integer"
+          },
+          "lock_in_months": {
+            "title": "Lock In Months",
+            "type": "integer"
+          },
+          "net_expected_return_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Net Expected Return Pct",
+            "type": "string"
+          },
+          "vehicle_id": {
+            "title": "Vehicle Id",
+            "type": "string"
+          },
+          "volatility_annual_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Volatility Annual Pct",
+            "type": "string"
+          }
+        },
+        "required": [
+          "vehicle_id",
+          "label",
+          "gate",
+          "explanation",
+          "net_expected_return_pct",
+          "volatility_annual_pct",
+          "liquidity_days",
+          "lock_in_months"
+        ],
+        "title": "GatedVehicle",
+        "type": "object"
+      },
+      "GoalIn-Input": {
+        "properties": {
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/GoalPriority",
+            "default": "SHOULD"
+          },
+          "target_amount": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Target Amount"
+          },
+          "target_date": {
+            "format": "date",
+            "title": "Target Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "target_amount",
+          "target_date"
+        ],
+        "title": "GoalIn",
+        "type": "object"
+      },
+      "GoalIn-Output": {
+        "properties": {
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/GoalPriority",
+            "default": "SHOULD"
+          },
+          "target_amount": {
+            "title": "Target Amount",
+            "type": "integer"
+          },
+          "target_date": {
+            "format": "date",
+            "title": "Target Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "target_amount",
+          "target_date"
+        ],
+        "title": "GoalIn",
+        "type": "object"
+      },
+      "GoalPriority": {
+        "enum": [
+          "MUST",
+          "SHOULD",
+          "WANT"
+        ],
+        "title": "GoalPriority",
+        "type": "string"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "Health": {
+        "properties": {
+          "service": {
+            "title": "Service",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "service"
+        ],
+        "title": "Health",
+        "type": "object"
+      },
+      "HorizonBucket": {
+        "enum": [
+          "LIQUID_0_12",
+          "DEBT_12_36",
+          "HYBRID_36_60",
+          "EQUITY_60_PLUS"
+        ],
+        "title": "HorizonBucket",
+        "type": "string"
+      },
+      "HorizonSummary": {
+        "properties": {
+          "band_coverage_pct": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Band Coverage Pct"
+          },
+          "hit_rate_pct": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hit Rate Pct"
+          },
+          "horizon": {
+            "title": "Horizon",
+            "type": "string"
+          },
+          "mean_brier": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mean Brier"
+          },
+          "n": {
+            "title": "N",
+            "type": "integer"
+          },
+          "n_needed": {
+            "title": "N Needed",
+            "type": "integer"
+          },
+          "net_alpha_pct": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Net Alpha Pct"
+          },
+          "severity": {
+            "title": "Severity",
+            "type": "string"
+          },
+          "verdict": {
+            "title": "Verdict",
+            "type": "string"
+          }
+        },
+        "required": [
+          "horizon",
+          "n",
+          "n_needed",
+          "hit_rate_pct",
+          "band_coverage_pct",
+          "mean_brier",
+          "net_alpha_pct",
+          "verdict",
+          "severity"
+        ],
+        "title": "HorizonSummary",
+        "type": "object"
+      },
+      "JobStability": {
+        "enum": [
+          "LOW",
+          "MEDIUM",
+          "HIGH"
+        ],
+        "title": "JobStability",
+        "type": "string"
+      },
+      "Knowledge": {
+        "enum": [
+          "LOW",
+          "MEDIUM",
+          "HIGH"
+        ],
+        "title": "Knowledge",
+        "type": "string"
+      },
+      "LiveFalsifierOut": {
+        "properties": {
+          "breached": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Breached"
+          },
+          "current_value": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Value"
+          },
+          "falsifier_id": {
+            "title": "Falsifier Id",
+            "type": "string"
+          },
+          "field_id": {
+            "title": "Field Id",
+            "type": "string"
+          },
+          "horizon": {
+            "title": "Horizon",
+            "type": "string"
+          },
+          "human_text": {
+            "title": "Human Text",
+            "type": "string"
+          },
+          "isin": {
+            "title": "Isin",
+            "type": "string"
+          },
+          "observed_as_of": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Observed As Of"
+          },
+          "operator": {
+            "title": "Operator",
+            "type": "string"
+          },
+          "recommendation_id": {
+            "title": "Recommendation Id",
+            "type": "string"
+          },
+          "threshold": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Threshold",
+            "type": "string"
+          },
+          "tradingsymbol": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tradingsymbol"
+          }
+        },
+        "required": [
+          "falsifier_id",
+          "recommendation_id",
+          "isin",
+          "tradingsymbol",
+          "horizon",
+          "field_id",
+          "operator",
+          "threshold",
+          "human_text",
+          "current_value",
+          "observed_as_of",
+          "breached"
+        ],
+        "title": "LiveFalsifierOut",
+        "type": "object"
+      },
+      "LiveStatus": {
+        "properties": {
+          "clients": {
+            "title": "Clients",
+            "type": "integer"
+          },
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          },
+          "feed": {
+            "title": "Feed",
+            "type": "string"
+          },
+          "last_tick_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Tick At"
+          },
+          "reconnects": {
+            "title": "Reconnects",
+            "type": "integer"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "tracked": {
+            "title": "Tracked",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "feed",
+          "detail",
+          "status",
+          "reconnects",
+          "last_tick_at",
+          "tracked",
+          "clients"
+        ],
+        "title": "LiveStatus",
+        "type": "object"
+      },
+      "ManualThesisIn": {
+        "properties": {
+          "band_base_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Band Base Pct"
+          },
+          "band_bear_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Band Bear Pct"
+          },
+          "band_bull_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Band Bull Pct"
+          },
+          "conviction": {
+            "title": "Conviction",
+            "type": "string"
+          },
+          "expires_on": {
+            "format": "date",
+            "title": "Expires On",
+            "type": "string"
+          },
+          "falsifiers": {
+            "items": {
+              "$ref": "#/components/schemas/FalsifierIn"
+            },
+            "minItems": 1,
+            "title": "Falsifiers",
+            "type": "array"
+          },
+          "horizon": {
+            "title": "Horizon",
+            "type": "string"
+          },
+          "instrument_token": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Instrument Token"
+          },
+          "isin": {
+            "title": "Isin",
+            "type": "string"
+          },
+          "ref_price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Ref Price"
+          },
+          "suggested_size_inr": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Suggested Size Inr"
+          },
+          "thesis_md": {
+            "description": "Your reasoning, frozen at issue",
+            "minLength": 10,
+            "title": "Thesis Md",
+            "type": "string"
+          },
+          "tradingsymbol": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tradingsymbol"
+          }
+        },
+        "required": [
+          "isin",
+          "horizon",
+          "expires_on",
+          "ref_price",
+          "band_bear_pct",
+          "band_base_pct",
+          "band_bull_pct",
+          "conviction",
+          "suggested_size_inr",
+          "thesis_md",
+          "falsifiers"
+        ],
+        "title": "ManualThesisIn",
+        "type": "object"
+      },
+      "MarkRunOut": {
+        "properties": {
+          "marked": {
+            "title": "Marked",
+            "type": "integer"
+          },
+          "scored": {
+            "title": "Scored",
+            "type": "integer"
+          },
+          "skipped": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Skipped",
+            "type": "array"
+          }
+        },
+        "required": [
+          "marked",
+          "scored",
+          "skipped"
+        ],
+        "title": "MarkRunOut",
+        "type": "object"
+      },
+      "MarketOverview": {
+        "properties": {
+          "feed": {
+            "title": "Feed",
+            "type": "string"
+          },
+          "gainers": {
+            "items": {
+              "$ref": "#/components/schemas/QuoteOut"
+            },
+            "title": "Gainers",
+            "type": "array"
+          },
+          "indices": {
+            "items": {
+              "$ref": "#/components/schemas/QuoteOut"
+            },
+            "title": "Indices",
+            "type": "array"
+          },
+          "losers": {
+            "items": {
+              "$ref": "#/components/schemas/QuoteOut"
+            },
+            "title": "Losers",
+            "type": "array"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "feed",
+          "status",
+          "indices",
+          "gainers",
+          "losers",
+          "message"
+        ],
+        "title": "MarketOverview",
+        "type": "object"
+      },
+      "OpenPositionIn": {
+        "properties": {
+          "amount_inr": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Amount Inr"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price"
+          },
+          "recommendation_id": {
+            "format": "uuid",
+            "title": "Recommendation Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "recommendation_id",
+          "amount_inr"
+        ],
+        "title": "OpenPositionIn",
+        "type": "object"
+      },
+      "PlanResult": {
+        "properties": {
+          "assumptions_version": {
+            "title": "Assumptions Version",
+            "type": "string"
+          },
+          "blocking_reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Blocking Reasons",
+            "type": "array"
+          },
+          "buffer_current": {
+            "title": "Buffer Current",
+            "type": "integer"
+          },
+          "buffer_eta_months": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Buffer Eta Months"
+          },
+          "buffer_target": {
+            "title": "Buffer Target",
+            "type": "integer"
+          },
+          "gates": {
+            "items": {
+              "$ref": "#/components/schemas/GateResult"
+            },
+            "title": "Gates",
+            "type": "array"
+          },
+          "generated_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Generated At"
+          },
+          "horizon_buckets": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "propertyNames": {
+              "$ref": "#/components/schemas/HorizonBucket"
+            },
+            "title": "Horizon Buckets",
+            "type": "object"
+          },
+          "investable_lumpsum": {
+            "title": "Investable Lumpsum",
+            "type": "integer"
+          },
+          "investable_monthly": {
+            "title": "Investable Monthly",
+            "type": "integer"
+          },
+          "max_equity_fraction": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Max Equity Fraction",
+            "type": "string"
+          },
+          "sensitivity": {
+            "items": {
+              "$ref": "#/components/schemas/SensitivityRow"
+            },
+            "title": "Sensitivity",
+            "type": "array"
+          },
+          "spending_recommendations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Spending Recommendations",
+            "type": "array"
+          },
+          "version_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Id"
+          }
+        },
+        "required": [
+          "gates",
+          "investable_monthly",
+          "investable_lumpsum",
+          "buffer_target",
+          "buffer_current",
+          "buffer_eta_months",
+          "blocking_reasons",
+          "spending_recommendations",
+          "max_equity_fraction",
+          "horizon_buckets",
+          "assumptions_version",
+          "sensitivity"
+        ],
+        "title": "PlanResult",
+        "type": "object"
+      },
+      "PositionOut": {
+        "properties": {
+          "close_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Close Reason"
+          },
+          "closed_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Closed On"
+          },
+          "entry_costs_inr": {
+            "title": "Entry Costs Inr",
+            "type": "integer"
+          },
+          "entry_price": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Entry Price",
+            "type": "string"
+          },
+          "exit_price": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exit Price"
+          },
+          "flag_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Flag Reason"
+          },
+          "flagged_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Flagged At"
+          },
+          "holding_xirr_pct": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Holding Xirr Pct"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "isin": {
+            "title": "Isin",
+            "type": "string"
+          },
+          "journal_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Journal Note"
+          },
+          "latest_mark": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latest Mark"
+          },
+          "opened_on": {
+            "format": "date",
+            "title": "Opened On",
+            "type": "string"
+          },
+          "qty": {
+            "title": "Qty",
+            "type": "integer"
+          },
+          "realised_pnl_inr": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Realised Pnl Inr"
+          },
+          "recommendation_id": {
+            "format": "uuid",
+            "title": "Recommendation Id",
+            "type": "string"
+          },
+          "thesis_snapshot_md": {
+            "title": "Thesis Snapshot Md",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "recommendation_id",
+          "isin",
+          "opened_on",
+          "qty",
+          "entry_price",
+          "entry_costs_inr",
+          "closed_on",
+          "exit_price",
+          "close_reason",
+          "journal_note",
+          "flagged_at",
+          "flag_reason",
+          "latest_mark",
+          "realised_pnl_inr",
+          "holding_xirr_pct",
+          "thesis_snapshot_md"
+        ],
+        "title": "PositionOut",
+        "type": "object"
+      },
+      "ProfileIn-Input": {
+        "properties": {
+          "dependants": {
+            "default": 0,
+            "title": "Dependants",
+            "type": "integer"
+          },
+          "display_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          },
+          "existing_investments": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "default": "0",
+            "title": "Existing Investments"
+          },
+          "fixed_outflow": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Fixed Outflow"
+          },
+          "income_variability": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "default": "0",
+            "title": "Income Variability"
+          },
+          "job_stability": {
+            "$ref": "#/components/schemas/JobStability",
+            "default": "MEDIUM"
+          },
+          "liquid_balance": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Liquid Balance"
+          },
+          "monthly_inflow": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Monthly Inflow"
+          },
+          "temperament_choice": {
+            "$ref": "#/components/schemas/TemperamentChoice",
+            "default": "SELL_SOME"
+          },
+          "variable_outflow": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Variable Outflow"
+          }
+        },
+        "required": [
+          "monthly_inflow",
+          "fixed_outflow",
+          "variable_outflow",
+          "liquid_balance"
+        ],
+        "title": "ProfileIn",
+        "type": "object"
+      },
+      "ProfileIn-Output": {
+        "properties": {
+          "dependants": {
+            "default": 0,
+            "title": "Dependants",
+            "type": "integer"
+          },
+          "display_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          },
+          "existing_investments": {
+            "default": 0,
+            "title": "Existing Investments",
+            "type": "integer"
+          },
+          "fixed_outflow": {
+            "title": "Fixed Outflow",
+            "type": "integer"
+          },
+          "income_variability": {
+            "default": "0",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Income Variability",
+            "type": "string"
+          },
+          "job_stability": {
+            "$ref": "#/components/schemas/JobStability",
+            "default": "MEDIUM"
+          },
+          "liquid_balance": {
+            "title": "Liquid Balance",
+            "type": "integer"
+          },
+          "monthly_inflow": {
+            "title": "Monthly Inflow",
+            "type": "integer"
+          },
+          "temperament_choice": {
+            "$ref": "#/components/schemas/TemperamentChoice",
+            "default": "SELL_SOME"
+          },
+          "variable_outflow": {
+            "title": "Variable Outflow",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "monthly_inflow",
+          "fixed_outflow",
+          "variable_outflow",
+          "liquid_balance"
+        ],
+        "title": "ProfileIn",
+        "type": "object"
+      },
+      "QuoteOut": {
+        "properties": {
+          "change_pct": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Change Pct"
+          },
+          "instrument_token": {
+            "title": "Instrument Token",
+            "type": "integer"
+          },
+          "last_price": {
+            "title": "Last Price",
+            "type": "string"
+          },
+          "received_at": {
+            "format": "date-time",
+            "title": "Received At",
+            "type": "string"
+          },
+          "symbol": {
+            "title": "Symbol",
+            "type": "string"
+          }
+        },
+        "required": [
+          "instrument_token",
+          "symbol",
+          "last_price",
+          "change_pct",
+          "received_at"
+        ],
+        "title": "QuoteOut",
+        "type": "object"
+      },
+      "ReportOut": {
+        "properties": {
+          "blocks": {
+            "items": {
+              "$ref": "#/components/schemas/BlockOut"
+            },
+            "title": "Blocks",
+            "type": "array"
+          },
+          "coverage": {
+            "title": "Coverage",
+            "type": "number"
+          },
+          "horizon": {
+            "title": "Horizon",
+            "type": "string"
+          },
+          "isin": {
+            "title": "Isin",
+            "type": "string"
+          },
+          "narrative_included": {
+            "title": "Narrative Included",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "isin",
+          "horizon",
+          "narrative_included",
+          "coverage",
+          "blocks"
+        ],
+        "title": "ReportOut",
+        "type": "object"
+      },
+      "ReportRequest": {
+        "properties": {
+          "horizon": {
+            "title": "Horizon",
+            "type": "string"
+          },
+          "isin": {
+            "title": "Isin",
+            "type": "string"
+          }
+        },
+        "required": [
+          "isin",
+          "horizon"
+        ],
+        "title": "ReportRequest",
+        "type": "object"
+      },
+      "ScenarioOption": {
+        "properties": {
+          "choice": {
+            "title": "Choice",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "tolerated_dd_fraction": {
+            "title": "Tolerated Dd Fraction",
+            "type": "string"
+          }
+        },
+        "required": [
+          "choice",
+          "label",
+          "tolerated_dd_fraction"
+        ],
+        "title": "ScenarioOption",
+        "type": "object"
+      },
+      "SensitivityRow": {
+        "properties": {
+          "equity_real_return_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Equity Real Return Pct",
+            "type": "string"
+          },
+          "hurdle_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Hurdle Pct",
+            "type": "string"
+          },
+          "investable_monthly": {
+            "title": "Investable Monthly",
+            "type": "integer"
+          },
+          "note": {
+            "title": "Note",
+            "type": "string"
+          }
+        },
+        "required": [
+          "equity_real_return_pct",
+          "hurdle_pct",
+          "investable_monthly",
+          "note"
+        ],
+        "title": "SensitivityRow",
+        "type": "object"
+      },
+      "TemperamentChoice": {
+        "enum": [
+          "SELL_EVERYTHING",
+          "SELL_SOME",
+          "HOLD",
+          "BUY_MORE"
+        ],
+        "title": "TemperamentChoice",
+        "type": "string"
+      },
+      "TemperamentScenario": {
+        "properties": {
+          "after_inr": {
+            "title": "After Inr",
+            "type": "integer"
+          },
+          "before_inr": {
+            "title": "Before Inr",
+            "type": "integer"
+          },
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/ScenarioOption"
+            },
+            "title": "Options",
+            "type": "array"
+          }
+        },
+        "required": [
+          "before_inr",
+          "after_inr",
+          "options"
+        ],
+        "title": "TemperamentScenario",
+        "type": "object"
+      },
+      "ThesisOut": {
+        "properties": {
+          "band_base_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Band Base Pct",
+            "type": "string"
+          },
+          "band_bear_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Band Bear Pct",
+            "type": "string"
+          },
+          "band_bull_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Band Bull Pct",
+            "type": "string"
+          },
+          "conviction": {
+            "title": "Conviction",
+            "type": "string"
+          },
+          "expires_on": {
+            "format": "date",
+            "title": "Expires On",
+            "type": "string"
+          },
+          "falsifiers": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Falsifiers",
+            "type": "array"
+          },
+          "horizon": {
+            "title": "Horizon",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "isin": {
+            "title": "Isin",
+            "type": "string"
+          },
+          "issued_at": {
+            "format": "date-time",
+            "title": "Issued At",
+            "type": "string"
+          },
+          "ref_price": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Ref Price",
+            "type": "string"
+          },
+          "report_md": {
+            "title": "Report Md",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "suggested_size_inr": {
+            "title": "Suggested Size Inr",
+            "type": "integer"
+          },
+          "tradingsymbol": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tradingsymbol"
+          }
+        },
+        "required": [
+          "id",
+          "isin",
+          "tradingsymbol",
+          "horizon",
+          "issued_at",
+          "expires_on",
+          "ref_price",
+          "band_bear_pct",
+          "band_base_pct",
+          "band_bull_pct",
+          "conviction",
+          "suggested_size_inr",
+          "report_md",
+          "status",
+          "falsifiers"
+        ],
+        "title": "ThesisOut",
+        "type": "object"
+      },
+      "UserState": {
+        "properties": {
+          "debts": {
+            "items": {
+              "$ref": "#/components/schemas/DebtIn-Output"
+            },
+            "title": "Debts",
+            "type": "array"
+          },
+          "goals": {
+            "items": {
+              "$ref": "#/components/schemas/GoalIn-Output"
+            },
+            "title": "Goals",
+            "type": "array"
+          },
+          "profile": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProfileIn-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "profile",
+          "debts",
+          "goals"
+        ],
+        "title": "UserState",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "VehicleScore": {
+        "properties": {
+          "allocated_lumpsum": {
+            "title": "Allocated Lumpsum",
+            "type": "integer"
+          },
+          "allocated_monthly": {
+            "title": "Allocated Monthly",
+            "type": "integer"
+          },
+          "components": {
+            "additionalProperties": {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            },
+            "title": "Components",
+            "type": "object"
+          },
+          "effort": {
+            "title": "Effort",
+            "type": "string"
+          },
+          "knowledge_required": {
+            "title": "Knowledge Required",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "liquidity_days": {
+            "title": "Liquidity Days",
+            "type": "integer"
+          },
+          "lock_in_months": {
+            "title": "Lock In Months",
+            "type": "integer"
+          },
+          "net_expected_return_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Net Expected Return Pct",
+            "type": "string"
+          },
+          "suitability_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Suitability Pct",
+            "type": "string"
+          },
+          "vehicle_id": {
+            "title": "Vehicle Id",
+            "type": "string"
+          },
+          "volatility_annual_pct": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Volatility Annual Pct",
+            "type": "string"
+          }
+        },
+        "required": [
+          "vehicle_id",
+          "label",
+          "suitability_pct",
+          "components",
+          "net_expected_return_pct",
+          "volatility_annual_pct",
+          "liquidity_days",
+          "lock_in_months",
+          "effort",
+          "knowledge_required",
+          "allocated_lumpsum",
+          "allocated_monthly"
+        ],
+        "title": "VehicleScore",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "CORPUS",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/alerts": {
+      "get": {
+        "operationId": "list_alerts_alerts_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "include_acknowledged",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include Acknowledged",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AlertOut"
+                  },
+                  "title": "Response List Alerts Alerts Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Alerts",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
+    "/alerts/check": {
+      "post": {
+        "description": "Evaluate every unbreached falsifier on every LIVE recommendation.\nSafe to re-run: a breached falsifier is never re-alerted.",
+        "operationId": "run_check_alerts_check_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Run Check",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
+    "/alerts/live-falsifiers": {
+      "get": {
+        "description": "Every falsifier on a LIVE thesis with its current reading \u2014 the\nwatch-list view. Distance to breach is the UI's arithmetic; the values\nhere are the record.",
+        "operationId": "live_falsifiers_alerts_live_falsifiers_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LiveFalsifierOut"
+                  },
+                  "title": "Response Live Falsifiers Alerts Live Falsifiers Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Live Falsifiers",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
+    "/alerts/{alert_id}/ack": {
+      "post": {
+        "operationId": "acknowledge_alerts__alert_id__ack_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "alert_id",
+            "required": true,
+            "schema": {
+              "title": "Alert Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Acknowledge",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
+    "/allocation": {
+      "get": {
+        "operationId": "get_allocation_allocation_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Allocation"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Allocation",
+        "tags": [
+          "allocation"
+        ]
+      }
+    },
+    "/allocation/preferences": {
+      "get": {
+        "operationId": "get_preferences_allocation_preferences_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllocationPreferences"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Preferences",
+        "tags": [
+          "allocation"
+        ]
+      },
+      "put": {
+        "operationId": "put_preferences_allocation_preferences_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AllocationPreferences"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllocationPreferences"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Put Preferences",
+        "tags": [
+          "allocation"
+        ]
+      }
+    },
+    "/auth/kite/callback": {
+      "get": {
+        "operationId": "callback_auth_kite_callback_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "request_token",
+            "required": true,
+            "schema": {
+              "title": "Request Token",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Callback",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/kite/login": {
+      "get": {
+        "operationId": "login_auth_kite_login_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Login",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/kite/status": {
+      "get": {
+        "operationId": "status_auth_kite_status_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Status",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/live/overview": {
+      "get": {
+        "operationId": "market_overview_live_overview_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketOverview"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Market Overview",
+        "tags": [
+          "live"
+        ]
+      }
+    },
+    "/live/status": {
+      "get": {
+        "operationId": "live_status_live_status_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Live Status",
+        "tags": [
+          "live"
+        ]
+      }
+    },
+    "/planner/debts": {
+      "put": {
+        "operationId": "put_debts_planner_debts_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/DebtIn-Input"
+                },
+                "title": "Body",
+                "type": "array"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DebtIn-Output"
+                  },
+                  "title": "Response Put Debts Planner Debts Put",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Put Debts",
+        "tags": [
+          "planner"
+        ]
+      }
+    },
+    "/planner/goals": {
+      "put": {
+        "operationId": "put_goals_planner_goals_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/GoalIn-Input"
+                },
+                "title": "Body",
+                "type": "array"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/GoalIn-Output"
+                  },
+                  "title": "Response Put Goals Planner Goals Put",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Put Goals",
+        "tags": [
+          "planner"
+        ]
+      }
+    },
+    "/planner/plan": {
+      "post": {
+        "operationId": "create_plan_planner_plan_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Create Plan",
+        "tags": [
+          "planner"
+        ]
+      }
+    },
+    "/planner/plan/latest": {
+      "get": {
+        "operationId": "get_latest_plan_planner_plan_latest_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Latest Plan",
+        "tags": [
+          "planner"
+        ]
+      }
+    },
+    "/planner/profile": {
+      "put": {
+        "operationId": "put_profile_planner_profile_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfileIn-Input"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileIn-Output"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Put Profile",
+        "tags": [
+          "planner"
+        ]
+      }
+    },
+    "/planner/state": {
+      "get": {
+        "operationId": "get_state_planner_state_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserState"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get State",
+        "tags": [
+          "planner"
+        ]
+      }
+    },
+    "/planner/temperament-scenario": {
+      "get": {
+        "description": "The scenario question, scaled to the user's actual corpus.",
+        "operationId": "temperament_scenario_planner_temperament_scenario_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemperamentScenario"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Temperament Scenario",
+        "tags": [
+          "planner"
+        ]
+      }
+    },
+    "/research/candidates": {
+      "get": {
+        "description": "Deterministic ranking from stored metric_values. Empty is a valid,\nexplained result \u2014 not a failure state.",
+        "operationId": "candidates_research_candidates_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "horizon",
+            "required": false,
+            "schema": {
+              "default": "MID",
+              "title": "Horizon",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CandidatesOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Candidates",
+        "tags": [
+          "research"
+        ]
+      }
+    },
+    "/research/reports": {
+      "post": {
+        "description": "On-demand report generation \u2014 20-60s when the LLM is wired. Refuses\nbelow 60% coverage (docs/07 anti-patterns) and without an API key.",
+        "operationId": "generate_report_research_reports_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Generate Report",
+        "tags": [
+          "research"
+        ]
+      }
+    },
+    "/sim/calibration": {
+      "get": {
+        "operationId": "get_calibration_sim_calibration_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/HorizonSummary"
+                  },
+                  "title": "Response Get Calibration Sim Calibration Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Calibration",
+        "tags": [
+          "sim"
+        ]
+      }
+    },
+    "/sim/positions": {
+      "get": {
+        "operationId": "list_positions_sim_positions_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PositionOut"
+                  },
+                  "title": "Response List Positions Sim Positions Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Positions",
+        "tags": [
+          "sim"
+        ]
+      },
+      "post": {
+        "operationId": "post_position_sim_positions_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenPositionIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PositionOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Post Position",
+        "tags": [
+          "sim"
+        ]
+      }
+    },
+    "/sim/positions/{position_id}/close": {
+      "post": {
+        "operationId": "post_close_sim_positions__position_id__close_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "position_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Position Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClosePositionIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PositionOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Post Close",
+        "tags": [
+          "sim"
+        ]
+      }
+    },
+    "/sim/run-daily": {
+      "post": {
+        "description": "Manual trigger for pipeline steps 9-10 until the nightly scheduler\nlands with the full pipeline (M5+).",
+        "operationId": "run_daily_sim_run_daily_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarkRunOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Run Daily",
+        "tags": [
+          "sim"
+        ]
+      }
+    },
+    "/sim/theses": {
+      "get": {
+        "operationId": "list_theses_sim_theses_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ThesisOut"
+                  },
+                  "title": "Response List Theses Sim Theses Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Theses",
+        "tags": [
+          "sim"
+        ]
+      },
+      "post": {
+        "operationId": "post_thesis_sim_theses_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManualThesisIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThesisOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Post Thesis",
+        "tags": [
+          "sim"
+        ]
+      }
+    }
+  }
+}
