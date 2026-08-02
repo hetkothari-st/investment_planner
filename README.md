@@ -29,9 +29,16 @@ First build takes a few minutes. Migrations run automatically on API boot.
 
 ### Option B — Natively
 
-Needs Python 3.12+ (`uv` will fetch it), Node 22+, pnpm, and your own
-PostgreSQL 16 and Redis 7. TimescaleDB is optional — the migrations detect it
-and fall back to plain tables when it's absent.
+Needs [`uv`](https://docs.astral.sh/uv/), Node 22+, pnpm, and your own
+PostgreSQL 16. `uv` fetches Python 3.12 itself, so you do not need it
+preinstalled.
+
+Two things are optional despite appearing in `.env.example`:
+
+- **Redis** — only the Kite login token store and the Dramatiq fan-out use it.
+  The planner, allocation, simulator, calibration and the replay feed all run
+  without it. Skip it until you wire up Kite.
+- **TimescaleDB** — the migrations detect it and fall back to plain tables.
 
 ```bash
 # 1. database (once)
@@ -52,6 +59,42 @@ pnpm install
 pnpm dev
 ```
 
+### On Windows
+
+The commands above are the same, with three differences worth knowing before
+you start.
+
+**`&&` does not chain commands in Windows PowerShell 5.1** — the one that opens
+as "Windows PowerShell" and ships with the OS. It fails with
+`The token '&&' is not a valid statement separator in this version`. Use `;`,
+or just run the lines one at a time. PowerShell 7+ (`pwsh`) accepts `&&`.
+
+**Install `uv` first**, then open a new terminal so the updated PATH is picked
+up — `uv` stays "not recognized" in the shell you installed from:
+
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+It lands in `%USERPROFILE%\.local\bin`. Confirm with `uv --version` in the new
+terminal before going on.
+
+**pnpm** comes from Node's bundled corepack: `corepack enable`.
+
+Then, from the repo root:
+
+```powershell
+Copy-Item .env.example .env   # then set CORPUS_FEED=replay
+cd apps\api
+uv sync
+uv run alembic upgrade head
+uv run uvicorn corpus.api.main:app --reload --port 8000
+```
+
+For PostgreSQL, either the [EnterpriseDB installer](https://www.postgresql.org/download/windows/)
+or Docker. Redis has no supported native Windows build — skip it, per the note
+above, or use Docker or WSL2 if you have reached the point of needing it.
+
 ### What you should see
 
 | URL | |
@@ -68,11 +111,17 @@ browser only ever talks to port 5173.
 ### If it doesn't come up
 
 - **`Cannot connect to the Docker daemon`** — Docker isn't running. See above.
-- **API exits with a connection error** — Postgres or Redis isn't up, or
-  `DATABASE_URL` points somewhere else. `pg_isready` and `redis-cli ping` first.
+- **`The token '&&' is not a valid statement separator`** — Windows PowerShell
+  5.1. Run the lines one at a time, or separate them with `;`.
+- **`uv` / `pnpm` is not recognized** — not installed, or installed in a shell
+  whose PATH predates it. Open a new terminal and check `uv --version` first.
+- **API exits with a connection error** — Postgres isn't up, or `DATABASE_URL`
+  points somewhere else. Check `pg_isready` first. Redis is not needed unless
+  you are using the Kite feed or the Dramatiq ingestion fan-out.
 - **`.env` seems to be ignored** — it is read from the **repo root**, not from
-  `apps/api`. Run `cd apps/api && uv run python -c "from corpus.config import
-  get_settings; print(get_settings().database_url)"` to see what actually loaded.
+  `apps/api`. From `apps/api`, run
+  `uv run python -c "from corpus.config import get_settings; print(get_settings().database_url)"`
+  to see what actually loaded.
 - **Live tiles say the feed is off** — that's `CORPUS_FEED=off`, the default.
   Set `CORPUS_FEED=replay` for demo ticks; `kite` needs the daily login.
 - **Screens are empty of market data** — expected on a fresh database. The
