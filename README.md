@@ -91,9 +91,31 @@ uv run alembic upgrade head
 uv run uvicorn corpus.api.main:app --reload --port 8000
 ```
 
-For PostgreSQL, either the [EnterpriseDB installer](https://www.postgresql.org/download/windows/)
-or Docker. Redis has no supported native Windows build — skip it, per the note
-above, or use Docker or WSL2 if you have reached the point of needing it.
+**PostgreSQL** is the one service you do need. Two ways:
+
+*Docker, if you have it* — brings up only the database, already configured with
+the user, password and database name the default `DATABASE_URL` expects, so
+there is nothing to edit:
+
+```powershell
+docker compose up -d db
+```
+
+*Or the [EnterpriseDB installer](https://www.postgresql.org/download/windows/)* —
+it does not put `psql` on your PATH, and it creates neither the role nor the
+database, so make them once. It will prompt for the `postgres` password you
+chose during setup:
+
+```powershell
+& 'C:\Program Files\PostgreSQL\16\bin\psql.exe' -U postgres -c "CREATE ROLE corpus LOGIN PASSWORD 'corpus';"
+& 'C:\Program Files\PostgreSQL\16\bin\psql.exe' -U postgres -c "CREATE DATABASE corpus OWNER corpus;"
+```
+
+A plain `LOGIN` role is enough — the migrations need no superuser rights when
+TimescaleDB is absent, which it is on a stock Windows install.
+
+**Redis** has no supported native Windows build — skip it, per the note above,
+or use Docker or WSL2 once you actually need the Kite feed.
 
 ### What you should see
 
@@ -115,9 +137,13 @@ browser only ever talks to port 5173.
   5.1. Run the lines one at a time, or separate them with `;`.
 - **`uv` / `pnpm` is not recognized** — not installed, or installed in a shell
   whose PATH predates it. Open a new terminal and check `uv --version` first.
-- **API exits with a connection error** — Postgres isn't up, or `DATABASE_URL`
-  points somewhere else. Check `pg_isready` first. Redis is not needed unless
-  you are using the Kite feed or the Dramatiq ingestion fan-out.
+- **`ConnectionRefusedError: [WinError 1225]`**, or `connection refused` on
+  `alembic upgrade head` — nothing is listening on 5432. PostgreSQL isn't
+  running; see the Windows section above. The traceback ends in asyncpg and
+  mentions SSL, but the cause is just the absent server.
+- **API exits with a connection error** — same thing, or `DATABASE_URL` points
+  somewhere else. Check `pg_isready` first. Redis is not needed unless you are
+  using the Kite feed or the Dramatiq ingestion fan-out.
 - **`.env` seems to be ignored** — it is read from the **repo root**, not from
   `apps/api`. From `apps/api`, run
   `uv run python -c "from corpus.config import get_settings; print(get_settings().database_url)"`
