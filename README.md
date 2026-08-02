@@ -3,6 +3,82 @@
 Personal investment research system for Indian markets.
 Measurement over prediction. Every output is scored.
 
+## Running it locally
+
+Two paths. Docker is one command and gets you Postgres and Redis for free;
+the native path is better if you want reload-on-save without container churn.
+
+Neither path needs Kite or Anthropic credentials. Without them you get the full
+deterministic system — planner, allocation, simulator, calibration — plus a
+replay feed of demo ticks. Market ingestion and LLM reports are the only things
+that stay switched off, and each says so on screen rather than failing silently.
+
+### Option A — Docker
+
+Requires Docker Desktop (or any Docker Engine) **actually running**:
+`docker info` must print a Server section. If it errors with
+`Cannot connect to the Docker daemon`, start Docker first — this is the most
+common reason the stack won't come up.
+
+```bash
+cp .env.example .env          # optional; defaults work without it
+CORPUS_FEED=replay docker compose up --build
+```
+
+First build takes a few minutes. Migrations run automatically on API boot.
+
+### Option B — Natively
+
+Needs Python 3.12+ (`uv` will fetch it), Node 22+, pnpm, and your own
+PostgreSQL 16 and Redis 7. TimescaleDB is optional — the migrations detect it
+and fall back to plain tables when it's absent.
+
+```bash
+# 1. database (once)
+createdb corpus
+psql -c "CREATE ROLE corpus LOGIN PASSWORD 'corpus'; ALTER DATABASE corpus OWNER TO corpus;"
+
+# 2. config
+cp .env.example .env          # then set CORPUS_FEED=replay for demo ticks
+
+# 3. API — from apps/api, which is where pyproject.toml and alembic.ini live
+cd apps/api
+uv sync
+uv run alembic upgrade head
+uv run uvicorn corpus.api.main:app --reload --port 8000
+
+# 4. web — in a second terminal, from the repo root
+pnpm install
+pnpm dev
+```
+
+### What you should see
+
+| URL | |
+|---|---|
+| http://localhost:5173 | the app — planner, allocation, equity, simulator, calibration, alerts |
+| http://localhost:5173/kitchen-sink | design-system reference (docs/09) |
+| http://localhost:8000/docs | API explorer |
+| http://localhost:8000/health | `{"status":"ok","service":"corpus-api"}` |
+| http://localhost:8000/live/status | which feed is running, and why |
+
+The web dev server proxies `/api/*` to the API, websockets included, so the
+browser only ever talks to port 5173.
+
+### If it doesn't come up
+
+- **`Cannot connect to the Docker daemon`** — Docker isn't running. See above.
+- **API exits with a connection error** — Postgres or Redis isn't up, or
+  `DATABASE_URL` points somewhere else. `pg_isready` and `redis-cli ping` first.
+- **`.env` seems to be ignored** — it is read from the **repo root**, not from
+  `apps/api`. Run `cd apps/api && uv run python -c "from corpus.config import
+  get_settings; print(get_settings().database_url)"` to see what actually loaded.
+- **Live tiles say the feed is off** — that's `CORPUS_FEED=off`, the default.
+  Set `CORPUS_FEED=replay` for demo ticks; `kite` needs the daily login.
+- **Screens are empty of market data** — expected on a fresh database. The
+  deterministic engines work from your own inputs; price and fundamentals data
+  arrives via the M1 backfill, which needs Kite credentials.
+
 ## Getting started with Claude Code
 
 Drop this whole folder in as your repo root, then open Claude Code and paste:
