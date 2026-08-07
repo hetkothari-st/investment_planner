@@ -5,6 +5,23 @@ Measurement over prediction. Every output is scored.
 
 ## Running it locally
 
+### The short version
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\setup.ps1    # Windows
+```
+
+```bash
+./scripts/setup.sh                                            # macOS / Linux
+```
+
+Checks every prerequisite, prepares `.env`, starts a database if Docker is
+available, applies migrations, and prints the two commands that start the app.
+Safe to re-run. When something is missing it names that one thing and how to
+install it, rather than failing several steps later.
+
+The rest of this section is what the script does, by hand.
+
 Two paths. Docker is one command and gets you Postgres and Redis for free;
 the native path is better if you want reload-on-save without container churn.
 
